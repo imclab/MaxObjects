@@ -1,0 +1,4 @@
+LIBRARY pg.adaptor~.mxe
+
+EXPORTS
+	main

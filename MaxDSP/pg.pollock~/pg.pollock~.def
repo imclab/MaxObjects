@@ -1,0 +1,7 @@
+;pg.pollock~.def
+
+LIBRARY pg.pollock~.mxe
+
+EXPORTS
+	main
+

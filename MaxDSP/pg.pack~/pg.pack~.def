@@ -1,0 +1,4 @@
+LIBRARY pg.pack~.mxe
+
+EXPORTS
+	main

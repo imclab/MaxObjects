@@ -1,0 +1,7 @@
+;pg.spectrum~.def
+
+LIBRARY pg.spectrum~.mxe
+
+EXPORTS
+	main
+
