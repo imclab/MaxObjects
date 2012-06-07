@@ -9,9 +9,9 @@
 
 typedef struct _fft
 {
-	float			*f_real;
-	fftwf_complex	*f_complex;
-	fftwf_plan		f_plan;		
+	double			*f_real;
+	fftw_complex	*f_complex;
+	fftw_plan		f_plan;		
 	int				f_ramp;		
 
 	int				f_windowSize;

@@ -5,7 +5,9 @@ int main()
 	t_class *c;
 
 	c = class_new("pg.analyser~", (method)analyser_new, (method)analyser_free, (short)sizeof(t_analyser), 0L, A_GIMME, 0);
+	
 	class_addmethod(c, (method)analyser_dsp,		"dsp",			A_CANT,	0);
+	class_addmethod(c, (method)analyser_dsp64,		"dsp64",		A_CANT, 0);
 	class_addmethod(c, (method)analyser_assist,		"assist",		A_CANT,	0);
 	
 	class_dspinit(c);
@@ -55,29 +57,26 @@ void *analyser_new(t_symbol *s, int argc, t_atom *argv)
 	}
 		
 	/* Initialization of the window  ********************************/
-	window_setup(&x->f_env, x->f_windowSize);
 	if( argv[2].a_type == A_LONG ) x->f_modEnv = argv[2].a_w.w_long;
 	if (x->f_modEnv < 0 || x->f_modEnv > 15)
 	{
 		x->f_modEnv = 1;
 		object_post((t_object*)x, "Wrong enveloppe, set to default : 1 (Hanning)");
 	}
-	analyser_envSelector(x);
+	window_setup(&x->f_env, x->f_windowSize, x->f_modEnv);
 
-	x->f_rapportSize = (float)x->f_sr / (float)x->f_windowSize;
+	x->f_rapportSize = x->f_sr / (t_sample)x->f_windowSize;
 
 	/* FFt initialization ***********************/
 	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
 	for(i = 0; i < x->f_overlapping; i++)
-	{
 		fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping);
-	}
 
-	x->f_centroid	= 0.f;
-	x->f_spread		= 0.f;
-	x->f_deviation	= 0.f;
-	x->f_skewness	= 0.f;
-	x->f_kurtosis	= 0.f;
+	x->f_centroid	= 0.;
+	x->f_spread		= 0.;
+	x->f_deviation	= 0.;
+	x->f_skewness	= 0.;
+	x->f_kurtosis	= 0.;
 
 	dsp_setup((t_pxobject *)x, 1);
 	outlet_new((t_pxobject *)x, "signal");
@@ -88,12 +87,95 @@ void *analyser_new(t_symbol *s, int argc, t_atom *argv)
 	return (x);
 }			
 
+void analyser_dsp64(t_analyser *x, t_object *dsp64, short *count, double samplerate, long maxvectorsize, long flags)
+{
+	x->f_sr = samplerate;
+	x->f_rapportSize = x->f_sr / (t_sample)x->f_windowSize;
+
+	object_method(dsp64, gensym("dsp_add64"), x, analyser_perform64, 0, NULL);
+}
+
 void analyser_dsp(t_analyser *x, t_signal **sp, short *count)
 {
-	x->f_sr = (float)sp[0]->s_sr;
-	x->f_rapportSize = x->f_sr / (float)x->f_windowSize;
-	dsp_add(analyser_perform, 7, x, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, 
-		sp[3]->s_vec, sp[4]->s_vec, sp[0]->s_n);
+	x->f_sr = sp[0]->s_sr;
+	x->f_rapportSize = x->f_sr / (t_sample)x->f_windowSize;
+
+	dsp_add(analyser_perform, 7, x, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec, sp[4]->s_vec, sp[0]->s_n);
+}
+
+void analyser_perform64(t_analyser *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam)
+{
+	int i, j;
+	t_double amplitude, frequency, rapport;
+    t_double	*in = ins[0];
+    t_double	*out1 = outs[0];
+	t_double	*out2 = outs[1];
+	t_double	*out3 = outs[2];
+	t_double	*out4 = outs[3];
+	
+	
+	for(i = 0; i < x->f_overlapping; i++)
+	{
+		for(j = 0; j < sampleframes; j++)
+		{
+			x->f_fft[i].f_real[x->f_fft[i].f_ramp] = in[j] * x->f_env.f_envelope[x->f_fft[i].f_ramp];
+
+			if (x->f_fft[i].f_ramp < x->f_arraySize && x->f_fft[i].f_ramp > 0)
+			{
+				amplitude = ((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]) + (x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]));
+				frequency = x->f_fft[i].f_ramp * x->f_rapportSize;
+				rapport = frequency - x->f_centroid;
+
+				x->f_fft[i].f_sumAmp	+= amplitude;
+
+				x->f_fft[i].f_centroid	+= amplitude * frequency;
+				x->f_fft[i].f_spread	+= amplitude * (rapport * rapport);
+				x->f_fft[i].f_skewness	+= amplitude * (rapport * rapport * rapport);
+				x->f_fft[i].f_kurtosis	+= amplitude * (rapport * rapport * rapport * rapport);
+			}
+			else if (x->f_fft[i].f_ramp == x->f_arraySize)
+			{
+				if(x->f_fft[i].f_sumAmp != 0.f)
+				{
+					x->f_centroid	= x->f_fft[i].f_centroid	/ x->f_fft[i].f_sumAmp;
+					x->f_spread		= x->f_fft[i].f_spread		/ x->f_fft[i].f_sumAmp;
+					x->f_deviation	= sqrt(x->f_spread);
+					x->f_skewness	= (x->f_fft[i].f_skewness	/ x->f_fft[i].f_sumAmp) / (x->f_spread * x->f_deviation);
+					x->f_kurtosis	= (x->f_fft[i].f_kurtosis	/ x->f_fft[i].f_sumAmp) / (x->f_spread * x->f_spread);
+				}
+				else
+				{
+					x->f_centroid	= 0.f;
+					x->f_spread		= 0.f;
+					x->f_deviation	= 0.f;
+					x->f_skewness	= 0.f;
+					x->f_kurtosis	= 0.f;
+				}
+				x->f_fft[i].f_sumAmp	= 0.f;
+				x->f_fft[i].f_centroid	= 0.f;
+				x->f_fft[i].f_spread	= 0.f;
+				x->f_fft[i].f_skewness	= 0.f;
+				x->f_fft[i].f_kurtosis	= 0.f;
+			}
+
+			x->f_fft[i].f_ramp++;
+			if (x->f_fft[i].f_ramp == x->f_windowSize)
+			{
+				fftw_execute(x->f_fft[i].f_plan);
+				x->f_fft[i].f_ramp = 0;
+			}
+			
+		}
+		
+	}
+
+	for(j = 0; j < sampleframes; j++)
+	{
+		out1[j] = x->f_centroid;
+		out2[j] = x->f_deviation;
+		out3[j] = x->f_skewness;
+		out4[j] = x->f_kurtosis;
+	}
 }
 
 t_int *analyser_perform(t_int *w)
@@ -158,7 +240,7 @@ t_int *analyser_perform(t_int *w)
 			x->f_fft[i].f_ramp++;
 			if (x->f_fft[i].f_ramp == x->f_windowSize)
 			{
-				fftwf_execute(x->f_fft[i].f_plan);
+				fftw_execute(x->f_fft[i].f_plan);
 				x->f_fft[i].f_ramp = 0;
 			}
 			
@@ -179,13 +261,10 @@ t_int *analyser_perform(t_int *w)
 
 void analyser_free(t_analyser *x)
 {
+	int i;
 	dsp_free((t_pxobject *)x);
-	/*
 	for(i = 0; i < x->f_overlapping; i++)
-	{
 		fft_free(&x->f_fft[i]);
-	}
-	*/
 	freebytes(x->f_fft, x->f_overlapping * sizeof(t_fft));
 	window_free(&x->f_env);
 	
@@ -231,87 +310,6 @@ void analyser_assist(t_analyser *x, void *b, long m, long a, char *s)
 
 t_max_err mode_set(t_analyser *x, t_object *attr, long argc, t_atom *argv)
 {
-	int mode;
-	mode = 16;
-	if ( atom_gettype(argv) == A_LONG) mode = atom_getlong(argv);
-	else if ( atom_gettype(argv) == A_FLOAT) mode = (int)atom_getfloat(argv);
-	else if ( atom_gettype(argv) == A_SYM)
-	{
-		if ( gensym(argv->a_w.w_sym->s_name)	  == gensym("Square"))			mode = 0;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Hanning"))			mode = 1;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Hamming"))			mode = 2;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Turkey"))			mode = 3;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Cosinus"))			mode = 4;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Lanczos"))			mode = 5;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Triangular"))		mode = 6;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Gaussian"))		mode = 7;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Bartlett-Hann"))	mode = 8;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Blackman"))		mode = 9;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Kaiser"))			mode = 10;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Nuttall"))			mode = 11;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Blackman-Harris"))	mode = 12;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Blackman-Nuttall"))mode = 13;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Flat-Top"))		mode = 14;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Poisson"))			mode = 15;
-	}
-
-	x->f_modEnv = mode;
-	analyser_envSelector(x);
-	
+	window_mode_set(&x->f_env, attr, argc, argv);
 	return 0;
-}
-
-void analyser_envSelector(t_analyser *x)
-{
-	switch(x->f_modEnv)
-	{
-		case 0:
-			window_square(&x->f_env);
-			break;
-		case 1:
-			window_hanning(&x->f_env);
-			break;
-		case 2:
-			window_hamming(&x->f_env);
-			break;
-		case 3:
-			window_turkey(&x->f_env);
-			break;
-		case 4:
-			window_cosinus(&x->f_env);
-			break;
-		case 5:
-			window_lanczos(&x->f_env);
-			break;
-		case 6:
-			window_triangular(&x->f_env);
-			break;
-		case 7:
-			window_gaussian(&x->f_env);
-			break;
-		case 8:
-			window_bartlett_hann(&x->f_env);
-			break;
-		case 9:
-			window_blackman(&x->f_env);
-			break;
-		case 10:
-			window_kaiser(&x->f_env);
-			break;
-		case 11:
-			window_nuttall(&x->f_env);
-			break;
-		case 12:
-			window_blackman_harris(&x->f_env);
-			break;
-		case 13:
-			window_blackman_nuttall(&x->f_env);
-			break;
-		case 14:
-			window_flat_top(&x->f_env);
-			break;
-		case 15:
-			window_poisson(&x->f_env);
-			break;
-	}
 }

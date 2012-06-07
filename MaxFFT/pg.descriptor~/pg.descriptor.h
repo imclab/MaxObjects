@@ -1,7 +1,4 @@
 
-#ifndef DEF_descriptor
-#define DEF_descriptor
-
 #include "ext.h"
 #include "ext_obex.h"
 #include "jpatcher_api.h"
@@ -125,5 +122,3 @@ void descriptor_mousewheel(t_descriptor *x, t_object *patcherview, t_pt pt, long
 
 void descriptor_post(t_descriptor *x, double posX,  t_object *view);
 void descriptor_postAve(t_descriptor *x, double posX1, double posX2,  t_object *view);
-
-#endif

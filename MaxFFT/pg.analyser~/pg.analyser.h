@@ -11,16 +11,16 @@
 typedef struct  _analyser 
 {
 	t_pxobject	f_ob;
-	float		f_sr;
+	t_sample	f_sr;
 
-	int			f_windowSize;
-	int			f_overlapping;
-	int			f_arraySize;
-	float 		f_rapportSize;
+	long		f_windowSize;
+	long		f_overlapping;
+	long		f_arraySize;
+	t_sample	f_rapportSize;
 
 	t_fft		*f_fft;
 	t_window	f_env;
-	int			f_modEnv;
+	long		f_modEnv;
 
 	t_sample	f_centroid;
 	t_sample	f_spread;
@@ -35,7 +35,9 @@ void *analyser_new(t_symbol *s, int argc, t_atom *argv);
 void analyser_free(t_analyser *x);
 void analyser_assist(t_analyser *x, void *b, long m, long a, char *s);
 void analyser_dsp(t_analyser *x, t_signal **sp, short *count);
+void analyser_dsp64(t_analyser *x, t_object *dsp64, short *count, double samplerate, long maxvectorsize, long flags);
 t_int *analyser_perform(t_int *w);
+void analyser_perform64(t_analyser *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam);
 void analyser_envSelector(t_analyser *x);
 
 t_max_err mode_set(t_analyser *x, t_object *attr, long argc, t_atom *argv);
