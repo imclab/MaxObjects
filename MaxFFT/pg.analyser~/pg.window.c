@@ -301,6 +301,7 @@ t_max_err window_mode_set(t_window *x, t_object *attr, long argc, t_atom *argv)
 
 void window_Selector(t_window *x)
 {
+	post("salut");
 	if(x->f_envelope)
 	{
 		switch(x->f_mode)

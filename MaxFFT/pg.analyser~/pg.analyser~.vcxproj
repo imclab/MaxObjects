@@ -93,7 +93,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>MaxAPI.lib;MaxAudio.lib;maxcrt.lib;libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib</AdditionalDependencies>
+      <AdditionalDependencies>MaxAPI.lib;MaxAudio.lib;maxcrt.lib;maxcrt_p.lib;libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).mxe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\msp-includes;.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes</AdditionalLibraryDirectories>
@@ -130,7 +130,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes;.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\msp-includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\jit-includes;.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\msp-includes;.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN_VERSION;WIN32;NDEBUG;_WINDOWS;_USRDLL;WIN_EXT_VERSION;_CRT_NOFORCE_MANIFEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>
@@ -158,10 +158,10 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>MaxAPI.lib;MaxAudio.lib;maxcrt.lib;libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib</AdditionalDependencies>
+      <AdditionalDependencies>MaxAPI.lib;MaxAudio.lib;maxcrt.lib;maxcrt_p.lib;jitlib.lib;libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).mxe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\msp-includes;.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\jit-includes;.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\msp-includes;.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>MSVCRT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
@@ -178,6 +178,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes\common\commonsyms.c" />
     <ClCompile Include="..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes\common\dllmain_win.c" />
     <ClCompile Include="pg.analysis_amplitude.c" />
     <ClCompile Include="pg.analyser~.c" />
@@ -185,16 +186,24 @@
     <ClCompile Include="pg.analysis_energy.c" />
     <ClCompile Include="pg.analysis_power.c" />
     <ClCompile Include="pg.fft.c" />
+    <ClCompile Include="pg.outlets.c" />
     <ClCompile Include="pg.window.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pg.analyser.h" />
-    <ClInclude Include="pg.fft.h" />
+    <ClInclude Include="pg.basic.h" />
     <ClInclude Include="pg.window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\SDKs\fftw-3.3.2-dll32\libfftw3-3.def" />
     <None Include="pg.descriptor~.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
