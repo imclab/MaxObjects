@@ -15,33 +15,33 @@ typedef struct  _mfcc
 {
 	t_pxobject	f_ob;
 
-	int			f_sr;
+	t_sample		f_sr;
 	void		*out1;
 
-	int			f_windowSize;
-	int			f_overlapping;
-	int			f_arraySize;
+	long		f_windowSize;
+	long		f_overlapping;
+	long		f_arraySize;
 	
-	int			f_nBands;
+	long		f_nBands;
 	void 		*f_clock;
 	t_fft		*f_fft;
 
-	float		*f_result;
+	t_sample	*f_result;
 	t_atom		*f_output;
-	int			f_interval;
-	int			f_count;
-	int			f_limit;
+	long		f_interval;
+	long		f_count;
+	long		f_limit;
 	t_window	f_env;
-	int			f_modEnv;
+	long		f_modEnv;
 
-	float		**f_filterParameters;
+	t_sample	**f_filterParameters;
 	
-	int			*f_melBandRef;
-	int			f_mfccMode;
+	long		*f_melBandRef;
+	long		f_mfccMode;
 
-	float		f_filter;
-	float		f_hightpass;
-	float 		f_rapportSize;
+	t_sample	f_filter;
+	t_sample	f_hightpass;
+	t_sample	f_rapportSize;
 
 } t_mfcc;
 

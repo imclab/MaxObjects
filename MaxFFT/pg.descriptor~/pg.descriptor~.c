@@ -214,7 +214,7 @@ void *descriptor_new(t_symbol *s, int argc, t_atom *argv)
 	if (!(d=object_dictionaryarg(argc,argv)))
 		return NULL;
 
-	x = (t_descriptor *)object_alloc(descriptor_class);
+	x = (t_descriptor *)object_alloc((t_class *)descriptor_class);
 	flags = 0 
 			| JBOX_DRAWFIRSTIN 
 			| JBOX_DRAWINLAST

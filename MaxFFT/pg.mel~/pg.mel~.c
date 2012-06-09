@@ -58,18 +58,16 @@ void *mfcc_new(t_symbol *s, int argc, t_atom *argv)
 	t_mfcc *x = NULL;
 	int i;
 	
-	if (x = (t_mfcc *)object_alloc(mfcc_class)) 
+	if (x = (t_mfcc *)object_alloc((t_class *)mfcc_class)) 
 	{		
-		/* Sampling Rate Initialization **************/
 		x->f_sr = sys_getsr();
-
 		x->f_nBands = 0;
 		x->f_limit = 5;			
 		x->f_count = 0;	
 		x->f_interval = 5;		
 		x->f_mfccMode = 0;
-		x->f_filter = 0.f;
-		x->f_hightpass = 0.95f;
+		x->f_filter = 0.;
+		x->f_hightpass = 0.95;
 
 		/* Windows Size Initialization **************/
 		x->f_windowSize = 0; 
@@ -99,33 +97,30 @@ void *mfcc_new(t_symbol *s, int argc, t_atom *argv)
 		}
 
 		/* Enveloppe   Initialization **************/
-		window_setup(&x->f_env, x->f_windowSize);
+		
 		if( argv[3].a_type == A_LONG ) x->f_modEnv = argv[3].a_w.w_long;
 		if (x->f_modEnv < 0 || x->f_modEnv > 15)
 		{
 			x->f_modEnv = 2;
 			object_post((t_object*)x, "Wrong enveloppe, set to default : 2 (Hamming)");
 		}
-		mfcc_envSelector(x);
+		window_setup(&x->f_env, x->f_windowSize, x->f_modEnv);
 
-		x->f_result				= (float *)getbytes(x->f_nBands * sizeof(float));
+		x->f_result				= (t_sample *)getbytes(x->f_nBands * sizeof(t_sample));
 		x->f_output				= (t_atom *)getbytes(x->f_nBands * sizeof(t_atom));
 
 		/* Mel Filter Initialization **************/
-		x->f_melBandRef			= (int *)getbytes(x->f_arraySize * sizeof(int));
-		x->f_filterParameters	= (float **)getbytes(x->f_nBands  * sizeof(float *));
+		x->f_melBandRef			= (long *)getbytes(x->f_arraySize * sizeof(long));
+		x->f_filterParameters	= (t_sample **)getbytes(x->f_nBands  * sizeof(t_sample *));
 		for(i = 0; i < x->f_nBands ; i++)
-		{
-			x->f_filterParameters[i] = (float *)getbytes(x->f_arraySize  * sizeof(float));
-		}
+			x->f_filterParameters[i] = (t_sample *)getbytes(x->f_arraySize  * sizeof(t_sample));
+
 		mfcc_filterParameter(x);
 
 		/* FFT Initialization ******************************************/
 		x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
 		for(i = 0; i < x->f_overlapping; i++)
-		{
 			fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping, x->f_nBands);
-		}
 
 		attr_args_process (x, argc, argv);
 
@@ -150,12 +145,12 @@ void mfcc_dsp(t_mfcc *x, t_signal **sp, short *count)
 
 t_int *mfcc_perform(t_int *w)
 {	
-	t_mfcc	*x	= (t_mfcc *)	(w[1]);
-	t_float	*in1	= (t_sample *)	(w[2]);
-	int n			= (int)			(w[3]);
+	t_mfcc		*x	 = (t_mfcc *)	(w[1]);
+	t_sample	*in1 = (t_sample *)	(w[2]);
+	int n			 = (int)			(w[3]);
 	
 	int i, j, alpha;
-	double energy;
+	t_sample energy;
 
 	if (x->f_ob.z_disabled) return w + 4;
 	
@@ -214,7 +209,7 @@ t_int *mfcc_perform(t_int *w)
 					/* Third : Perfom the cosinus transform */
 					else if(x->f_fft[i].f_ramp == x->f_arraySize + x->f_nBands)
 					{
-						fftwf_execute( x->f_fft[i].f_planCos );
+						fftw_execute(x->f_fft[i].f_planCos );
 					}
 					/* Fourth : Record the result */
 					else if(x->f_fft[i].f_ramp >= x->f_arraySize + 1 + x->f_nBands && x->f_fft[i].f_ramp < x->f_arraySize + (2 * x->f_nBands))
@@ -266,7 +261,7 @@ t_int *mfcc_perform(t_int *w)
 			x->f_fft[i].f_ramp++;
 			if (x->f_fft[i].f_ramp >= x->f_windowSize)
 			{
-				fftwf_execute( x->f_fft[i].f_plan );
+				fftw_execute(x->f_fft[i].f_plan );
 				x->f_fft[i].f_ramp = 0;
 				x->f_fft[i].f_spew2 += 1;
 			}	
@@ -327,14 +322,14 @@ void mfcc_free(t_mfcc *x)
 	}
 	freebytes(x->f_fft, x->f_overlapping * sizeof(t_fft));
 	
-	freebytes(x->f_result, x->f_nBands * sizeof(float));
+	freebytes(x->f_result, x->f_nBands * sizeof(t_sample));
 	freebytes(x->f_result, x->f_nBands * sizeof(t_atom));
-	freebytes(x->f_melBandRef , x->f_arraySize * sizeof(int));
+	freebytes(x->f_melBandRef , x->f_arraySize * sizeof(long));
 	for(i = 0; i < x->f_nBands; i++)
 	{
-		freebytes(x->f_filterParameters[i], x->f_arraySize * sizeof(float));
+		freebytes(x->f_filterParameters[i], x->f_arraySize * sizeof(t_sample));
 	}
-	freebytes(x->f_filterParameters, x->f_nBands * sizeof(float));
+	freebytes(x->f_filterParameters, x->f_nBands * sizeof(t_sample));
 	window_free(&x->f_env);
 	object_free(x->f_clock);
 
@@ -478,8 +473,6 @@ void mfcc_filterParameter(t_mfcc *x)
 			//if(i == x->f_nBands - 1 ) post("x->f_filterParameters %ld %ld = %f", i, j, (float)x->f_filterParameters[i][j]);
 		}
 	}
-
-	
 	
 	freebytes(melBandCenterMel, x->f_nBands * sizeof(float));
 	freebytes(melBandCenterHerz, (x->f_nBands + 1) * sizeof(float));
@@ -487,90 +480,8 @@ void mfcc_filterParameter(t_mfcc *x)
 	freebytes(freqBandCenter, x->f_nBands * sizeof(float));
 }
 
-
-void mfcc_envSelector(t_mfcc *x)
-{
-	switch(x->f_modEnv)
-	{
-		case 0:
-			window_square(&x->f_env);
-			break;
-		case 1:
-			window_hanning(&x->f_env);
-			break;
-		case 2:
-			window_hamming(&x->f_env);
-			break;
-		case 3:
-			window_turkey(&x->f_env);
-			break;
-		case 4:
-			window_cosinus(&x->f_env);
-			break;
-		case 5:
-			window_lanczos(&x->f_env);
-			break;
-		case 6:
-			window_triangular(&x->f_env);
-			break;
-		case 7:
-			window_gaussian(&x->f_env);
-			break;
-		case 8:
-			window_bartlett_hann(&x->f_env);
-			break;
-		case 9:
-			window_blackman(&x->f_env);
-			break;
-		case 10:
-			window_kaiser(&x->f_env);
-			break;
-		case 11:
-			window_nuttall(&x->f_env);
-			break;
-		case 12:
-			window_blackman_harris(&x->f_env);
-			break;
-		case 13:
-			window_blackman_nuttall(&x->f_env);
-			break;
-		case 14:
-			window_flat_top(&x->f_env);
-			break;
-		case 15:
-			window_poisson(&x->f_env);
-			break;
-	}
-}
-
 t_max_err mode_set(t_mfcc *x, t_object *attr, long argc, t_atom *argv)
 {
-	int mode;
-	mode = 16;
-	if ( atom_gettype(argv) == A_LONG) mode = atom_getlong(argv);
-	else if ( atom_gettype(argv) == A_FLOAT) mode = (int)atom_getfloat(argv);
-	else if ( atom_gettype(argv) == A_SYM)
-	{
-		if ( gensym(argv->a_w.w_sym->s_name)	  == gensym("Square"))			mode = 0;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Hanning"))			mode = 1;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Hamming"))			mode = 2;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Turkey"))			mode = 3;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Cosinus"))			mode = 4;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Lanczos"))			mode = 5;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Triangular"))		mode = 6;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Gaussian"))		mode = 7;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Bartlett-Hann"))	mode = 8;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Blackman"))		mode = 9;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Kaiser"))			mode = 10;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Nuttall"))			mode = 11;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Blackman-Harris"))	mode = 12;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Blackman-Nuttall"))mode = 13;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Flat-Top"))		mode = 14;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Poison"))			mode = 15;
-	}
-	
-	x->f_modEnv = mode;
-	mfcc_envSelector(x);
-	
+	window_mode_set(&x->f_env, attr, argc, argv);
 	return 0;
 }

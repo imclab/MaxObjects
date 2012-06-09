@@ -1,22 +1,22 @@
 
-#ifndef DEF_window
-#define DEF_window
+#ifndef DEF_MY_WINDOW
+#define DEF_MY_WINDOW
 
 #include "ext.h"
 #include "ext_obex.h"
-#include "ext_common.h"
 #include "z_dsp.h"
-
-#define WINDOW_SIZE	16384
 
 typedef struct _window
 {
-	float		*f_envelope;
-	int			f_size;
+	t_sample	*f_envelope;
+	long		f_size;
+	long		f_mode;
 }t_window;
 
-void window_setup(t_window *x, int size);
+void window_setup(t_window *x, long size, long mode);
 void window_free(t_window *x);
+t_max_err window_mode_set(t_window *x, t_object *attr, long argc, t_atom *argv);
+void window_Selector(t_window *x);
 
 void window_square(t_window *x);
 void window_hamming(t_window *x);
