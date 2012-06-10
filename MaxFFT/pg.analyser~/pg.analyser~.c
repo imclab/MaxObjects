@@ -67,13 +67,6 @@ void *analyser_new(t_symbol *s, int argc, t_atom *argv)
 
 	x->f_rapportSize = (double)x->f_sr / (double)x->f_windowSize;
 
-	/* FFt initialization ***********************/
-	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
-	for(i = 0; i < x->f_overlapping; i++)
-	{
-		fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping);
-	}
-
 	x->f_centroid	= 0.;
 	x->f_spread		= 0.;
 	x->f_deviation	= 0.;
@@ -91,16 +84,26 @@ void *analyser_new(t_symbol *s, int argc, t_atom *argv)
 
 void analyser_dsp(t_analyser *x, t_signal **sp, short *count)
 {
+	int i;
 	x->f_sr = (double)sp[0]->s_sr;
 	x->f_rapportSize = x->f_sr / (double)x->f_windowSize;
+
+	for(i = 0; i < x->f_overlapping; i++)
+		fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping);
 
 	dsp_add(analyser_perform, 7, x, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec, sp[4]->s_vec, sp[0]->s_n);
 }
 
 void analyser_dsp64(t_analyser *x, t_object *dsp64, short *count, double samplerate, long maxvectorsize, long flags)
 {
+	int i;
 	x->f_sr = samplerate;
 	x->f_rapportSize = x->f_sr / (t_sample)x->f_windowSize;
+
+	/* FFt initialization ***********************/
+	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
+	for(i = 0; i < x->f_overlapping; i++)
+		fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping);
 
 	object_method(dsp64, gensym("dsp_add64"), x, analyser_perform64, 0, NULL);
 }

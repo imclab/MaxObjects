@@ -9,7 +9,7 @@ void fft_setup(t_fft *x, int windowSize, int instance, int nbIntance)
 	x->f_ramp = (x->f_windowSize * x->f_instance) / nbIntance;
 
 	x->f_real		= (double *)fftw_malloc(x->f_windowSize * sizeof(double));
-	x->f_complex	= (fftw_complex *)fftw_malloc(x->f_arraySize * sizeof(fftw_complex));
+	x->f_complex	= (fftw_complex *)fftw_malloc(x->f_windowSize * sizeof(fftw_complex));
 	x->f_plan		= fftw_plan_dft_r2c_1d(x->f_windowSize, x->f_real, x->f_complex, FFTW_ESTIMATE);
 
 	x->f_sumAmp	= 0.;
