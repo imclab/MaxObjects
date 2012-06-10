@@ -7,39 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		22CF11E00EE9A9860054F513 /* MaxAudioAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22CF11DF0EE9A9860054F513 /* MaxAudioAPI.framework */; };
+		22CF119E0EE9A82E0054F513 /* MaxAudioAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22CF119D0EE9A82E0054F513 /* MaxAudioAPI.framework */; };
 		2FBBEADE08F335360078DB84 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54266BCE05E6E9780000000C /* MaxAPI.framework */; };
-		DD22491914A0A849006DDD5C /* fftw3.h in Headers */ = {isa = PBXBuildFile; fileRef = DD22491814A0A849006DDD5C /* fftw3.h */; };
-		DD25FDE5156A6AA000CAEDA3 /* pg.window.c in Sources */ = {isa = PBXBuildFile; fileRef = DD25FDDE156A6AA000CAEDA3 /* pg.window.c */; };
-		DD25FDE6156A6AA000CAEDA3 /* pg.window.h in Headers */ = {isa = PBXBuildFile; fileRef = DD25FDDF156A6AA000CAEDA3 /* pg.window.h */; };
-		DD89030F157D055E00D3ED84 /* pg.descriptor~.c in Sources */ = {isa = PBXBuildFile; fileRef = DD890305157D055E00D3ED84 /* pg.descriptor~.c */; };
-		DD890311157D055E00D3ED84 /* pg.buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = DD890307157D055E00D3ED84 /* pg.buffer.c */; };
-		DD890312157D055E00D3ED84 /* pg.interaction.c in Sources */ = {isa = PBXBuildFile; fileRef = DD890308157D055E00D3ED84 /* pg.interaction.c */; };
-		DD890313157D055E00D3ED84 /* pg.drawContext.c in Sources */ = {isa = PBXBuildFile; fileRef = DD890309157D055E00D3ED84 /* pg.drawContext.c */; };
-		DD890314157D055E00D3ED84 /* pg.drawAnalyse.c in Sources */ = {isa = PBXBuildFile; fileRef = DD89030A157D055E00D3ED84 /* pg.drawAnalyse.c */; };
-		DD890316157D055E00D3ED84 /* pg.descriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = DD89030C157D055E00D3ED84 /* pg.descriptor.h */; };
-		DD890317157D055E00D3ED84 /* pg.compute.c in Sources */ = {isa = PBXBuildFile; fileRef = DD89030D157D055E00D3ED84 /* pg.compute.c */; };
-		DD890318157D055E00D3ED84 /* pg.buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = DD89030E157D055E00D3ED84 /* pg.buffer.h */; };
-		DDBFF327157D19D600E190B7 /* libfftw3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBFF326157D19D600E190B7 /* libfftw3.dylib */; };
+		DD1803081584E3CC0098DAE8 /* libfftw3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1803071584E3CC0098DAE8 /* libfftw3.3.dylib */; };
+		DD1803111584E4110098DAE8 /* fftw3.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1803101584E4110098DAE8 /* fftw3.h */; };
+		DD1803351584E91E0098DAE8 /* pg.buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803281584E91E0098DAE8 /* pg.buffer.c */; };
+		DD1803361584E91E0098DAE8 /* pg.buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1803291584E91E0098DAE8 /* pg.buffer.h */; };
+		DD1803371584E91E0098DAE8 /* pg.compute.c in Sources */ = {isa = PBXBuildFile; fileRef = DD18032A1584E91E0098DAE8 /* pg.compute.c */; };
+		DD1803381584E91E0098DAE8 /* pg.descriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = DD18032B1584E91E0098DAE8 /* pg.descriptor.h */; };
+		DD1803391584E91E0098DAE8 /* pg.descriptor~.c in Sources */ = {isa = PBXBuildFile; fileRef = DD18032C1584E91E0098DAE8 /* pg.descriptor~.c */; };
+		DD18033D1584E91E0098DAE8 /* pg.drawAnalyse.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803301584E91E0098DAE8 /* pg.drawAnalyse.c */; };
+		DD18033E1584E91E0098DAE8 /* pg.drawContext.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803311584E91E0098DAE8 /* pg.drawContext.c */; };
+		DD18033F1584E91E0098DAE8 /* pg.interaction.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803321584E91E0098DAE8 /* pg.interaction.c */; };
+		DD1803401584E91E0098DAE8 /* pg.window.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803331584E91E0098DAE8 /* pg.window.c */; };
+		DD1803411584E91E0098DAE8 /* pg.window.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1803341584E91E0098DAE8 /* pg.window.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		22CF10220EE984600054F513 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
-		22CF11DF0EE9A9860054F513 /* MaxAudioAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAudioAPI.framework; path = "../../c74support/msp-includes/MaxAudioAPI.framework"; sourceTree = SOURCE_ROOT; };
+		22CF10220EE984600054F513 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../../maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
+		22CF119D0EE9A82E0054F513 /* MaxAudioAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAudioAPI.framework; path = "../../../c74support/msp-includes/MaxAudioAPI.framework"; sourceTree = SOURCE_ROOT; };
 		2FBBEAE508F335360078DB84 /* pg.descriptor~.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "pg.descriptor~.mxo"; sourceTree = BUILT_PRODUCTS_DIR; };
-		54266BCE05E6E9780000000C /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
-		DD22491814A0A849006DDD5C /* fftw3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fftw3.h; path = /usr/include/fftw3.h; sourceTree = "<absolute>"; };
-		DD25FDDE156A6AA000CAEDA3 /* pg.window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.window.c; sourceTree = "<group>"; };
-		DD25FDDF156A6AA000CAEDA3 /* pg.window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.window.h; sourceTree = "<group>"; };
-		DD890305157D055E00D3ED84 /* pg.descriptor~.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "pg.descriptor~.c"; sourceTree = "<group>"; };
-		DD890307157D055E00D3ED84 /* pg.buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.buffer.c; sourceTree = "<group>"; };
-		DD890308157D055E00D3ED84 /* pg.interaction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.interaction.c; sourceTree = "<group>"; };
-		DD890309157D055E00D3ED84 /* pg.drawContext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.drawContext.c; sourceTree = "<group>"; };
-		DD89030A157D055E00D3ED84 /* pg.drawAnalyse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.drawAnalyse.c; sourceTree = "<group>"; };
-		DD89030C157D055E00D3ED84 /* pg.descriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.descriptor.h; sourceTree = "<group>"; };
-		DD89030D157D055E00D3ED84 /* pg.compute.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.compute.c; sourceTree = "<group>"; };
-		DD89030E157D055E00D3ED84 /* pg.buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.buffer.h; sourceTree = "<group>"; };
-		DDBFF326157D19D600E190B7 /* libfftw3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfftw3.dylib; path = usr/local/lib/libfftw3.dylib; sourceTree = SDKROOT; };
+		54266BCE05E6E9780000000C /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
+		DD1803071584E3CC0098DAE8 /* libfftw3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfftw3.3.dylib; path = usr/local/lib/libfftw3.3.dylib; sourceTree = SDKROOT; };
+		DD1803101584E4110098DAE8 /* fftw3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fftw3.h; path = /usr/include/fftw3.h; sourceTree = "<absolute>"; };
+		DD1803281584E91E0098DAE8 /* pg.buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.buffer.c; sourceTree = "<group>"; };
+		DD1803291584E91E0098DAE8 /* pg.buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.buffer.h; sourceTree = "<group>"; };
+		DD18032A1584E91E0098DAE8 /* pg.compute.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.compute.c; sourceTree = "<group>"; };
+		DD18032B1584E91E0098DAE8 /* pg.descriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.descriptor.h; sourceTree = "<group>"; };
+		DD18032C1584E91E0098DAE8 /* pg.descriptor~.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "pg.descriptor~.c"; sourceTree = "<group>"; };
+		DD1803301584E91E0098DAE8 /* pg.drawAnalyse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.drawAnalyse.c; sourceTree = "<group>"; };
+		DD1803311584E91E0098DAE8 /* pg.drawContext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.drawContext.c; sourceTree = "<group>"; };
+		DD1803321584E91E0098DAE8 /* pg.interaction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.interaction.c; sourceTree = "<group>"; };
+		DD1803331584E91E0098DAE8 /* pg.window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.window.c; sourceTree = "<group>"; };
+		DD1803341584E91E0098DAE8 /* pg.window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.window.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,8 +48,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FBBEADE08F335360078DB84 /* MaxAPI.framework in Frameworks */,
-				22CF11E00EE9A9860054F513 /* MaxAudioAPI.framework in Frameworks */,
-				DDBFF327157D19D600E190B7 /* libfftw3.dylib in Frameworks */,
+				22CF119E0EE9A82E0054F513 /* MaxAudioAPI.framework in Frameworks */,
+				DD1803081584E3CC0098DAE8 /* libfftw3.3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,11 +59,10 @@
 		089C166AFE841209C02AAC07 /* iterator */ = {
 			isa = PBXGroup;
 			children = (
-				DD22491814A0A849006DDD5C /* fftw3.h */,
-				22CF10220EE984600054F513 /* maxmspsdk.xcconfig */,
+				DD1803101584E4110098DAE8 /* fftw3.h */,
+				08FB77ADFE841716C02AAC07 /* Source */,
 				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
 				19C28FB4FE9D528D11CA2CBB /* Products */,
-				08FB77ADFE841716C02AAC07 /* Source */,
 			);
 			name = iterator;
 			sourceTree = "<group>";
@@ -72,8 +71,8 @@
 			isa = PBXGroup;
 			children = (
 				54266BCE05E6E9780000000C /* MaxAPI.framework */,
-				22CF11DF0EE9A9860054F513 /* MaxAudioAPI.framework */,
-				DDBFF326157D19D600E190B7 /* libfftw3.dylib */,
+				22CF119D0EE9A82E0054F513 /* MaxAudioAPI.framework */,
+				DD1803071584E3CC0098DAE8 /* libfftw3.3.dylib */,
 			);
 			name = "External Frameworks and Libraries";
 			sourceTree = "<group>";
@@ -81,16 +80,17 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				DD890305157D055E00D3ED84 /* pg.descriptor~.c */,
-				DD890307157D055E00D3ED84 /* pg.buffer.c */,
-				DD890308157D055E00D3ED84 /* pg.interaction.c */,
-				DD890309157D055E00D3ED84 /* pg.drawContext.c */,
-				DD89030A157D055E00D3ED84 /* pg.drawAnalyse.c */,
-				DD89030C157D055E00D3ED84 /* pg.descriptor.h */,
-				DD89030D157D055E00D3ED84 /* pg.compute.c */,
-				DD89030E157D055E00D3ED84 /* pg.buffer.h */,
-				DD25FDDE156A6AA000CAEDA3 /* pg.window.c */,
-				DD25FDDF156A6AA000CAEDA3 /* pg.window.h */,
+				DD1803281584E91E0098DAE8 /* pg.buffer.c */,
+				DD1803291584E91E0098DAE8 /* pg.buffer.h */,
+				DD18032A1584E91E0098DAE8 /* pg.compute.c */,
+				DD18032B1584E91E0098DAE8 /* pg.descriptor.h */,
+				DD18032C1584E91E0098DAE8 /* pg.descriptor~.c */,
+				DD1803301584E91E0098DAE8 /* pg.drawAnalyse.c */,
+				DD1803311584E91E0098DAE8 /* pg.drawContext.c */,
+				DD1803321584E91E0098DAE8 /* pg.interaction.c */,
+				DD1803331584E91E0098DAE8 /* pg.window.c */,
+				DD1803341584E91E0098DAE8 /* pg.window.h */,
+				22CF10220EE984600054F513 /* maxmspsdk.xcconfig */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -110,10 +110,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD22491914A0A849006DDD5C /* fftw3.h in Headers */,
-				DD25FDE6156A6AA000CAEDA3 /* pg.window.h in Headers */,
-				DD890316157D055E00D3ED84 /* pg.descriptor.h in Headers */,
-				DD890318157D055E00D3ED84 /* pg.buffer.h in Headers */,
+				DD1803111584E4110098DAE8 /* fftw3.h in Headers */,
+				DD1803361584E91E0098DAE8 /* pg.buffer.h in Headers */,
+				DD1803381584E91E0098DAE8 /* pg.descriptor.h in Headers */,
+				DD1803411584E91E0098DAE8 /* pg.window.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,13 +188,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD25FDE5156A6AA000CAEDA3 /* pg.window.c in Sources */,
-				DD89030F157D055E00D3ED84 /* pg.descriptor~.c in Sources */,
-				DD890311157D055E00D3ED84 /* pg.buffer.c in Sources */,
-				DD890312157D055E00D3ED84 /* pg.interaction.c in Sources */,
-				DD890313157D055E00D3ED84 /* pg.drawContext.c in Sources */,
-				DD890314157D055E00D3ED84 /* pg.drawAnalyse.c in Sources */,
-				DD890317157D055E00D3ED84 /* pg.compute.c in Sources */,
+				DD1803351584E91E0098DAE8 /* pg.buffer.c in Sources */,
+				DD1803371584E91E0098DAE8 /* pg.compute.c in Sources */,
+				DD1803391584E91E0098DAE8 /* pg.descriptor~.c in Sources */,
+				DD18033D1584E91E0098DAE8 /* pg.drawAnalyse.c in Sources */,
+				DD18033E1584E91E0098DAE8 /* pg.drawContext.c in Sources */,
+				DD18033F1584E91E0098DAE8 /* pg.interaction.c in Sources */,
+				DD1803401584E91E0098DAE8 /* pg.window.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,14 +220,9 @@
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../c74support/msp-includes\"",
+					"\"$(SRCROOT)/../../../c74support/msp-includes\"",
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../fftw-3.3/MaCompil/lib\"",
-					"\"$(SRCROOT)/../../../fftw-3.3/Compilation/lib\"",
-				);
 			};
 			name = Development;
 		};
@@ -235,19 +230,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22CF10220EE984600054F513 /* maxmspsdk.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../c74support/msp-includes\"",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../fftw-3.3/MaCompil/lib\"",
-					"\"$(SRCROOT)/../../../fftw-3.3/Compilation/lib\"",
+					"\"$(SRCROOT)/../../../c74support/msp-includes\"",
 				);
 			};
 			name = Deployment;
