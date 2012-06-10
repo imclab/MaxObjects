@@ -31,7 +31,6 @@ int main()
 void *analyser_new(t_symbol *s, int argc, t_atom *argv)
 {
 	t_analyser *x = (t_analyser *)object_alloc((t_class *)analyser_class);
-	int i;
 
 	/* Sampling Rate initialization **************/
 	x->f_sr = sys_getsr();
@@ -111,11 +110,11 @@ void analyser_dsp64(t_analyser *x, t_object *dsp64, short *count, double sampler
 t_int *analyser_perform(t_int *w)
 {	
 	t_analyser	*x		= (t_analyser *)(w[1]);
-	float	*in		= (float *)	(w[2]);
-	float	*out1	= (float *)	(w[3]);
-	float	*out2	= (float *)	(w[4]);
-	float	*out3	= (float *)	(w[5]);
-	float	*out4	= (float *)	(w[6]);
+	t_float	*in		= (t_float *)	(w[2]);
+	t_float	*out1	= (t_float *)	(w[3]);
+	t_float	*out2	= (t_float *)	(w[4]);
+	t_float	*out3	= (t_float *)	(w[5]);
+	t_float	*out4	= (t_float *)	(w[6]);
 	int n			= (int)		(w[7]);
 	
 	int i, j;
