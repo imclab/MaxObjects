@@ -270,26 +270,6 @@ t_max_err window_mode_set(t_window *x, t_object *attr, long argc, t_atom *argv)
 	int mode;
 	mode = 16;
 	if ( atom_gettype(argv) == A_LONG) mode = atom_getlong(argv);
-	else if ( atom_gettype(argv) == A_FLOAT) mode = (int)atom_getfloat(argv);
-	else if ( atom_gettype(argv) == A_SYM)
-	{
-		if ( gensym(argv->a_w.w_sym->s_name)	  == gensym("Square"))			mode = 0;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Hanning"))			mode = 1;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Hamming"))			mode = 2;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Turkey"))			mode = 3;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Cosinus"))			mode = 4;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Lanczos"))			mode = 5;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Triangular"))		mode = 6;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Gaussian"))		mode = 7;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Bartlett-Hann"))	mode = 8;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Blackman"))		mode = 9;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Kaiser"))			mode = 10;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Nuttall"))			mode = 11;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Blackman-Harris"))	mode = 12;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Blackman-Nuttall"))mode = 13;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Flat-Top"))		mode = 14;
-		else if ( gensym(argv->a_w.w_sym->s_name) == gensym("Poisson"))			mode = 15;
-	}
 	if(mode != x->f_mode)
 	{
 		x->f_mode = mode;
@@ -301,7 +281,6 @@ t_max_err window_mode_set(t_window *x, t_object *attr, long argc, t_atom *argv)
 
 void window_Selector(t_window *x)
 {
-	post("salut");
 	if(x->f_envelope)
 	{
 		switch(x->f_mode)

@@ -1,7 +1,4 @@
 
-#ifndef DEF_MY_WINDOW
-#define DEF_MY_WINDOW
-
 #include "ext.h"
 #include "ext_obex.h"
 #include "z_dsp.h"
@@ -34,5 +31,3 @@ void window_blackman_harris(t_window *x);
 void window_blackman_nuttall(t_window *x);
 void window_flat_top(t_window *x);
 void window_poisson(t_window *x);
-
-#endif
