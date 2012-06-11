@@ -57,3 +57,6 @@ void gradient_perform64(t_gradient *x, t_object *dsp64, double **ins, long numin
 t_max_err mode_set(t_gradient *x, t_object *attr, long argc, t_atom *argv);
 void fft_setup(t_fft *x, int windowSize, int instance, int nbIntance);
 void fft_free(t_fft *x);
+
+void gradient_dsp(t_gradient *x, t_signal **sp, short *count);
+t_int *gradient_perform(t_int *w);

@@ -118,7 +118,7 @@ void *mel_new(t_symbol *s, int argc, t_atom *argv)
 		/* Inlet and Outlet Initialization ******************************/
 		dsp_setup((t_pxobject *)x, 1);
 		x->out1 = listout(x);
-
+		x->f_clock = clock_new(x, (method)mel_out);
 		attr_args_process (x, argc, argv);
 	}
 	return x;
@@ -137,7 +137,6 @@ void mel_dsp64(t_mel *x, t_object *dsp64, short *count, double samplerate, long 
 		fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping, x->f_nBands);
 	}
 	/* Clock Initialization ****************************************/
-	x->f_clock = clock_new(x, (method)mel_out);
 	clock_delay(x->f_clock, 0L);
 	object_method(dsp64, gensym("dsp_add64"), x, mel_perform64, 0, NULL);
 }
@@ -173,7 +172,7 @@ void mel_perform64(t_mel *x, t_object *dsp64, double **ins, long numins, double 
 					{
 						alpha = x->f_melBandRef[x->f_fft[i].f_ramp];
 
-						energy =  (sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0])+(x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1])));
+						energy = (sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0])+(x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1])));
 						// Si la bande frequentielle appartient au flitre de la bande mel alpha, il appartient aussi au filtre de la bande alpha+1
 						// sauf lorque j-1 car la bande j-1 existe pas, donc elle appartient seulement a la bande j+1.
 						if(alpha != -1)
@@ -226,7 +225,7 @@ void mel_perform64(t_mel *x, t_object *dsp64, double **ins, long numins, double 
 					{
 
 						alpha = x->f_melBandRef[x->f_fft[i].f_ramp];
-						energy =  (sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0])+(x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1])));
+						energy = (sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0])+(x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1])));
 					
 						if(alpha != -1)
 						{
@@ -315,9 +314,8 @@ void mel_free(t_mel *x)
 	freebytes(x->f_result, x->f_nBands * sizeof(t_atom));
 	freebytes(x->f_melBandRef , x->f_arraySize * sizeof(long));
 	for(i = 0; i < x->f_nBands; i++)
-	{
 		freebytes(x->f_filterParameters[i], x->f_arraySize * sizeof(t_sample));
-	}
+
 	freebytes(x->f_filterParameters, x->f_nBands * sizeof(t_sample));
 	window_free(&x->f_env);
 	object_free(x->f_clock);
@@ -357,53 +355,39 @@ void mel_assist(t_mel *x, void *b, long m, long a, char *s)
 
 void mel_filterParameter(t_mel *x)
 {
-	int i, j;
+	int i, j, frequency;
 
-	float maxMel;
-	float melBandSize;
-	float freqBandSize;
-	float *melBandCenterMel;
-	float *melBandCenterHerz;
-	float twoMelBandSize;
-	float *freqBandCenter;
-	float *normalizeFactor;
-	// Defini le coefficient mel maximum //
-	// A partir de la frequence d echantillonage - 20Hz //
-	maxMel = 2595*log10( ( ((float)(x->f_sr/2) - 20.f) / 700.f) + 1.f );
-	// Defini la taille d'une bande en mel //
-	melBandSize = maxMel/x->f_nBands;
-	// Defini le centre des bandes mel en  mel //
-	melBandCenterMel = (float *)getbytes(x->f_nBands  * sizeof(float));
-	for(i = 0; i < x->f_nBands; i++)
-	{
-		melBandCenterMel[i] = (float)i * melBandSize  +  melBandSize / 2.f ;
-	}
-	// Defini le centre des bandes mel en Hz //
-	melBandCenterHerz	= (float *)getbytes((x->f_nBands+1)  * sizeof(float));
-	for(i = 0; i < x->f_nBands; i++)
-	{
-		melBandCenterHerz[i]	= (700 * ( pow(10, melBandCenterMel[i]/2595.f) - 1.f)) + 20.f;
-		
-		//post("%ld", i);
-		//post("cen %f", melBandCenterHerz[i]);
-	}
-	melBandCenterHerz[x->f_nBands] = x->f_sr;
-	// Defini la taille d'une bande FFT //
-	freqBandSize = (float)x->f_sr / (float)x->f_windowSize;
-	// Defini le centre des bandes de FFT //
-	freqBandCenter = (float *)getbytes(x->f_arraySize  * sizeof(float));
-	for(i = 0; i < x->f_arraySize; i++)
-	{
-		freqBandCenter[i] = ( (float)i * freqBandSize ) + ( freqBandSize / 2.f );
-	}
+	t_sample maxMel;
+	t_sample melBandSize;
+	t_sample freqBandSize;
+	t_sample *melBandCenterMel;
+	t_sample *melBandCenterHerz;
+	t_sample twoMelBandSize;
+	t_sample *freqBandCenter;
+	t_sample *normalizeFactor;
 	
-	// On applique un filtre a deux bandes frequentielles par defaut 
-	// L'on defini un tableau permattant de savoir a quelles bandes
-	// frequentielles le filtre est different de zero et nous evite ainsi
-	// une application du filtre sur toutes les bandes
+	
+	maxMel = 2595. * log10(((((t_sample)(x->f_sr) / 2.) - 20.) / 700.) + 1.);
+	melBandSize = maxMel / (t_sample)x->f_nBands;
+
+	melBandCenterMel = (t_sample *)getbytes(x->f_nBands  * sizeof(t_sample));
+	for(i = 0; i < x->f_nBands; i++)
+		melBandCenterMel[i] = (t_sample)i * melBandSize  +  melBandSize / 2. ;
+
+	melBandCenterHerz= (t_sample *)getbytes((x->f_nBands+1)  * sizeof(t_sample));
+	for(i = 0; i < x->f_nBands; i++)
+		melBandCenterHerz[i]	= (700. * (pow(10., (melBandCenterMel[i] / 2595.)) - 1.)) + 20.;
+
+	melBandCenterHerz[x->f_nBands] = x->f_sr;
+	freqBandSize = x->f_sr / (t_sample)x->f_windowSize;
+
+	freqBandCenter = (t_sample *)getbytes(x->f_arraySize  * sizeof(t_sample));
+	for(i = 0; i < x->f_arraySize; i++)
+		freqBandCenter[i] = ((t_sample)i * freqBandSize) + (freqBandSize / 2.);
+	
 	for(i = 0; i < x->f_arraySize; i++)
 	{
-		int frequency = (float)(i*freqBandSize);
+		frequency = (t_sample)i * freqBandSize;
 		for(j = 0; j < x->f_nBands; j++)
 		{
 			if( frequency < melBandCenterHerz[0])
@@ -417,10 +401,7 @@ void mel_filterParameter(t_mel *x)
 		}
 	}
 	
-	// on defini un facteur de normalize par bande de mel
-	// Si une bande de mel recouvre N bande de FFT
-	// alors le facteur = 1/N
-	normalizeFactor = (float *)getbytes(x->f_nBands  * sizeof(float));
+	normalizeFactor = (t_sample *)getbytes(x->f_nBands  * sizeof(t_sample));
 	for(i = 0; i < x->f_nBands; i++)
 	{
 		normalizeFactor[i] = 0;
@@ -429,44 +410,35 @@ void mel_filterParameter(t_mel *x)
 			if( x->f_melBandRef[j] == i || x->f_melBandRef[j] == i-1 )
 			{
 				normalizeFactor[i]++;
-				//post("OK");
 			}
 		}
-		if (normalizeFactor[i] <= 1) 
+		if (normalizeFactor[i] <= 1.) 
 		{
-			normalizeFactor[i] = 1;
+			normalizeFactor[i] = 1.;
 		}
-		//post("%ld facteur %ld", i, (int)normalizeFactor[i]);
 	}
 	
-	//x->f_rapportSize = (float)(PI * (1.0 / (float)x->f_arraySize));
-	//for(i = 0; i < x->f_arraySize; i++) post("%ld %ld", i, x->f_melBandRef[i]);
-	// Defini les facteurs de filtres triangulaire en fonctions des bandes fft et mel //
 	for(i = 0; i < x->f_nBands; i++)
 	{
 		for(j = 0; j < x->f_arraySize; j++)
 		{
-			// Filtre triangulaire (n) = 2/N * ( N/2 -| n - (N-1)/2|)
+			if(i == 0) 
+				twoMelBandSize = melBandCenterHerz[1];
+			else if(i == x->f_nBands-1) 
+				twoMelBandSize = x->f_sr/2 - melBandCenterHerz[i-1];
+			else 
+				twoMelBandSize = melBandCenterHerz[i+1] - melBandCenterHerz[i-1];
 
-			// Definition de la period N : twoMelBandSize
-			// Pour la bande 0 : N =  melBandCenterHerz[1] - 0
-			if(i == 0) twoMelBandSize = melBandCenterHerz[1];
-			// Pour la derniere bande N = SamplingRate/2 - - melBandCenterHerz[i-1];
-			else if(i == x->f_nBands-1) twoMelBandSize = x->f_sr/2 - melBandCenterHerz[i-1];
-			// Pour le reste N = melBandCenterHerz[i+1] - melBandCenterHerz[i-1]
-			else twoMelBandSize = melBandCenterHerz[i+1] - melBandCenterHerz[i-1];
-			// Calculs
-			// n est egal freqBandCenter[j]-melBandCenterHerz[i-1])
-			x->f_filterParameters[i][j] = ((2.f/twoMelBandSize)  * ((twoMelBandSize/2.f) - fabs((freqBandCenter[j]-melBandCenterHerz[i-1])  - ((twoMelBandSize - 1.f) / 2.f)))/normalizeFactor[i]) ;
-			if (x->f_filterParameters[i][j] <= 0.f) x->f_filterParameters[i][j] = 0.f;
-			//if(i == x->f_nBands - 1 ) post("x->f_filterParameters %ld %ld = %f", i, j, (float)x->f_filterParameters[i][j]);
-		}
+			x->f_filterParameters[i][j] = ((2. / twoMelBandSize)  * ((twoMelBandSize / 2.) - fabs((freqBandCenter[j] - melBandCenterHerz[i-1])  - ((twoMelBandSize - 1.) / 2.))) / normalizeFactor[i]) ;
+			if (x->f_filterParameters[i][j] <= 0.f) 
+				x->f_filterParameters[i][j] = 0.f;
+			}
 	}
 	
-	freebytes(melBandCenterMel, x->f_nBands * sizeof(float));
-	freebytes(melBandCenterHerz, (x->f_nBands + 1) * sizeof(float));
-	freebytes(freqBandCenter, x->f_arraySize * sizeof(float));
-	freebytes(freqBandCenter, x->f_nBands * sizeof(float));
+	freebytes(melBandCenterMel, x->f_nBands * sizeof(t_sample));
+	freebytes(melBandCenterHerz, (x->f_nBands + 1) * sizeof(t_sample));
+	freebytes(freqBandCenter, x->f_arraySize * sizeof(t_sample));
+	freebytes(freqBandCenter, x->f_nBands * sizeof(t_sample));
 }
 
 t_max_err mode_set(t_mel *x, t_object *attr, long argc, t_atom *argv)

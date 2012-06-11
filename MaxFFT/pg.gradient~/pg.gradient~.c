@@ -6,6 +6,7 @@ int main()
 
 	c = class_new("pg.gradient~", (method)gradient_new, (method)gradient_free, (short)sizeof(t_gradient), 0L, A_GIMME, 0);
 	class_addmethod(c, (method)gradient_dsp64,		"dsp64",		A_CANT,	0);
+	class_addmethod(c, (method)gradient_dsp,		"dsp",			A_CANT,	0);
 	class_addmethod(c, (method)gradient_assist,		"assist",		A_CANT,	0);
 
 	CLASS_ATTR_LONG				(c, "window", 0, t_gradient, f_winMode);
@@ -286,4 +287,171 @@ t_max_err mode_set(t_gradient *x, t_object *attr, long argc, t_atom *argv)
 	window_mode_set(&x->f_env, attr, argc, argv);
 	x->f_ampMode = x->f_env.f_mode;
 	return 0;
+}
+
+void gradient_dsp(t_gradient *x, t_signal **sp, short *count)
+{
+	int i;
+	x->f_sr = (double)sp[0]->s_sr;
+	x->f_rapportSize	= (double)(PI * (1. / (double)x->f_arraySize));
+	x->f_rapportFreq = x->f_sr / (t_sample)x->f_windowSize;
+
+	/* FFt initialization ***********************/
+	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
+	for(i = 0; i < x->f_overlapping; i++)
+	{
+		fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping);
+	}
+
+	x->f_sumFreq = 0.;
+	x->f_sumFreqCar = 0.;
+	for(i = 0; i < x->f_arraySize; i++)
+	{
+		x->f_sumFreq += (double)i * x->f_rapportFreq;
+		x->f_sumFreqCar += ((double)i * x->f_rapportFreq) * ((double)i * x->f_rapportFreq);
+	}
+	x->f_sumFreqCar *= (double)x->f_arraySize;
+	x->f_sumFreqCar -= (x->f_sumFreq * x->f_sumFreq);
+
+	dsp_add(gradient_perform, 4, x, sp[0]->s_vec, sp[1]->s_vec, sp[0]->s_n);
+}
+
+t_int *gradient_perform(t_int *w)
+{
+    t_gradient	*x		= (t_gradient *)(w[1]);
+	t_sample	*in		= (t_sample *)	(w[2]);
+	t_sample	*out1	= (t_sample *)	(w[3]);
+	int n				= (int)			(w[4]);
+
+	int i, j;
+	t_double amplitude, frequency, logAdd;
+	if (x->f_ob.z_disabled) return w + 5;
+
+	for(i = 0; i < x->f_overlapping; i++)
+	{
+		for(j = 0; j < n; j++)
+		{
+			x->f_fft[i].f_real[x->f_fft[i].f_ramp] = in[j] * x->f_env.f_envelope[x->f_fft[i].f_ramp];
+
+			/* Slope */
+			if(x->f_mode == 0)
+			{
+				if (x->f_fft[i].f_ramp < x->f_arraySize && x->f_fft[i].f_ramp > 0)
+				{
+					amplitude = x->f_rapportSize * sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]) + (x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]));
+					frequency = (t_double)x->f_fft[i].f_ramp * x->f_rapportFreq;
+					
+					if(x->f_ampMode == 0)
+					{
+						x->f_fft[i].f_sumAmp	+= amplitude;
+						x->f_fft[i].f_sumFreq	+= amplitude * frequency;
+					}
+					else if(x->f_ampMode == 1)
+					{
+						amplitude *= amplitude;
+						x->f_fft[i].f_sumAmp	+= amplitude;
+						x->f_fft[i].f_sumFreq	+= amplitude * frequency;
+					}
+					else if(x->f_ampMode == 2)
+					{
+						amplitude = 20. * log10(amplitude);
+						if (amplitude < -90.f) amplitude = -90.f;
+						logAdd = pow(10., (amplitude / 10.));
+						x->f_fft[i].f_sumAmp	+= logAdd;
+						x->f_fft[i].f_sumFreq	+= logAdd * frequency;
+					}
+						
+				}
+				else if (x->f_fft[i].f_ramp == x->f_arraySize)
+				{
+					if(x->f_fft[i].f_sumAmp != 0.)
+					{
+						x->f_gradient = x->f_fft[i].f_sumFreq * (t_double)x->f_arraySize;
+						x->f_gradient -= (x->f_sumFreq * x->f_fft[i].f_sumAmp);
+						x->f_gradient /= x->f_sumFreqCar;
+						x->f_gradient /= x->f_fft[i].f_sumAmp;
+						x->f_gradient *= (t_sample)x->f_sr / 4.;
+					}
+					else 
+					{
+						x->f_gradient = 0.;
+					}
+					x->f_fft[i].f_sumAmp = 0.;
+					x->f_fft[i].f_sumFreq = 0.;
+				}
+			}
+			/* Decrease */
+			else
+			{
+				if (x->f_fft[i].f_ramp < x->f_arraySize && x->f_fft[i].f_ramp > 0)
+				{
+					amplitude = x->f_rapportSize * sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]) + (x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]));
+					if(x->f_ampMode == 0)
+					{
+						if(x->f_fft[i].f_ramp == 1)
+							x->f_fft[i].f_firstAmp = amplitude;
+						else
+						{
+							x->f_fft[i].f_sumAmp	+= amplitude - x->f_fft[i].f_firstAmp;
+							x->f_fft[i].f_sumFreq	+= amplitude * (t_sample)(x->f_fft[i].f_ramp - 1);
+						}
+					}
+					else if(x->f_ampMode == 1)
+					{
+						amplitude *= amplitude;
+						if(x->f_fft[i].f_ramp == 1)
+							x->f_fft[i].f_firstAmp = amplitude;
+						else
+						{
+							x->f_fft[i].f_sumAmp	+= amplitude - x->f_fft[i].f_firstAmp;
+							x->f_fft[i].f_sumFreq	+= amplitude * (t_sample)(x->f_fft[i].f_ramp - 1);
+						}
+					}
+					else if(x->f_ampMode == 2)
+					{
+						amplitude = 20. * log10(amplitude);
+						if (amplitude < -90.f) amplitude = -90.f;
+						logAdd = pow(10., (amplitude / 10.));
+						
+						if(x->f_fft[i].f_ramp == 1)
+							x->f_fft[i].f_firstAmp = logAdd;
+						else
+						{
+							x->f_fft[i].f_sumAmp	+= logAdd - x->f_fft[i].f_firstAmp;
+							x->f_fft[i].f_sumFreq	+= logAdd * (t_sample)(x->f_fft[i].f_ramp - 1);
+						}
+					}
+				}
+				else if (x->f_fft[i].f_ramp == x->f_arraySize)
+				{
+					if(x->f_fft[i].f_sumFreq != 0.)
+					{
+						x->f_gradient = x->f_fft[i].f_sumAmp / x->f_fft[i].f_sumFreq;
+					}
+					else 
+					{
+						x->f_gradient = 0.;
+					}
+					x->f_fft[i].f_sumAmp = 0.;
+					x->f_fft[i].f_sumFreq = 0.;
+				}
+			}
+
+			x->f_fft[i].f_ramp++;
+			if (x->f_fft[i].f_ramp == x->f_windowSize)
+			{
+				fftw_execute(x->f_fft[i].f_plan);
+				x->f_fft[i].f_ramp = 0;
+			}
+	
+		}
+
+	}
+
+	for(j = 0; j < n; j++)
+	{
+		out1[j] = x->f_gradient;
+	}
+
+	return w + 5;
 }

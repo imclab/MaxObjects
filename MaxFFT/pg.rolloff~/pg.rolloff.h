@@ -53,3 +53,6 @@ void rolloff_perform64(t_rolloff *x, t_object *dsp64, double **ins, long numins,
 t_max_err mode_set(t_rolloff *x, t_object *attr, long argc, t_atom *argv);
 void fft_setup(t_fft *x, int windowSize, int instance, int nbIntance);
 void fft_free(t_fft *x);
+
+void rolloff_dsp(t_rolloff *x, t_signal **sp, short *count);
+t_int *rolloff_perform(t_int *w);

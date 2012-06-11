@@ -4,8 +4,9 @@ int main()
 {
 	t_class *c;
 
-	c = class_new("pg.energy~", (method)energy_new, (method)energy_free, (short)sizeof(t_energy), 0L, A_GIMME, 0);
+	c = class_new("pg.energy~", (method)energy_new, (method)energy_free, (long)sizeof(t_energy), 0L, A_GIMME, 0);
 	class_addmethod(c, (method)energy_dsp64,		"dsp64",		A_CANT,	0);
+	class_addmethod(c, (method)energy_dsp,			"dsp",			A_CANT,	0);
 	class_addmethod(c, (method)energy_assist,		"assist",		A_CANT,	0);
 
 	CLASS_ATTR_LONG				(c, "window", 0, t_energy, f_winMode);
@@ -221,4 +222,104 @@ t_max_err mode_set(t_energy *x, t_object *attr, long argc, t_atom *argv)
 	window_mode_set(&x->f_env, attr, argc, argv);
 	x->f_winMode = x->f_env.f_mode;
 	return 0;
+}
+
+
+void energy_dsp(t_energy *x, t_signal **sp, short *count)
+{
+	int i;
+	x->f_sr = (double)sp[0]->s_sr;
+	x->f_rapportSize	= (double)(PI * (1. / (double)x->f_arraySize));
+
+	/* FFt initialization ***********************/
+	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
+	for(i = 0; i < x->f_overlapping; i++)
+	{
+		fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping);
+	}
+
+	dsp_add(energy_perform, 7, x, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, 
+		sp[3]->s_vec, sp[4]->s_vec, sp[0]->s_n);
+}
+
+
+t_int *energy_perform(t_int *w)
+{	
+	t_energy	*x		= (t_energy *)(w[1]);
+	t_sample	*in		= (t_sample *)	(w[2]);
+	t_sample	*out1	= (t_sample *)	(w[3]);
+	t_sample	*out2	= (t_sample *)	(w[4]);
+	t_sample	*out3	= (t_sample *)	(w[5]);
+	t_sample	*out4	= (t_sample *)	(w[6]);
+	int n				= (int)			(w[7]);
+
+	t_double amplitude;
+	int i, j;
+	if (x->f_ob.z_disabled) return w + 8;
+
+	for(i = 0; i < x->f_overlapping; i++)
+	{
+		for(j = 0; j < n; j++)
+		{
+			x->f_fft[i].f_real[x->f_fft[i].f_ramp] = in[j] * x->f_env.f_envelope[x->f_fft[i].f_ramp];
+
+			if (x->f_fft[i].f_ramp < x->f_arraySize && x->f_fft[i].f_ramp > 0)
+			{
+				amplitude = x->f_rapportSize * sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]) + (x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]));
+				if(x->f_ampMode == 0)
+				{
+					x->f_fft[i].f_sum	+= amplitude;
+				}
+				else if(x->f_ampMode == 1)
+				{
+					amplitude *= amplitude;
+					x->f_fft[i].f_sum	+= amplitude;
+				}
+				else if(x->f_ampMode == 2)
+				{
+					amplitude = 20. * log10(amplitude);
+					if (amplitude < -90.f) amplitude = -90.f;
+					x->f_fft[i].f_sum	+= pow(10., (amplitude / 10.));
+				}
+				if(amplitude < x->f_fft[i].f_min) x->f_fft[i].f_min = amplitude;
+				if(amplitude > x->f_fft[i].f_max) x->f_fft[i].f_max = amplitude;
+				
+
+			}
+			else if (x->f_fft[i].f_ramp == x->f_arraySize)
+			{
+				x->f_min	= x->f_fft[i].f_min;
+				x->f_max	= x->f_fft[i].f_max;
+				x->f_sum	= x->f_fft[i].f_sum;
+				if(x->f_ampMode == 2)
+					x->f_ave	= 10. * log10(x->f_sum / (t_double)x->f_arraySize);
+				else
+				x->f_ave	= x->f_sum / (t_double)x->f_arraySize;
+
+
+				x->f_fft[i].f_min = 300.;
+				x->f_fft[i].f_max = -300.;
+				x->f_fft[i].f_sum = 0.;
+				
+			}
+
+			x->f_fft[i].f_ramp++;
+			if (x->f_fft[i].f_ramp == x->f_windowSize)
+			{
+				fftw_execute(x->f_fft[i].f_plan);
+				x->f_fft[i].f_ramp = 0;
+			}
+	
+		}
+
+	}
+
+	for(j = 0; j < n; j++)
+	{
+		out1[j] = x->f_min;
+		out2[j] = x->f_ave;
+		out3[j] = x->f_max;
+		out4[j] = x->f_sum;
+	}
+	return (w + 8);	
 }

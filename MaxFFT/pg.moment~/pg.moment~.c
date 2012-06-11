@@ -6,6 +6,7 @@ int main()
 
 	c = class_new("pg.moment~", (method)moment_new, (method)moment_free, (short)sizeof(t_moment), 0L, A_GIMME, 0);
 	class_addmethod(c, (method)moment_dsp64,		"dsp64",		A_CANT,	0);
+	class_addmethod(c, (method)moment_dsp,			"dsp",		A_CANT,	0);
 	class_addmethod(c, (method)moment_assist,		"assist",		A_CANT,	0);
 
 	CLASS_ATTR_LONG				(c, "window", 0, t_moment, f_winMode);
@@ -243,4 +244,127 @@ t_max_err mode_set(t_moment *x, t_object *attr, long argc, t_atom *argv)
 	window_mode_set(&x->f_env, attr, argc, argv);
 	x->f_winMode = x->f_env.f_mode;
 	return 0;
+}
+
+void moment_dsp(t_moment *x, t_signal **sp, short *count)
+{
+	int i;
+	x->f_sr = (double)sp[0]->s_sr;
+	x->f_rapportSize	= (double)(PI * (1. / (double)x->f_arraySize));
+	x->f_rapportFreq = x->f_sr / (t_sample)x->f_windowSize;
+
+	/* FFt initialization ***********************/
+	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
+	for(i = 0; i < x->f_overlapping; i++)
+	{
+		fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping);
+	}
+
+	dsp_add(moment_perform, 7, x, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, 
+		sp[3]->s_vec, sp[4]->s_vec, sp[0]->s_n);
+}
+
+
+
+t_int *moment_perform(t_int *w)
+{	
+	t_moment	*x		= (t_moment *)(w[1]);
+	t_sample	*in		= (t_sample *)	(w[2]);
+	t_sample	*out1	= (t_sample *)	(w[3]);
+	t_sample	*out2	= (t_sample *)	(w[4]);
+	t_sample	*out3	= (t_sample *)	(w[5]);
+	t_sample	*out4	= (t_sample *)	(w[6]);
+	int n				= (int)			(w[7]);
+	
+	int i, j;
+	t_double amplitude, frequency, rapport, logAdd;
+	if (x->f_ob.z_disabled) return w + 8;
+
+	for(i = 0; i < x->f_overlapping; i++)
+	{
+		for(j = 0; j < n; j++)
+		{
+			x->f_fft[i].f_real[x->f_fft[i].f_ramp] = in[j] * x->f_env.f_envelope[x->f_fft[i].f_ramp];
+
+			if (x->f_fft[i].f_ramp < x->f_arraySize && x->f_fft[i].f_ramp > 0)
+			{
+				amplitude = sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]) + (x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]));
+				frequency = (t_double)x->f_fft[i].f_ramp * x->f_rapportFreq;
+				rapport = frequency - x->f_centroid;
+
+				if(x->f_ampMode == 0)
+				{
+					x->f_fft[i].f_sumAmp	+= amplitude;
+					x->f_fft[i].f_centroid	+= amplitude * frequency;
+					x->f_fft[i].f_spread	+= amplitude * (rapport * rapport);
+					x->f_fft[i].f_skewness	+= amplitude * (rapport * rapport * rapport);
+					x->f_fft[i].f_kurtosis	+= amplitude * (rapport * rapport * rapport * rapport);
+				}
+				else if(x->f_ampMode == 1)
+				{
+					amplitude *= amplitude;
+					x->f_fft[i].f_sumAmp	+= amplitude;
+					x->f_fft[i].f_centroid	+= amplitude * frequency;
+					x->f_fft[i].f_spread	+= amplitude * (rapport * rapport);
+					x->f_fft[i].f_skewness	+= amplitude * (rapport * rapport * rapport);
+					x->f_fft[i].f_kurtosis	+= amplitude * (rapport * rapport * rapport * rapport);
+				}
+				else if(x->f_ampMode == 2)
+				{
+					amplitude = 20. * log10(amplitude);
+					if (amplitude < -90.f) amplitude = -90.f;
+					logAdd = pow(10., (amplitude / 10.));
+					x->f_fft[i].f_sumAmp	+= logAdd;
+					x->f_fft[i].f_centroid	+= logAdd * frequency;
+					x->f_fft[i].f_spread	+= logAdd * (rapport * rapport);
+					x->f_fft[i].f_skewness	+= logAdd * (rapport * rapport * rapport);
+					x->f_fft[i].f_kurtosis	+= logAdd * (rapport * rapport * rapport * rapport);
+				}
+
+			}
+			else if (x->f_fft[i].f_ramp == x->f_arraySize)
+			{
+				if(x->f_fft[i].f_sumAmp != 0.)
+				{
+					x->f_centroid	= x->f_fft[i].f_centroid	/ x->f_fft[i].f_sumAmp;
+					x->f_spread		= x->f_fft[i].f_spread		/ x->f_fft[i].f_sumAmp;
+					x->f_deviation	= sqrt(x->f_spread);
+					x->f_skewness	= (x->f_fft[i].f_skewness	/ x->f_fft[i].f_sumAmp) / (x->f_spread * x->f_deviation);
+					x->f_kurtosis	= (x->f_fft[i].f_kurtosis	/ x->f_fft[i].f_sumAmp) / (x->f_spread * x->f_spread);
+				}
+				else
+				{
+					x->f_centroid	= 0.;
+					x->f_spread		= 0.;
+					x->f_deviation	= 0.;
+					x->f_skewness	= 0.;
+					x->f_kurtosis	= 0.;
+				}
+				x->f_fft[i].f_sumAmp	= 0.;
+				x->f_fft[i].f_centroid	= 0.;
+				x->f_fft[i].f_spread	= 0.;
+				x->f_fft[i].f_skewness	= 0.;
+				x->f_fft[i].f_kurtosis	= 0.;
+			}
+
+			x->f_fft[i].f_ramp++;
+			if (x->f_fft[i].f_ramp == x->f_windowSize)
+			{
+				fftw_execute(x->f_fft[i].f_plan);
+				x->f_fft[i].f_ramp = 0;
+			}
+	
+		}
+
+	}
+
+	for(j = 0; j < n; j++)
+	{
+		out1[j] = x->f_centroid;
+		out2[j] = x->f_deviation;
+		out3[j] = x->f_skewness;
+		out4[j] = x->f_kurtosis;
+	}
+
+	return w + 8;
 }
