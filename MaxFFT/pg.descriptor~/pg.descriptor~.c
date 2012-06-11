@@ -63,13 +63,13 @@ int main()
 	CLASS_ATTR_DEFAULT			(c, "centroid", 0, "1");
 	CLASS_ATTR_SAVE				(c, "centroid", 1);
 
-	CLASS_ATTR_LONG				(c, "spread", 0, t_descriptor, f_analyseMode[5]);
-	CLASS_ATTR_CATEGORY			(c, "spread", 0, "Descriptor~");
-	CLASS_ATTR_STYLE			(c, "spread", 0, "onoff");
-	CLASS_ATTR_ORDER			(c, "spread", 0, "1");
-	CLASS_ATTR_LABEL			(c, "spread", 0, "Spread");
-	CLASS_ATTR_DEFAULT			(c, "spread", 0, "1");
-	CLASS_ATTR_SAVE				(c, "spread", 1);
+	CLASS_ATTR_LONG				(c, "deviation", 0, t_descriptor, f_analyseMode[5]);
+	CLASS_ATTR_CATEGORY			(c, "deviation", 0, "Descriptor~");
+	CLASS_ATTR_STYLE			(c, "deviation", 0, "onoff");
+	CLASS_ATTR_ORDER			(c, "deviation", 0, "1");
+	CLASS_ATTR_LABEL			(c, "deviation", 0, "Spread");
+	CLASS_ATTR_DEFAULT			(c, "deviation", 0, "1");
+	CLASS_ATTR_SAVE				(c, "deviation", 1);
 
 	CLASS_ATTR_LONG				(c, "skewness", 0, t_descriptor, f_analyseMode[2]);
 	CLASS_ATTR_CATEGORY			(c, "skewness", 0, "Descriptor~");

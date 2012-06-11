@@ -8,7 +8,7 @@
 #include "ext_globalsymbol.h"
 #include "z_dsp.h"
 #include "buffer.h"
-#include "pg.window.h"
+#include "../pg.window/pg.window.h"
 #include <fftw3.h>
 
 typedef struct _buf
@@ -18,7 +18,7 @@ typedef struct _buf
 	long		f_channel;
 	long		f_nChannels;
 	
-	double	f_rapportSize;
+	double		f_rapportSize;
 	long		f_windowSize;
 	long		f_overlapping;
 	long		f_arraySize;
@@ -32,9 +32,14 @@ typedef struct _buf
 	double		*f_spread[4];
 	double		*f_skewness[4];
 	double		*f_kurtosis[4];
+
 	double		*f_maxAmp[4];
 	double		*f_minAmp[4];
 	double		*f_aveAmp[4];
+
+	double		*f_rolloff[4];
+	double		*f_slope[4];
+	double		*f_decrease[4];
 } t_buf;
 
 typedef struct  _descriptor 

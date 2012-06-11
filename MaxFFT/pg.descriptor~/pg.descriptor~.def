@@ -1,6 +1,6 @@
-;pg.analyser~.def
+;pg.descriptor~.def
 
-LIBRARY pg.analyser~.mxe
+LIBRARY pg.descriptor~.mxe
 
 EXPORTS
 	main
