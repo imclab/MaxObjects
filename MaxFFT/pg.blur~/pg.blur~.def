@@ -1,7 +1,0 @@
-;blur~.def
-
-LIBRARY blur~.mxe
-
-EXPORTS
-	main
-

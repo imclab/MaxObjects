@@ -179,13 +179,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes\common\dllmain_win.c" />
+    <ClCompile Include="..\pg.window\pg.window.c" />
     <ClCompile Include="pg.energy~.c" />
     <ClCompile Include="pg.fft.c" />
-    <ClCompile Include="pg.window.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\pg.window\pg.window.h" />
     <ClInclude Include="pg.energy.h" />
-    <ClInclude Include="pg.window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\SDKs\fftw-3.3.2-dll32\libfftw3-3.def" />

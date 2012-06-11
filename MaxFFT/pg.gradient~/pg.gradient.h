@@ -2,7 +2,7 @@
 #include "ext.h"
 #include "ext_obex.h"
 #include "z_dsp.h"
-#include "pg.window.h"
+#include "../pg.window/pg.window.h"
 #include <fftw3.h>
 
 typedef struct _fft

@@ -73,7 +73,7 @@ void *energy_new(t_symbol *s, int argc, t_atom *argv)
 	window_setup(&x->f_env, x->f_windowSize, x->f_winMode);
 
 	x->f_min	= 0.;
-	x->f_max		= 0.;
+	x->f_max	= 0.;
 	x->f_ave	= 0.;
 	x->f_sum	= 0.;
 

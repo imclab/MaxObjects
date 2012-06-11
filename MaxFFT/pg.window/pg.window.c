@@ -82,17 +82,24 @@ void window_lanczos(t_window *x)
 
 void window_kaiser(t_window *x)
 {
-	// Not yet //
 	int i, size;
-	t_sample j, alpha, a, b, iota;
+	t_sample j, sumvalue, alpha;
 	size = x->f_size;
 	j = size - 1;
+    sumvalue = 0.;
 	alpha = 3.;
-	for(i = 0; i < size; i++)
-    {
-		//b = (((2. * (t_sample)i) / j) - 1.) * (((2. * (t_sample)i) / j) - 1.);
-		//a = iota * (PI * alpha * (sqrt( 1. - b))) / iota * (PI * alpha)
-		x->f_envelope[i] = 1.;
+    for (i = 0; i < size / 2; i++) 
+	{
+        sumvalue += window_besselI0(PI * alpha * sqrt(1. - pow(4. * (t_sample)i / (t_sample)size - 1., 2.)));
+        x->f_envelope[i] = sumvalue;
+    }
+    
+    sumvalue += window_besselI0(PI * alpha * sqrt(1. - pow(4. * ((t_sample)size /2. ) / (t_sample)size - 1., 2.)));
+
+    for (i = 0; i < size / 2; i++) 
+	{
+        x->f_envelope[i] = sqrt( x->f_envelope[i] / sumvalue);
+        x->f_envelope[size - 1 - i] =  x->f_envelope[i];
     }
 }
 
@@ -335,4 +342,34 @@ void window_Selector(t_window *x)
 				break;
 		}
 	}
+}
+
+t_sample window_besselI0(t_sample x)
+{
+    t_sample denominator;
+    t_sample numerator;
+    t_sample z;
+    
+    if (x == 0.0) 
+	{
+        return 1.;
+    } 
+	else 
+	{
+        z = x * x;
+        numerator = (z* (z* (z* (z* (z* (z* (z* (z* (z* (z* (z* (z* (z* 
+            (z* 0.210580722890567e-22  + 0.380715242345326e-19 ) +
+            0.479440257548300e-16) + 0.435125971262668e-13 ) +
+            0.300931127112960e-10) + 0.160224679395361e-7  ) +
+            0.654858370096785e-5)  + 0.202591084143397e-2  ) +
+            0.463076284721000e0)   + 0.754337328948189e2   ) +
+            0.830792541809429e4)   + 0.571661130563785e6   ) +
+            0.216415572361227e8)   + 0.356644482244025e9   ) +
+            0.144048298227235e10);
+        
+        denominator = (z*(z*(z-0.307646912682801e4)+
+            0.347626332405882e7)-0.144048298227235e10);
+    }
+    
+    return -numerator/denominator;
 }
