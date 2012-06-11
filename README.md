@@ -14,7 +14,7 @@
 ### MaxDSP :
 
 * **pg.chaos~** : Chaotic attractors.
-* **pg.pollock~** : QUasi-synchronous granular synthesiser.
+* **pg.pollock~** : Quasi-synchronous granular synthesiser.
 * **pg.pack~** : Pack object for signal (Max5 only).
 * **pg.unpack~** : Unpack object for signal (Max5 only).
 * **pg.adaptor~** : Adapter for packed signal (Max5 only).
