@@ -1,4 +1,4 @@
-## The MaxObjects library is a collection of externals for Max 5 and Max 6.
+## The pg.library is a collection of externals for Max 5 and Max 6.
 
 ### MaxData :
 
@@ -14,18 +14,19 @@
 ### MaxDSP :
 
 * **pg.chaos~** : Chaotic attractors.
-* **pg.pollock~** : QUasi-synchronous granular synthetiser.
+* **pg.pollock~** : QUasi-synchronous granular synthesiser.
 * **pg.pack~** : Pack object for signal (Max5 only).
 * **pg.unpack~** : Unpack object for signal (Max5 only).
 * **pg.adaptor~** : Adaptater for packed signal (Max5 only).
 
 ### MaxFFT :
 
-* **pg.analyser~** : Centroid, spread, skewness and kurtosis of a signal.
-* **pg.blur~** : FFT blur effect.
-* **pg.descriptor~** : Sonogram and analysis of a buffer.
-* **pg.mel~** : Mel and MFCCs for signal.
-* **pg.spectrum~** : Spectrum of a signal.
+* **pg.analyser~** : Estimation of the centroid, the spread, the skewness and the kurtosis.
+* **pg.energy~** : Estimation of the minimum, the average, the maximum and the sum of the amplitude.
+* **pg.descriptor~** : Sonogram and analysis of a buffer~ (beta).
+* **pg.mel~** : Spectrum above the mel scale and MFCCs (beta, crash sometimes).
+* **pg.gradient~** : Estimation of the slope or the decrease of the spectrum.
+* **
 
 ### Binaries :
 
