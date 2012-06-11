@@ -1,7 +1,0 @@
-;pg.analyser~.def
-
-LIBRARY pg.analyser~.mxe
-
-EXPORTS
-	main
-

@@ -5,22 +5,22 @@ int main()
 {
 	t_class *c;
 
-	c = class_new("pg.mel~", (method)mfcc_new, (method)mfcc_free, (short)sizeof(t_mfcc), 0L, A_GIMME, 0);
-	class_addmethod(c, (method)mfcc_dsp,		"dsp",			A_CANT,	0);
-	class_addmethod(c, (method)mfcc_assist,		"assist",		A_CANT,	0);
+	c = class_new("pg.mel~", (method)mel_new, (method)mel_free, (short)sizeof(t_mel), 0L, A_GIMME, 0);
+	class_addmethod(c, (method)mel_dsp64,		"dsp64",		A_CANT,	0);
+	class_addmethod(c, (method)mel_assist,		"assist",		A_CANT,	0);
 	
 	class_dspinit(c);
 	class_register(CLASS_BOX, c);
-	mfcc_class = c;
+	mel_class = c;
 	
-	CLASS_ATTR_LONG				(c, "mfcc", 0, t_mfcc, f_mfccMode);
-	CLASS_ATTR_LABEL			(c, "mfcc", 0, "Mode");
-	CLASS_ATTR_ENUMINDEX		(c, "mfcc", 0, "Mel \"Mfcc");
-	CLASS_ATTR_DEFAULT			(c, "mfcc", 0, "0");
-	CLASS_ATTR_SAVE				(c, "mfcc", 1);
-	CLASS_ATTR_ORDER			(c, "window", 0, "1");
+	CLASS_ATTR_LONG				(c, "mode", 0, t_mel, f_mode);
+	CLASS_ATTR_LABEL			(c, "mode", 0, "Mode");
+	CLASS_ATTR_ENUMINDEX		(c, "mode", 0, "Mel \"Mfcc");
+	CLASS_ATTR_DEFAULT			(c, "mode", 0, "0");
+	CLASS_ATTR_SAVE				(c, "mode", 1);
+	CLASS_ATTR_ORDER			(c, "mode", 0, "1");
 
-	CLASS_ATTR_LONG				(c, "window", 0, t_mfcc, f_modEnv);
+	CLASS_ATTR_LONG				(c, "window", 0, t_mel, f_winMode);
 	CLASS_ATTR_LABEL			(c, "window", 0, "Window type");
 	CLASS_ATTR_ENUMINDEX		(c, "window", 0, "Square \" \"Hanning \" \"Hamming \" \"Turkey \" \"Cosinus \" \"Lanczos \" \"Triangular \" \"Gaussian \" \"Bartlett-Hann \" \"Blackman \" \"Kaiser \" \"Nuttall \" \"Blackman-Harris \" \"Blackman-Nuttall \" \"Flat-Top \" \"Poisson");
 	CLASS_ATTR_ACCESSORS		(c, "window", NULL, mode_set);
@@ -29,19 +29,19 @@ int main()
 	CLASS_ATTR_FILTER_CLIP		(c, "window", 0, 10);
 	CLASS_ATTR_ORDER			(c, "window", 0, "2");
 
-	CLASS_ATTR_LONG				(c, "interval", 0, t_mfcc, f_interval);
+	CLASS_ATTR_LONG				(c, "interval", 0, t_mel, f_interval);
 	CLASS_ATTR_LABEL			(c, "interval", 0, "Polling interval");
 	CLASS_ATTR_FILTER_CLIP		(c, "interval", 3, 5000);
 	CLASS_ATTR_DEFAULT			(c, "interval", 0, "10");
 	CLASS_ATTR_SAVE				(c, "interval", 1);
 	
-	CLASS_ATTR_LONG				(c, "smooth", 0, t_mfcc, f_limit);;
+	CLASS_ATTR_LONG				(c, "smooth", 0, t_mel, f_limit);
 	CLASS_ATTR_LABEL			(c, "smooth", 0, "Smooth");
 	CLASS_ATTR_FILTER_MIN		(c, "smooth", 0);
 	CLASS_ATTR_DEFAULT			(c, "smooth", 0, "5");
 	CLASS_ATTR_SAVE				(c, "smooth", 1);
 
-	CLASS_ATTR_FLOAT			(c, "highpass", 0, t_mfcc, f_hightpass);
+	CLASS_ATTR_FLOAT			(c, "highpass", 0, t_mel, f_hightpass);
 	CLASS_ATTR_LABEL			(c, "highpass", 0, "Highpass filter");
 	CLASS_ATTR_FILTER_CLIP		(c, "highpass", 0., 1.);
 	CLASS_ATTR_DEFAULT			(c, "highpass", 0, "0.95");
@@ -53,21 +53,15 @@ int main()
 	return 0;
 }
 
-void *mfcc_new(t_symbol *s, int argc, t_atom *argv)
+void *mel_new(t_symbol *s, int argc, t_atom *argv)
 {
-	t_mfcc *x = NULL;
+	t_mel *x = NULL;
 	int i;
 	
-	if (x = (t_mfcc *)object_alloc((t_class *)mfcc_class)) 
+	if (x = (t_mel *)object_alloc((t_class *)mel_class)) 
 	{		
+		/* Sampling Rate initialization **************/
 		x->f_sr = sys_getsr();
-		x->f_nBands = 0;
-		x->f_limit = 5;			
-		x->f_count = 0;	
-		x->f_interval = 5;		
-		x->f_mfccMode = 0;
-		x->f_filter = 0.;
-		x->f_hightpass = 0.95;
 
 		/* Windows Size Initialization **************/
 		x->f_windowSize = 0; 
@@ -77,7 +71,7 @@ void *mfcc_new(t_symbol *s, int argc, t_atom *argv)
 			x->f_windowSize = 1024;
 			object_post((t_object*)x, "Wrong window size initialization, set to default : 1024");
 		}
-		x->f_arraySize = x->f_windowSize / 2;
+		x->f_arraySize = x->f_windowSize/2;
 
 		/* Overlapping Initialization ***************/
 		x->f_overlapping = 0; 
@@ -88,91 +82,91 @@ void *mfcc_new(t_symbol *s, int argc, t_atom *argv)
 			object_post((t_object*)x, "Wrong overlapping initialization, set to default : 2");
 		}
 		
+		/* Initialization of the window  ********************************/
+		if( argv[2].a_type == A_LONG ) x->f_winMode = argv[2].a_w.w_long;
+		if (x->f_winMode < 0 || x->f_winMode > 15)
+		{
+			x->f_winMode = 1;
+			object_post((t_object*)x, "Wrong window initialization, set to default : 1");
+		}
+		window_setup(&x->f_env, x->f_windowSize, x->f_winMode);
+
 		/* Mel bands Initialization ***************/
-		if( argv[2].a_type == A_LONG ) x->f_nBands = (int)(argv[2].a_w.w_long);
+		if( argv[3].a_type == A_LONG ) x->f_nBands = (int)(argv[3].a_w.w_long);
 		if (x->f_nBands < 1)
 		{
 			x->f_nBands = 24;
 			object_post((t_object*)x, "Wrong bands initialization, set to default : 24");
 		}
 
-		/* Enveloppe   Initialization **************/
-		
-		if( argv[3].a_type == A_LONG ) x->f_modEnv = argv[3].a_w.w_long;
-		if (x->f_modEnv < 0 || x->f_modEnv > 15)
-		{
-			x->f_modEnv = 2;
-			object_post((t_object*)x, "Wrong enveloppe, set to default : 2 (Hamming)");
-		}
-		window_setup(&x->f_env, x->f_windowSize, x->f_modEnv);
-
-		x->f_result				= (t_sample *)getbytes(x->f_nBands * sizeof(t_sample));
-		x->f_output				= (t_atom *)getbytes(x->f_nBands * sizeof(t_atom));
-
 		/* Mel Filter Initialization **************/
 		x->f_melBandRef			= (long *)getbytes(x->f_arraySize * sizeof(long));
 		x->f_filterParameters	= (t_sample **)getbytes(x->f_nBands  * sizeof(t_sample *));
 		for(i = 0; i < x->f_nBands ; i++)
 			x->f_filterParameters[i] = (t_sample *)getbytes(x->f_arraySize  * sizeof(t_sample));
-
-		mfcc_filterParameter(x);
-
-		/* FFT Initialization ******************************************/
-		x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
-		for(i = 0; i < x->f_overlapping; i++)
-			fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping, x->f_nBands);
-
-		attr_args_process (x, argc, argv);
+		mel_filterParameter(x);
+		
+		x->f_limit = 5;			
+		x->f_count = 0;	
+		x->f_interval = 5;		
+		x->f_mode = 0;
+		x->f_filter = 0.;
+		x->f_hightpass = 0.95;
+		x->f_result				= (t_sample *)getbytes(x->f_nBands * sizeof(t_sample));
+		x->f_output				= (t_atom *)getbytes(x->f_nBands * sizeof(t_atom));
 
 		/* Inlet and Outlet Initialization ******************************/
 		dsp_setup((t_pxobject *)x, 1);
 		x->out1 = listout(x);
 
-		/* Clock Initialization *****************************************/
-		x->f_clock = clock_new(x, (method)mfcc_out);
-		clock_delay(x->f_clock, 0L);
-
+		attr_args_process (x, argc, argv);
 	}
-	
 	return x;
 }			
 
-void mfcc_dsp(t_mfcc *x, t_signal **sp, short *count)
+void mel_dsp64(t_mel *x, t_object *dsp64, short *count, double samplerate, long maxvectorsize, long flags)
 {
-	x->f_sr = sp[0]->s_sr;
-	dsp_add(mfcc_perform, 3, x, sp[0]->s_vec, sp[0]->s_n);
+	int i;
+	x->f_sr = samplerate;
+	x->f_rapportSize	= (double)(PI * (1. / (double)x->f_arraySize));
+
+	/* FFt initialization ***********************/
+	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
+	for(i = 0; i < x->f_overlapping; i++)
+	{
+		fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping, x->f_nBands);
+	}
+	/* Clock Initialization ****************************************/
+	x->f_clock = clock_new(x, (method)mel_out);
+	clock_delay(x->f_clock, 0L);
+	object_method(dsp64, gensym("dsp_add64"), x, mel_perform64, 0, NULL);
 }
 
-t_int *mfcc_perform(t_int *w)
+void mel_perform64(t_mel *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam)
 {	
-	t_mfcc		*x	 = (t_mfcc *)	(w[1]);
-	t_sample	*in1 = (t_sample *)	(w[2]);
-	int n			 = (int)			(w[3]);
-	
-	int i, j, alpha;
-	t_sample energy;
-
-	if (x->f_ob.z_disabled) return w + 4;
+	long i, j, alpha;
+	t_double	*in		= ins[0];
+	t_double energy;
 	
 	for(i = 0; i < x->f_overlapping; i++)
 	{
-		for(j = 0; j < n; j++)
+		for(j = 0; j < sampleframes; j++)
 		{
-			/* Enveloppe and filter if mffcMode = 1 else just the enveloppe */
-			if (x->f_mfccMode != 0)
+			/* Lowpass filter for Mfccs */
+			if (x->f_mode != 0)
 			{
-				x->f_fft[i].f_real[x->f_fft[i].f_ramp] = (in1[j] - (x->f_hightpass * x->f_filter)) * x->f_env.f_envelope[x->f_fft[i].f_ramp];
-				x->f_filter = in1[j];
+				x->f_fft[i].f_real[x->f_fft[i].f_ramp] = (in[j] - (x->f_hightpass * x->f_filter)) * x->f_env.f_envelope[x->f_fft[i].f_ramp];
+				x->f_filter = in[j];
 			}
 			else
 			{
-				x->f_fft[i].f_real[x->f_fft[i].f_ramp] = in1[j] * x->f_env.f_envelope[x->f_fft[i].f_ramp];
+				x->f_fft[i].f_real[x->f_fft[i].f_ramp] = in[j] * x->f_env.f_envelope[x->f_fft[i].f_ramp];
 			}
 
 			if (x->f_fft[i].f_spew2 > 1)
 			{
 				/* MFCC's perform */
-				if (x->f_mfccMode != 0)
+				if (x->f_mode != 0)
 				{
 					/* First : Scale above the mel scale */
 					if (x->f_fft[i].f_ramp >= 0 && x->f_fft[i].f_ramp <  x->f_arraySize )
@@ -267,10 +261,9 @@ t_int *mfcc_perform(t_int *w)
 			}	
 		}
 	}
-	return w + 4;	
 }
 
-void mfcc_out(t_mfcc *x)
+void mel_out(t_mel *x)
 {
 	int i, j;
 	
@@ -295,7 +288,7 @@ void mfcc_out(t_mfcc *x)
 					x->f_count++;
 				}
 			}
-			if (x->f_mfccMode != 0)
+			if (x->f_mode != 0)
 			{
 				outlet_list(x->out1, 0L, (x->f_nBands-1), x->f_output);
 			}
@@ -311,15 +304,11 @@ void mfcc_out(t_mfcc *x)
 	
 }
 
-void mfcc_free(t_mfcc *x)
+void mel_free(t_mel *x)
 {
 	int i;
 	
 	dsp_free((t_pxobject *)x);
-	for(i = 0; i < x->f_overlapping; i++)
-	{
-		fft_free(&x->f_fft[i]);
-	}
 	freebytes(x->f_fft, x->f_overlapping * sizeof(t_fft));
 	
 	freebytes(x->f_result, x->f_nBands * sizeof(t_sample));
@@ -335,7 +324,7 @@ void mfcc_free(t_mfcc *x)
 
 }
 
-void mfcc_assist(t_mfcc *x, void *b, long m, long a, char *s)
+void mel_assist(t_mel *x, void *b, long m, long a, char *s)
 {
 	if (m == ASSIST_INLET) 
 	{
@@ -351,7 +340,7 @@ void mfcc_assist(t_mfcc *x, void *b, long m, long a, char *s)
 		switch (a) 
 		{	
 			case 0:
-				if (x->f_mfccMode != 0)
+				if (x->f_mode != 0)
 				{
 					sprintf(s,"(List) MFCCs");
 				}
@@ -366,7 +355,7 @@ void mfcc_assist(t_mfcc *x, void *b, long m, long a, char *s)
 }
 
 
-void mfcc_filterParameter(t_mfcc *x)
+void mel_filterParameter(t_mel *x)
 {
 	int i, j;
 
@@ -480,7 +469,7 @@ void mfcc_filterParameter(t_mfcc *x)
 	freebytes(freqBandCenter, x->f_nBands * sizeof(float));
 }
 
-t_max_err mode_set(t_mfcc *x, t_object *attr, long argc, t_atom *argv)
+t_max_err mode_set(t_mel *x, t_object *attr, long argc, t_atom *argv)
 {
 	window_mode_set(&x->f_env, attr, argc, argv);
 	return 0;

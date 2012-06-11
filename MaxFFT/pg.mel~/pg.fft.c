@@ -1,4 +1,4 @@
-#include "pg.fft.h"
+#include "pg.mel.h"
 
 void fft_setup(t_fft *x, int windowSize, int instance, int nbIntance, int nBands)
 {

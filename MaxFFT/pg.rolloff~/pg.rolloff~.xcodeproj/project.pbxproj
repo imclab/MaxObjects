@@ -9,37 +9,29 @@
 /* Begin PBXBuildFile section */
 		22CF119E0EE9A82E0054F513 /* MaxAudioAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22CF119D0EE9A82E0054F513 /* MaxAudioAPI.framework */; };
 		2FBBEADE08F335360078DB84 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54266BCE05E6E9780000000C /* MaxAPI.framework */; };
+		DD1802F91584E3880098DAE8 /* pg.analyser.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1802F01584E3880098DAE8 /* pg.analyser.h */; };
+		DD1802FA1584E3880098DAE8 /* pg.analyser~.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1802F11584E3880098DAE8 /* pg.analyser~.c */; };
+		DD1802FE1584E3880098DAE8 /* pg.fft.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1802F51584E3880098DAE8 /* pg.fft.c */; };
+		DD1802FF1584E3880098DAE8 /* pg.fft.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1802F61584E3880098DAE8 /* pg.fft.h */; };
+		DD1803001584E3880098DAE8 /* pg.window.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1802F71584E3880098DAE8 /* pg.window.c */; };
+		DD1803011584E3880098DAE8 /* pg.window.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1802F81584E3880098DAE8 /* pg.window.h */; };
 		DD1803081584E3CC0098DAE8 /* libfftw3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1803071584E3CC0098DAE8 /* libfftw3.3.dylib */; };
 		DD1803111584E4110098DAE8 /* fftw3.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1803101584E4110098DAE8 /* fftw3.h */; };
-		DD1803351584E91E0098DAE8 /* pg.buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803281584E91E0098DAE8 /* pg.buffer.c */; };
-		DD1803361584E91E0098DAE8 /* pg.buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1803291584E91E0098DAE8 /* pg.buffer.h */; };
-		DD1803371584E91E0098DAE8 /* pg.compute.c in Sources */ = {isa = PBXBuildFile; fileRef = DD18032A1584E91E0098DAE8 /* pg.compute.c */; };
-		DD1803381584E91E0098DAE8 /* pg.descriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = DD18032B1584E91E0098DAE8 /* pg.descriptor.h */; };
-		DD1803391584E91E0098DAE8 /* pg.descriptor~.c in Sources */ = {isa = PBXBuildFile; fileRef = DD18032C1584E91E0098DAE8 /* pg.descriptor~.c */; };
-		DD18033D1584E91E0098DAE8 /* pg.drawAnalyse.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803301584E91E0098DAE8 /* pg.drawAnalyse.c */; };
-		DD18033E1584E91E0098DAE8 /* pg.drawContext.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803311584E91E0098DAE8 /* pg.drawContext.c */; };
-		DD18033F1584E91E0098DAE8 /* pg.interaction.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803321584E91E0098DAE8 /* pg.interaction.c */; };
-		DD1803401584E91E0098DAE8 /* pg.window.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803331584E91E0098DAE8 /* pg.window.c */; };
-		DD1803411584E91E0098DAE8 /* pg.window.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1803341584E91E0098DAE8 /* pg.window.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		22CF10220EE984600054F513 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../../maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
 		22CF119D0EE9A82E0054F513 /* MaxAudioAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAudioAPI.framework; path = "../../../c74support/msp-includes/MaxAudioAPI.framework"; sourceTree = SOURCE_ROOT; };
-		2FBBEAE508F335360078DB84 /* pg.descriptor~.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "pg.descriptor~.mxo"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2FBBEAE508F335360078DB84 /* pg.analyser~.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "pg.analyser~.mxo"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54266BCE05E6E9780000000C /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
+		DD1802F01584E3880098DAE8 /* pg.analyser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.analyser.h; sourceTree = "<group>"; };
+		DD1802F11584E3880098DAE8 /* pg.analyser~.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "pg.analyser~.c"; sourceTree = "<group>"; };
+		DD1802F51584E3880098DAE8 /* pg.fft.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.fft.c; sourceTree = "<group>"; };
+		DD1802F61584E3880098DAE8 /* pg.fft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.fft.h; sourceTree = "<group>"; };
+		DD1802F71584E3880098DAE8 /* pg.window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.window.c; sourceTree = "<group>"; };
+		DD1802F81584E3880098DAE8 /* pg.window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.window.h; sourceTree = "<group>"; };
 		DD1803071584E3CC0098DAE8 /* libfftw3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfftw3.3.dylib; path = usr/local/lib/libfftw3.3.dylib; sourceTree = SDKROOT; };
 		DD1803101584E4110098DAE8 /* fftw3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fftw3.h; path = /usr/include/fftw3.h; sourceTree = "<absolute>"; };
-		DD1803281584E91E0098DAE8 /* pg.buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.buffer.c; sourceTree = "<group>"; };
-		DD1803291584E91E0098DAE8 /* pg.buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.buffer.h; sourceTree = "<group>"; };
-		DD18032A1584E91E0098DAE8 /* pg.compute.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.compute.c; sourceTree = "<group>"; };
-		DD18032B1584E91E0098DAE8 /* pg.descriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.descriptor.h; sourceTree = "<group>"; };
-		DD18032C1584E91E0098DAE8 /* pg.descriptor~.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "pg.descriptor~.c"; sourceTree = "<group>"; };
-		DD1803301584E91E0098DAE8 /* pg.drawAnalyse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.drawAnalyse.c; sourceTree = "<group>"; };
-		DD1803311584E91E0098DAE8 /* pg.drawContext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.drawContext.c; sourceTree = "<group>"; };
-		DD1803321584E91E0098DAE8 /* pg.interaction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.interaction.c; sourceTree = "<group>"; };
-		DD1803331584E91E0098DAE8 /* pg.window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.window.c; sourceTree = "<group>"; };
-		DD1803341584E91E0098DAE8 /* pg.window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.window.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,16 +72,12 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				DD1803281584E91E0098DAE8 /* pg.buffer.c */,
-				DD1803291584E91E0098DAE8 /* pg.buffer.h */,
-				DD18032A1584E91E0098DAE8 /* pg.compute.c */,
-				DD18032B1584E91E0098DAE8 /* pg.descriptor.h */,
-				DD18032C1584E91E0098DAE8 /* pg.descriptor~.c */,
-				DD1803301584E91E0098DAE8 /* pg.drawAnalyse.c */,
-				DD1803311584E91E0098DAE8 /* pg.drawContext.c */,
-				DD1803321584E91E0098DAE8 /* pg.interaction.c */,
-				DD1803331584E91E0098DAE8 /* pg.window.c */,
-				DD1803341584E91E0098DAE8 /* pg.window.h */,
+				DD1802F01584E3880098DAE8 /* pg.analyser.h */,
+				DD1802F11584E3880098DAE8 /* pg.analyser~.c */,
+				DD1802F51584E3880098DAE8 /* pg.fft.c */,
+				DD1802F61584E3880098DAE8 /* pg.fft.h */,
+				DD1802F71584E3880098DAE8 /* pg.window.c */,
+				DD1802F81584E3880098DAE8 /* pg.window.h */,
 				22CF10220EE984600054F513 /* maxmspsdk.xcconfig */,
 			);
 			name = Source;
@@ -98,7 +86,7 @@
 		19C28FB4FE9D528D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2FBBEAE508F335360078DB84 /* pg.descriptor~.mxo */,
+				2FBBEAE508F335360078DB84 /* pg.analyser~.mxo */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,10 +98,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD1802F91584E3880098DAE8 /* pg.analyser.h in Headers */,
+				DD1802FF1584E3880098DAE8 /* pg.fft.h in Headers */,
+				DD1803011584E3880098DAE8 /* pg.window.h in Headers */,
 				DD1803111584E4110098DAE8 /* fftw3.h in Headers */,
-				DD1803361584E91E0098DAE8 /* pg.buffer.h in Headers */,
-				DD1803381584E91E0098DAE8 /* pg.descriptor.h in Headers */,
-				DD1803411584E91E0098DAE8 /* pg.window.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,7 +124,7 @@
 			);
 			name = "max-external";
 			productName = iterator;
-			productReference = 2FBBEAE508F335360078DB84 /* pg.descriptor~.mxo */;
+			productReference = 2FBBEAE508F335360078DB84 /* pg.analyser~.mxo */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -144,7 +132,7 @@
 /* Begin PBXProject section */
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "pg.descriptor~" */;
+			buildConfigurationList = 2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "pg.analyser~" */;
 			compatibilityVersion = "Xcode 3.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -188,13 +176,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD1803351584E91E0098DAE8 /* pg.buffer.c in Sources */,
-				DD1803371584E91E0098DAE8 /* pg.compute.c in Sources */,
-				DD1803391584E91E0098DAE8 /* pg.descriptor~.c in Sources */,
-				DD18033D1584E91E0098DAE8 /* pg.drawAnalyse.c in Sources */,
-				DD18033E1584E91E0098DAE8 /* pg.drawContext.c in Sources */,
-				DD18033F1584E91E0098DAE8 /* pg.interaction.c in Sources */,
-				DD1803401584E91E0098DAE8 /* pg.window.c in Sources */,
+				DD1802FA1584E3880098DAE8 /* pg.analyser~.c in Sources */,
+				DD1802FE1584E3880098DAE8 /* pg.fft.c in Sources */,
+				DD1803001584E3880098DAE8 /* pg.window.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,7 +225,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "pg.descriptor~" */ = {
+		2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "pg.analyser~" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2FBBEAD008F335010078DB84 /* Development */,

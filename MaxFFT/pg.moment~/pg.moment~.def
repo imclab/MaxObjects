@@ -1,0 +1,7 @@
+;pg.moment~.def
+
+LIBRARY pg.moment~.mxe
+
+EXPORTS
+	main
+

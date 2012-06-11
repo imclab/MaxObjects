@@ -1,0 +1,7 @@
+;pg.enregy~.def
+
+LIBRARY pg.enregy~.mxe
+
+EXPORTS
+	main
+

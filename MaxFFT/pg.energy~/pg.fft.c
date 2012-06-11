@@ -1,4 +1,4 @@
-#include "pg.fft.h"
+#include "pg.energy.h"
 
 void fft_setup(t_fft *x, int windowSize, int instance, int nbIntance)
 {
@@ -12,12 +12,9 @@ void fft_setup(t_fft *x, int windowSize, int instance, int nbIntance)
 	x->f_complex	= (fftw_complex *)fftw_malloc(x->f_windowSize * sizeof(fftw_complex));
 	x->f_plan		= fftw_plan_dft_r2c_1d(x->f_windowSize, x->f_real, x->f_complex, FFTW_ESTIMATE);
 
-	x->f_sumAmp	= 0.;
-
-	x->f_centroid	= 0.;
-	x->f_spread		= 0.;
-	x->f_skewness	= 0.;
-	x->f_kurtosis	= 0.;
+	x->f_sum	= 0.;
+	x->f_min	= 300.;
+	x->f_max	= -300.;
 }
 
 void fft_free(t_fft *x)

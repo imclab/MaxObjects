@@ -179,18 +179,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes\common\dllmain_win.c" />
-    <ClCompile Include="pg.analyser~.c" />
+    <ClCompile Include="pg.rolloff~.c" />
     <ClCompile Include="pg.fft.c" />
     <ClCompile Include="pg.window.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pg.analyser.h" />
-    <ClInclude Include="pg.fft.h" />
+    <ClInclude Include="pg.rolloff.h" />
     <ClInclude Include="pg.window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\SDKs\fftw-3.3.2-dll32\libfftw3-3.def" />
-    <None Include="pg.analyser~.def" />
+    <None Include="pg.rolloff~.def" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
