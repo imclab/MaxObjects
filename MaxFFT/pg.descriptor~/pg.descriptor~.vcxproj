@@ -189,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pg.window\pg.window.h" />
+    <ClInclude Include="pg.analysis.h" />
     <ClInclude Include="pg.buffer.h" />
     <ClInclude Include="pg.descriptor.h" />
   </ItemGroup>

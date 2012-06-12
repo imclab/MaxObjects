@@ -3,7 +3,7 @@
 void descriptor_compute(t_buf *x, t_window *w)
 {
 	int				i, j, k, l, m, hopeSize;
-	double			value, sumAmp, frequecyBand, ratio;
+	double			frequecyBand, ratio;
 	double			*real;
 	fftw_complex	*complex;
 	fftw_plan		plan;	
@@ -25,7 +25,7 @@ void descriptor_compute(t_buf *x, t_window *w)
 				hopeSize = (x->f_windowSize / x->f_overlapping) * (x->f_overlapping - 1);
 				frequecyBand = (double)x->f_buffer->b_sr / (double)x->f_windowSize;
 				window_setup(w, x->f_windowSize, w->f_mode);
-
+				
 				for(j = 0; j < x->f_nChannels; j++)
 				{
 					for(i = 0, k = 0, m = 0; m < x->f_nFrames; i++)
@@ -42,42 +42,10 @@ void descriptor_compute(t_buf *x, t_window *w)
 						if(k == x->f_windowSize)
 						{
 							fftw_execute(plan);
-
-							sumAmp = 0.;
-							for(l = 0; l < x->f_arraySize; l++)
-							{
-								value = complex[l][0] * complex[l][0] + complex[l][1] * complex[l][1];
-
-								sumAmp += value;
-								x->f_centroid[j][m] += value * (double)l * frequecyBand;
-
-								if (value < -90.f) value = -90.f;
-						
-								x->f_sonogram[j][m][l] = value;
-								if(value > x->f_maxAmp[j][m]) x->f_maxAmp[j][m] = value;
-								if(value < x->f_minAmp[j][m]) x->f_minAmp[j][m] = value;
-								x->f_aveAmp[j][m] += value;
-							}
-							x->f_centroid[j][m] /= sumAmp;
-							x->f_aveAmp[j][m] /= x->f_arraySize;
-
-							for(l = 0; l < x->f_arraySize; l++)
-							{
-								value = complex[l][0] * complex[l][0] + complex[l][1] * complex[l][1];
-								ratio = x->f_centroid[j][m] - (double)l * frequecyBand;
-							
-								x->f_spread[j][m]	+= value * ratio * ratio;
-								x->f_skewness[j][m] += value * ratio * ratio * ratio;
-								x->f_kurtosis[j][m] += value * ratio * ratio * ratio * ratio;
-							}
-							x->f_spread[j][m]	/= sumAmp;
-							x->f_skewness[j][m] /= sumAmp;
-							x->f_kurtosis[j][m] /= sumAmp;
-						
-							x->f_skewness[j][m] /= x->f_spread[j][m] * sqrt(x->f_spread[j][m]);
-							x->f_kurtosis[j][m] /= x->f_spread[j][m] * x->f_spread[j][m];
-							x->f_spread[j][m] = sqrt(x->f_spread[j][m]);
-
+							descriptor_sonogram(x, complex, j, m);
+							descriptor_energy(x, j, m);
+							descriptor_moment(x, j, m, frequecyBand);
+							descriptor_gradient(x, j, m, frequecyBand, (double)x->f_buffer->b_sr);
 							k = 0;
 							m++;
 							i -= hopeSize;
@@ -96,7 +64,7 @@ void descriptor_compute(t_buf *x, t_window *w)
 	}
 }
 
-void descriptor_sonogram(t_buf *x, double **complex, int channel, int frame)
+void descriptor_sonogram(t_buf *x, fftw_complex *complex, int channel, int frame)
 {
 	int i;
 	double value;
@@ -111,7 +79,7 @@ void descriptor_sonogram(t_buf *x, double **complex, int channel, int frame)
 	}
 }
 
-void descriptor_energy(t_buf *x, double **complex, int channel, int frame)
+void descriptor_energy(t_buf *x, int channel, int frame)
 {
 	int i;
 	double value;
@@ -148,7 +116,7 @@ void descriptor_energy(t_buf *x, double **complex, int channel, int frame)
 		
 }
 
-void descriptor_moment(t_buf *x, double **complex, int channel, int frame, double frequencyBand)
+void descriptor_moment(t_buf *x, int channel, int frame, double frequencyBand)
 {
 	int i;
 	double frequency, value, ratio;
@@ -192,7 +160,7 @@ void descriptor_moment(t_buf *x, double **complex, int channel, int frame, doubl
 	}
 }
 
-void descriptor_gradient(t_buf *x, double **complex, int channel, int frame, double frequencyBand, double sr)
+void descriptor_gradient(t_buf *x, int channel, int frame, double frequencyBand, double sr)
 {
 	int i;
 	double sumFreqSim, sumFreqCar;
@@ -228,4 +196,6 @@ void descriptor_gradient(t_buf *x, double **complex, int channel, int frame, dou
 	x->f_grad.f_slopePow[channel][frame]  /= sumFreqCar;
 	x->f_grad.f_slopePow[channel][frame] /= sumAmp;
 	x->f_grad.f_slopePow[channel][frame] *= sr / 4.;
+
+	// Need Gradient 
 }
