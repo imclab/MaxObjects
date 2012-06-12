@@ -244,16 +244,16 @@
 ,
 													"patching_rect" : [ 75.0, 135.0, 47.0, 20.0 ],
 													"saved_object_attributes" : 													{
-														"default_fontsize" : 12.0,
-														"description" : "",
 														"tags" : "",
-														"fontname" : "Arial",
 														"fontface" : 0,
 														"default_fontface" : 0,
 														"fontsize" : 12.0,
 														"globalpatchername" : "",
 														"digest" : "",
-														"default_fontname" : "Arial"
+														"default_fontname" : "Arial",
+														"default_fontsize" : 12.0,
+														"description" : "",
+														"fontname" : "Arial"
 													}
 ,
 													"text" : "p noisy"
@@ -1644,16 +1644,16 @@
 ,
 									"patching_rect" : [ 215.0, 100.0, 42.0, 20.0 ],
 									"saved_object_attributes" : 									{
-										"default_fontsize" : 12.0,
-										"description" : "",
 										"tags" : "",
-										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
-										"default_fontname" : "Arial"
+										"default_fontname" : "Arial",
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial"
 									}
 ,
 									"text" : "p filter"
@@ -2061,16 +2061,16 @@
 ,
 									"patching_rect" : [ 215.0, 165.0, 67.0, 20.0 ],
 									"saved_object_attributes" : 									{
-										"default_fontsize" : 18.0,
-										"description" : "",
 										"tags" : "",
-										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 18.0,
 										"globalpatchername" : "",
 										"digest" : "",
-										"default_fontname" : "Arial"
+										"default_fontname" : "Arial",
+										"default_fontsize" : 18.0,
+										"description" : "",
+										"fontname" : "Arial"
 									}
 ,
 									"text" : "p draw_lcd"
@@ -2134,16 +2134,16 @@
 ,
 					"patching_rect" : [ 135.0, 375.0, 59.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"default_fontsize" : 12.0,
-						"description" : "",
 						"tags" : "",
-						"fontname" : "Arial",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
 						"globalpatchername" : "",
 						"digest" : "",
-						"default_fontname" : "Arial"
+						"default_fontname" : "Arial",
+						"default_fontsize" : 12.0,
+						"description" : "",
+						"fontname" : "Arial"
 					}
 ,
 					"text" : "p display"
@@ -2507,16 +2507,16 @@
 ,
 					"patching_rect" : [ 526.75, 151.5, 97.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"default_fontsize" : 12.0,
-						"description" : "",
 						"tags" : "",
-						"fontname" : "Arial",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
 						"globalpatchername" : "",
 						"digest" : "",
-						"default_fontname" : "Arial"
+						"default_fontname" : "Arial",
+						"default_fontsize" : 12.0,
+						"description" : "",
+						"fontname" : "Arial"
 					}
 ,
 					"text" : "p audioPanic 32"
@@ -2570,7 +2570,7 @@
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"id" : "obj-29",
-					"items" : [ "RMS", ",", "Power", ",", "Energy" ],
+					"items" : [ "RMS", ",", "Power" ],
 					"maxclass" : "umenu",
 					"numinlets" : 1,
 					"numoutlets" : 3,
@@ -2799,7 +2799,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "signal" ],
-					"patching_rect" : [ 75.0, 270.5, 124.0, 20.0 ],
+					"patching_rect" : [ 75.0, 268.0, 124.0, 20.0 ],
 					"saved_object_attributes" : 					{
 						"amplitude" : 2
 					}

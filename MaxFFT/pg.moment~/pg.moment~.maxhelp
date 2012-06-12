@@ -354,10 +354,10 @@
 ,
 					"patching_rect" : [ 464.0, 192.5, 97.0, 20.0 ],
 					"saved_object_attributes" : 					{
+						"tags" : "",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
-						"tags" : "",
 						"globalpatchername" : "",
 						"digest" : "",
 						"default_fontname" : "Arial",
@@ -601,10 +601,10 @@
 ,
 													"patching_rect" : [ 75.0, 135.0, 47.0, 20.0 ],
 													"saved_object_attributes" : 													{
+														"tags" : "",
 														"fontface" : 0,
 														"default_fontface" : 0,
 														"fontsize" : 12.0,
-														"tags" : "",
 														"globalpatchername" : "",
 														"digest" : "",
 														"default_fontname" : "Arial",
@@ -1776,7 +1776,7 @@
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"id" : "obj-21",
-					"items" : [ "RMS", ",", "Power", ",", "Energy" ],
+					"items" : [ "RMS", ",", "Power" ],
 					"maxclass" : "umenu",
 					"numinlets" : 1,
 					"numoutlets" : 3,
@@ -2458,10 +2458,10 @@
 ,
 									"patching_rect" : [ 335.0, 130.0, 73.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"tags" : "",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
-										"tags" : "",
 										"globalpatchername" : "",
 										"digest" : "",
 										"default_fontname" : "Arial",
@@ -2625,10 +2625,10 @@
 ,
 									"patching_rect" : [ 335.0, 100.0, 42.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"tags" : "",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
-										"tags" : "",
 										"globalpatchername" : "",
 										"digest" : "",
 										"default_fontname" : "Arial",
@@ -2792,10 +2792,10 @@
 ,
 									"patching_rect" : [ 215.0, 100.0, 42.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"tags" : "",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
-										"tags" : "",
 										"globalpatchername" : "",
 										"digest" : "",
 										"default_fontname" : "Arial",
@@ -2959,10 +2959,10 @@
 ,
 									"patching_rect" : [ 125.0, 100.0, 42.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"tags" : "",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
-										"tags" : "",
 										"globalpatchername" : "",
 										"digest" : "",
 										"default_fontname" : "Arial",
@@ -3126,10 +3126,10 @@
 ,
 									"patching_rect" : [ 50.0, 100.0, 42.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"tags" : "",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
-										"tags" : "",
 										"globalpatchername" : "",
 										"digest" : "",
 										"default_fontname" : "Arial",
@@ -3543,10 +3543,10 @@
 ,
 									"patching_rect" : [ 215.0, 130.0, 67.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"tags" : "",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 18.0,
-										"tags" : "",
 										"globalpatchername" : "",
 										"digest" : "",
 										"default_fontname" : "Arial",
@@ -3841,10 +3841,10 @@
 ,
 					"patching_rect" : [ 119.0, 437.0, 235.0, 20.0 ],
 					"saved_object_attributes" : 					{
+						"tags" : "",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
-						"tags" : "",
 						"globalpatchername" : "",
 						"digest" : "",
 						"default_fontname" : "Arial",
@@ -4096,8 +4096,8 @@
 					"outlettype" : [ "signal", "signal", "signal", "signal" ],
 					"patching_rect" : [ 74.0, 311.5, 241.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"window" : 1,
-						"amplitude" : 1
+						"amplitude" : 2,
+						"window" : 1
 					}
 ,
 					"text" : "pg.moment~ 2048 8 1"
