@@ -9,17 +9,15 @@
 
 typedef struct _fft
 {
-	t_sample		*f_real; 
-	t_sample		*f_melBand;
-	t_sample		*f_mffcoeff;
+	double			*f_real; 
 	fftw_complex	*f_complex;
 	fftw_plan		f_plan;
+
+	double			*f_melBand;
+	double			*f_mffcoeff;
 	fftw_plan		f_planCos;
+
 	long			f_ramp;
-
-	t_sample		*f_mfcc;
-
-	long 			f_spew;
 
 	long			f_windowSize;
 	long			f_arraySize;
@@ -45,8 +43,6 @@ typedef struct  _mel
 	t_sample	*f_result;
 	t_atom		*f_output;
 	long		f_interval;
-	long		f_count;
-	long		f_limit;
 
 	t_window	f_env;
 	long		f_winMode;
@@ -60,6 +56,7 @@ typedef struct  _mel
 	t_sample	f_hightpass;
 	t_sample	f_rapportSize;
 
+	int			f_spew;
 } t_mel;
 
 void *mel_class;

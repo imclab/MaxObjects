@@ -30,7 +30,7 @@
 * **pg.analyser~** : Estimation of the centroid, the spread, the skewness and the kurtosis.
 * **pg.energy~** : Estimation of the minimum, the average, the maximum and the sum of the amplitude.
 * **pg.descriptor~** : Sonogram and analysis of a buffer~ (beta).
-* **pg.mel~** : Spectrum above the mel scale and MFCCs (beta, crash sometimes).
+* **pg.mel~** : Spectrum above the mel scale and MFCCs.
 * **pg.gradient~** : Estimation of the slope or the decrease of the spectrum.
 * **pg.rolloff~** : Estimation of the rolloff frequency.
 

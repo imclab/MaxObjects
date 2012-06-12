@@ -37,13 +37,6 @@ int main()
 	CLASS_ATTR_SAVE				(c, "interval", 1);
 	CLASS_ATTR_ORDER			(c, "interval", 0, "3");
 	
-	CLASS_ATTR_LONG				(c, "smooth", 0, t_mel, f_limit);
-	CLASS_ATTR_LABEL			(c, "smooth", 0, "Smooth");
-	CLASS_ATTR_FILTER_MIN		(c, "smooth", 0);
-	CLASS_ATTR_DEFAULT			(c, "smooth", 0, "5");
-	CLASS_ATTR_SAVE				(c, "smooth", 1);
-	CLASS_ATTR_ORDER			(c, "smooth", 0, "4");
-	
 	CLASS_ATTR_FLOAT			(c, "highpass", 0, t_mel, f_hightpass);
 	CLASS_ATTR_LABEL			(c, "highpass", 0, "Highpass filter");
 	CLASS_ATTR_FILTER_CLIP		(c, "highpass", 0., 1.);
@@ -109,21 +102,21 @@ void *mel_new(t_symbol *s, int argc, t_atom *argv)
 		for(i = 0; i < x->f_nBands ; i++)
 			x->f_filterParameters[i] = (t_sample *)getbytes(x->f_arraySize  * sizeof(t_sample));
 		mel_filterParameter(x);
-		
-		x->f_limit = 5;			
-		x->f_count = 0;	
+				
 		x->f_interval = 5;		
 		x->f_mode = 0;
 		x->f_filter = 0.;
 		x->f_hightpass = 0.95;
 		x->f_result				= (t_sample *)getbytes(x->f_nBands * sizeof(t_sample));
 		x->f_output				= (t_atom *)getbytes(x->f_nBands * sizeof(t_atom));
-		x->f_spew = 0;
+
 		/* Inlet and Outlet Initialization ******************************/
 		dsp_setup((t_pxobject *)x, 1);
 		x->out1 = listout(x);
+		x->f_spew = 0;
 		x->f_clock = clock_new(x, (method)mel_out);
 		clock_delay(x->f_clock, 0L);
+
 		attr_args_process (x, argc, argv);
 	}
 	return x;
@@ -166,93 +159,90 @@ void mel_perform64(t_mel *x, t_object *dsp64, double **ins, long numins, double 
 			{
 				x->f_fft[i].f_real[x->f_fft[i].f_ramp] = in[j] * x->f_env.f_envelope[x->f_fft[i].f_ramp];
 			}
-
-
-				/* MFCC's perform */
-				if (x->f_mode != 0)
+			/* MFCC's perform */
+			if (x->f_mode != 0)
+			{
+				/* First : Scale above the mel scale */
+				if (x->f_fft[i].f_ramp >= 0 && x->f_fft[i].f_ramp <  x->f_arraySize )
 				{
-					/* First : Scale above the mel scale */
-					if (x->f_fft[i].f_ramp >= 0 && x->f_fft[i].f_ramp <  x->f_arraySize )
+					alpha = x->f_melBandRef[x->f_fft[i].f_ramp];
+					energy = (sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0])+(x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1])));
+					// Si la bande frequentielle appartient au flitre de la bande mel alpha, il appartient aussi au filtre de la bande alpha+1
+					// sauf lorque j-1 car la bande j-1 existe pas, donc elle appartient seulement a la bande j+1.
+					if(alpha != -1)
 					{
-						alpha = x->f_melBandRef[x->f_fft[i].f_ramp];
-
-						energy = (sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0])+(x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1])));
-						// Si la bande frequentielle appartient au flitre de la bande mel alpha, il appartient aussi au filtre de la bande alpha+1
-						// sauf lorque j-1 car la bande j-1 existe pas, donc elle appartient seulement a la bande j+1.
-						if(alpha != -1)
-						{
-							x->f_fft[i].f_melBand[alpha] += energy * x->f_filterParameters[alpha][x->f_fft[i].f_ramp];
-						}
-						// Sauf pour la dernire bande car la position +1 de la derniere n'existe pas, elle appartient seulement a la bande alpha.
-						if(alpha != x->f_nBands-1)
-						{
-							x->f_fft[i].f_melBand[alpha+1] += energy * x->f_filterParameters[alpha+1][x->f_fft[i].f_ramp];
-						}
+						x->f_fft[i].f_melBand[alpha] += energy * x->f_filterParameters[alpha][x->f_fft[i].f_ramp];
+					}
+					// Sauf pour la dernire bande car la position +1 de la derniere n'existe pas, elle appartient seulement a la bande alpha.
+					if(alpha != x->f_nBands-1)
+					{
+						x->f_fft[i].f_melBand[alpha+1] += energy * x->f_filterParameters[alpha+1][x->f_fft[i].f_ramp];
+					}
 					
-					}
-					/* Second : Take the logarithm */
-					else if(x->f_fft[i].f_ramp >= x->f_arraySize && x->f_fft[i].f_ramp < x->f_arraySize+x->f_nBands)
+				}
+				/* Second : Take the logarithm */
+				else if(x->f_fft[i].f_ramp >= x->f_arraySize && x->f_fft[i].f_ramp < x->f_arraySize+x->f_nBands)
+				{
+					alpha = x->f_fft[i].f_ramp - x->f_arraySize ;
+					if(x->f_fft[i].f_melBand[alpha] != 0.)
 					{
-						alpha = x->f_fft[i].f_ramp - x->f_arraySize ;
-						if(x->f_fft[i].f_melBand[alpha] != 0.)
-						{
-							x->f_fft[i].f_melBand[alpha] = log10(x->f_fft[i].f_melBand[alpha]);
-						}
-						else
-						{
-							x->f_fft[i].f_melBand[alpha] = -90.f;
-						}
+						x->f_fft[i].f_melBand[alpha] = log10(x->f_fft[i].f_melBand[alpha]);
 					}
-					/* Third : Perfom the cosinus transform */
-					else if(x->f_fft[i].f_ramp == x->f_arraySize + x->f_nBands)
+					else
 					{
-						fftw_execute(x->f_fft[i].f_planCos );
-					}
-					/* Fourth : Record the result */
-					else if(x->f_fft[i].f_ramp >= x->f_arraySize + 1 + x->f_nBands && x->f_fft[i].f_ramp < x->f_arraySize + (2 * x->f_nBands))
-					{
-						alpha = x->f_fft[i].f_ramp - (x->f_arraySize + x->f_nBands + 1);
-						
-						x->f_fft[i].f_mfcc[alpha] = x->f_fft[i].f_mffcoeff[alpha+1];
-						x->f_fft[i].f_melBand[alpha+1] = 0.f;
-						if(alpha == x->f_nBands - 2)
-						{
-							x->f_fft[i].f_spew = 1;
-							x->f_fft[i].f_melBand[0] = 0.f;
-						}
+						x->f_fft[i].f_melBand[alpha] = -90.f;
 					}
 				}
-				/* Mel perform */
-				else
+				/* Third : Perfom the cosinus transform */
+				else if(x->f_fft[i].f_ramp == x->f_arraySize + x->f_nBands)
 				{
-					if (x->f_fft[i].f_ramp >= 0 && x->f_fft[i].f_ramp <  x->f_arraySize )
+					fftw_execute(x->f_fft[i].f_planCos );
+				}
+				/* Fourth : Record the result */
+				else if(x->f_fft[i].f_ramp >= x->f_arraySize + 1 + x->f_nBands && x->f_fft[i].f_ramp < x->f_arraySize + (2 * x->f_nBands) + 1)
+				{
+					alpha = x->f_fft[i].f_ramp - (x->f_arraySize + x->f_nBands + 1);
+						
+					x->f_result[alpha] = x->f_fft[i].f_mffcoeff[alpha];
+					x->f_fft[i].f_melBand[alpha] = 0.f;
+					if(alpha == x->f_nBands - 1)
 					{
-
-						alpha = x->f_melBandRef[x->f_fft[i].f_ramp];
-						energy = (sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0])+(x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1])));
-					
-						if(alpha != -1)
-						{
-							x->f_fft[i].f_melBand[alpha] += energy * x->f_filterParameters[alpha][x->f_fft[i].f_ramp];
-						}
-						if(alpha != x->f_nBands-1)
-						{
-							x->f_fft[i].f_melBand[alpha+1] += energy * x->f_filterParameters[alpha+1][x->f_fft[i].f_ramp];
-						}
-					
-					}
-					else if(x->f_fft[i].f_ramp >= x->f_arraySize && x->f_fft[i].f_ramp < x->f_arraySize + x->f_nBands)
-					{
-						alpha = x->f_fft[i].f_ramp - x->f_arraySize;
-	
-						x->f_fft[i].f_mfcc[alpha] = x->f_fft[i].f_melBand[alpha];
+						x->f_spew = 1;
 						x->f_fft[i].f_melBand[alpha] = 0.f;
 					}
-					else if(x->f_fft[i].f_ramp == x->f_arraySize + x->f_nBands)
-					{
-						x->f_fft[i].f_spew = 0;
-					}
 				}
+			}
+			/* Mel perform */
+			else
+			{
+				if (x->f_fft[i].f_ramp >= 0 && x->f_fft[i].f_ramp <  x->f_arraySize )
+				{
+
+					alpha = x->f_melBandRef[x->f_fft[i].f_ramp];
+					energy =  (sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0])+(x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1])));
+					
+					if(alpha != -1)
+					{
+						x->f_fft[i].f_melBand[alpha] += energy * x->f_filterParameters[alpha][x->f_fft[i].f_ramp];
+					}
+					if(alpha != x->f_nBands-1)
+					{
+						x->f_fft[i].f_melBand[alpha+1] += energy * x->f_filterParameters[alpha+1][x->f_fft[i].f_ramp];
+					}
+					
+				}
+				else if(x->f_fft[i].f_ramp >= x->f_arraySize && x->f_fft[i].f_ramp < x->f_arraySize + x->f_nBands)
+				{
+					alpha = x->f_fft[i].f_ramp - x->f_arraySize;
+	
+					x->f_result[alpha] = x->f_fft[i].f_melBand[alpha];
+					x->f_fft[i].f_melBand[alpha] = 0.f;
+				}
+				else if(x->f_fft[i].f_ramp == x->f_arraySize + x->f_nBands)
+				{
+					x->f_spew = 1;
+				}
+			}
 			
 			x->f_fft[i].f_ramp++;
 			if (x->f_fft[i].f_ramp >= x->f_windowSize)
@@ -270,37 +260,20 @@ void mel_out(t_mel *x)
 	
 	for(i = 0; i < x->f_overlapping; i++)
 	{
-		if (x->f_fft[i].f_spew == 1)
-		{	
-			if (x->f_count != 0 && x->f_limit != 0)
-			{
-				for(j = 0; j < x->f_nBands; j++)
-				{
-					x->f_result[j] = x->f_result[j] + (x->f_fft[i].f_mfcc[j] - x->f_result[j])*(2.f/(x->f_limit+1));
-					SETFLOAT(x->f_output+j, x->f_result[j]);
-				}
-			}
-			else
-			{
-				for(j = 0; j < x->f_nBands; j++)
-				{
-					x->f_result[j] = x->f_fft[i].f_mfcc[j];
-					SETFLOAT(x->f_output+j, x->f_result[j]);
-					x->f_count++;
-				}
-			}
-			if (x->f_mode != 0)
-			{
-				outlet_list(x->out1, 0L, (x->f_nBands-1), x->f_output);
-			}
-			else 
-			{
-				outlet_list(x->out1, 0L, x->f_nBands, x->f_output);
-			}
-			x->f_fft[i].f_spew = 0;
-			clock_delay(x->f_clock, x->f_interval);
+		for(j = 0; j < x->f_nBands; j++)
+		{
+			SETFLOAT(x->f_output+j, x->f_result[j]);
+		}
+		if(x->f_mode != 0)
+		{
+			outlet_list(x->out1, 0L, (x->f_nBands-1), x->f_output+1);
+		}
+		else 
+		{
+			outlet_list(x->out1, 0L, x->f_nBands, x->f_output);
 		}
 	}
+	clock_delay(x->f_clock, x->f_interval);
 }
 
 void mel_free(t_mel *x)

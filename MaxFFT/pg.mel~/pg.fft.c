@@ -10,21 +10,13 @@ void fft_setup(t_fft *x, int windowSize, int instance, int nbIntance, int nBands
 
 	x->f_ramp = (x->f_windowSize * x->f_instance) / nbIntance;
 
-	x->f_real		= (t_sample *)fftw_malloc(x->f_windowSize * sizeof(t_sample));
-	x->f_complex	= (fftw_complex *)fftw_malloc(x->f_arraySize * sizeof(fftw_complex));
+	x->f_real		= (double *)fftw_malloc(x->f_windowSize * sizeof(double));
+	x->f_complex	= (fftw_complex *)fftw_malloc((x->f_arraySize + 1) * sizeof(fftw_complex));
 	x->f_plan		= fftw_plan_dft_r2c_1d(x->f_windowSize, x->f_real, x->f_complex, FFTW_ESTIMATE);
 	
-	x->f_melBand	= (t_sample *)fftw_malloc(x->f_nBands  * sizeof(t_sample));
-	x->f_mffcoeff	= (t_sample *)fftw_malloc(x->f_nBands  * sizeof(t_sample));
-	x->f_planCos	= fftw_plan_r2r_1d(x->f_nBands, x->f_melBand, x->f_mffcoeff , FFTW_REDFT10, FFTW_ESTIMATE);
-
-	x->f_mfcc		= (t_sample *)getbytes(x->f_nBands * sizeof(t_sample));
-	for(i = 0; i < x->f_nBands; i++)
-	{
-		x->f_mfcc[i] = 0.f;
-		x->f_melBand[i] = 0.f;
-	}
-	x->f_spew = 0;
+	x->f_melBand	= (double *)fftw_malloc((x->f_nBands * 2) * sizeof(double));
+	x->f_mffcoeff	= (double *)fftw_malloc((x->f_nBands * 2) * sizeof(double));
+	x->f_planCos	= fftw_plan_r2r_1d(x->f_nBands , x->f_melBand, x->f_mffcoeff , FFTW_REDFT10, FFTW_ESTIMATE);
 }
 
 void fft_free(t_fft *x)
@@ -35,5 +27,4 @@ void fft_free(t_fft *x)
 	fftw_destroy_plan(x->f_planCos);
 	fftw_free(x->f_melBand);
 	fftw_free(x->f_mffcoeff);
-	freebytes(x->f_mfcc, x->f_arraySize * sizeof(t_sample));
 }
