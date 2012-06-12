@@ -20,10 +20,10 @@ int main()
 
 	CLASS_ATTR_LONG				(c, "amplitude", 0, t_rolloff, f_ampMode);
 	CLASS_ATTR_LABEL			(c, "amplitude", 0, "Amplitude mode");
-	CLASS_ATTR_ENUMINDEX		(c, "amplitude", 0, "RMS \" \"Power \" \"Energy");
+	CLASS_ATTR_ENUMINDEX		(c, "amplitude", 0, "RMS \" \"Power");
 	CLASS_ATTR_DEFAULT			(c, "amplitude", 0, "0");
 	CLASS_ATTR_SAVE				(c, "amplitude", 1);
-	CLASS_ATTR_FILTER_CLIP		(c, "amplitude", 0, 2);
+	CLASS_ATTR_FILTER_CLIP		(c, "amplitude", 0, 1);
 	CLASS_ATTR_ORDER			(c, "amplitude", 0, "1");
 
 	CLASS_ATTR_DOUBLE			(c, "rolloff", 0, t_rolloff, f_value);
@@ -126,19 +126,11 @@ void rolloff_perform64(t_rolloff *x, t_object *dsp64, double **ins, long numins,
 					x->f_fft[i].f_sumAmp	+= amplitude;
 					x->f_fft[i].f_amp[x->f_fft[i].f_ramp] = amplitude;
 				}
-				else if(x->f_ampMode == 1)
+				else
 				{
 					amplitude *= amplitude;
 					x->f_fft[i].f_sumAmp	+= amplitude;
 					x->f_fft[i].f_amp[x->f_fft[i].f_ramp] = amplitude;
-				}
-				else if(x->f_ampMode == 2)
-				{
-					amplitude = 20. * log10(amplitude);
-					if (amplitude < -90.f) amplitude = -90.f;
-					logAdd = pow(10., (amplitude / 10.));
-					x->f_fft[i].f_sumAmp	+= logAdd;
-					x->f_fft[i].f_amp[x->f_fft[i].f_ramp] = logAdd;
 				}
 
 			}
@@ -146,7 +138,7 @@ void rolloff_perform64(t_rolloff *x, t_object *dsp64, double **ins, long numins,
 			{
 				sumAmp = 0.;
 				rolloffAmp = x->f_value * x->f_fft[i].f_sumAmp;
-				for(k = 0; k < x->f_arraySize || sumAmp <= rolloffAmp; k++)
+				for(k = 0; sumAmp <= rolloffAmp; k++)
 				{
 					sumAmp += x->f_fft[i].f_amp[k];
 				}

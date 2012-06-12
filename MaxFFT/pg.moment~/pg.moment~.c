@@ -20,10 +20,10 @@ int main()
 
 	CLASS_ATTR_LONG				(c, "amplitude", 0, t_moment, f_ampMode);
 	CLASS_ATTR_LABEL			(c, "amplitude", 0, "Amplitude mode");
-	CLASS_ATTR_ENUMINDEX		(c, "amplitude", 0, "RMS \" \"Power \" \"Energy");
+	CLASS_ATTR_ENUMINDEX		(c, "amplitude", 0, "RMS \" \"Power");
 	CLASS_ATTR_DEFAULT			(c, "amplitude", 0, "0");
 	CLASS_ATTR_SAVE				(c, "amplitude", 1);
-	CLASS_ATTR_FILTER_CLIP		(c, "amplitude", 0, 2);
+	CLASS_ATTR_FILTER_CLIP		(c, "amplitude", 0, 1);
 	CLASS_ATTR_ORDER			(c, "amplitude", 0, "1");
 
 	class_dspinit(c);
@@ -142,18 +142,6 @@ void moment_perform64(t_moment *x, t_object *dsp64, double **ins, long numins, d
 					x->f_fft[i].f_skewness	+= amplitude * (rapport * rapport * rapport);
 					x->f_fft[i].f_kurtosis	+= amplitude * (rapport * rapport * rapport * rapport);
 				}
-				else if(x->f_ampMode == 2)
-				{
-					amplitude = 20. * log10(amplitude);
-					if (amplitude < -90.f) amplitude = -90.f;
-					logAdd = pow(10., (amplitude / 10.));
-					x->f_fft[i].f_sumAmp	+= logAdd;
-					x->f_fft[i].f_centroid	+= logAdd * frequency;
-					x->f_fft[i].f_spread	+= logAdd * (rapport * rapport);
-					x->f_fft[i].f_skewness	+= logAdd * (rapport * rapport * rapport);
-					x->f_fft[i].f_kurtosis	+= logAdd * (rapport * rapport * rapport * rapport);
-				}
-
 			}
 			else if (x->f_fft[i].f_ramp == x->f_arraySize)
 			{

@@ -20,10 +20,10 @@ int main()
 
 	CLASS_ATTR_LONG				(c, "amplitude", 0, t_gradient, f_ampMode);
 	CLASS_ATTR_LABEL			(c, "amplitude", 0, "Amplitude mode");
-	CLASS_ATTR_ENUMINDEX		(c, "amplitude", 0, "RMS \" \"Power \" \"Energy");
+	CLASS_ATTR_ENUMINDEX		(c, "amplitude", 0, "RMS \" \"Power");
 	CLASS_ATTR_DEFAULT			(c, "amplitude", 0, "0");
 	CLASS_ATTR_SAVE				(c, "amplitude", 1);
-	CLASS_ATTR_FILTER_CLIP		(c, "amplitude", 0, 2);
+	CLASS_ATTR_FILTER_CLIP		(c, "amplitude", 0, 1);
 	CLASS_ATTR_ORDER			(c, "amplitude", 0, "1");
 
 	CLASS_ATTR_LONG				(c, "gradient", 0, t_gradient, f_mode);
@@ -146,14 +146,6 @@ void gradient_perform64(t_gradient *x, t_object *dsp64, double **ins, long numin
 						amplitude *= amplitude;
 						x->f_fft[i].f_sumAmp	+= amplitude;
 						x->f_fft[i].f_sumFreq	+= amplitude * frequency;
-					}
-					else if(x->f_ampMode == 2)
-					{
-						amplitude = 20. * log10(amplitude);
-						if (amplitude < -90.f) amplitude = -90.f;
-						logAdd = pow(10., (amplitude / 10.));
-						x->f_fft[i].f_sumAmp	+= logAdd;
-						x->f_fft[i].f_sumFreq	+= logAdd * frequency;
 					}
 						
 				}

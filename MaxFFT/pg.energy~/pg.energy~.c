@@ -122,24 +122,17 @@ void energy_perform64(t_energy *x, t_object *dsp64, double **ins, long numins, d
 			if (x->f_fft[i].f_ramp < x->f_arraySize && x->f_fft[i].f_ramp > 0)
 			{
 				amplitude = x->f_rapportSize * sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]) + (x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]));
-				if(x->f_ampMode == 0)
+				if(x->f_ampMode != 1)
 				{
 					x->f_fft[i].f_sum	+= amplitude;
 				}
-				else if(x->f_ampMode == 1)
+				else
 				{
 					amplitude *= amplitude;
 					x->f_fft[i].f_sum	+= amplitude;
 				}
-				else if(x->f_ampMode == 2)
-				{
-					amplitude = 20. * log10(amplitude);
-					if (amplitude < -90.f) amplitude = -90.;
-					x->f_fft[i].f_sum	+= pow(10., (amplitude / 10.));
-				}
 				if(amplitude < x->f_fft[i].f_min) x->f_fft[i].f_min = amplitude;
 				if(amplitude > x->f_fft[i].f_max) x->f_fft[i].f_max = amplitude;
-				
 
 			}
 			else if (x->f_fft[i].f_ramp == x->f_arraySize)
@@ -147,11 +140,18 @@ void energy_perform64(t_energy *x, t_object *dsp64, double **ins, long numins, d
 				x->f_min	= x->f_fft[i].f_min;
 				x->f_max	= x->f_fft[i].f_max;
 				x->f_sum	= x->f_fft[i].f_sum;
-				if(x->f_ampMode == 2)
-					x->f_ave	= 10. * log10(x->f_sum / (double)x->f_arraySize);
-				else
 				x->f_ave	= x->f_sum / (double)x->f_arraySize;
-
+				if(x->f_ampMode == 2)
+				{
+					x->f_min	= 20. * log10(x->f_min);
+					if (x->f_min < -90.f) x->f_min = -90.;
+					x->f_ave	= 20. * log10(x->f_ave);
+					if (x->f_ave < -90.f) x->f_ave = -90.;
+					x->f_max	= 20. * log10(x->f_max);
+					if (x->f_max < -90.f) x->f_max = -90.;
+					x->f_sum	= 20. * log10(x->f_sum);
+					if (x->f_sum < -90.f) x->f_sum = -90.;
+				}
 
 				x->f_fft[i].f_min = 300.;
 				x->f_fft[i].f_max = -300.;

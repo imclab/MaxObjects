@@ -6,10 +6,12 @@
 #include "jpatcher_syms.h"
 #include "ext_dictionary.h"
 #include "ext_globalsymbol.h"
+#include "pg.analysis.h"
 #include "z_dsp.h"
 #include "buffer.h"
 #include "../pg.window/pg.window.h"
 #include <fftw3.h>
+
 
 typedef struct _buf
 {
@@ -27,15 +29,10 @@ typedef struct _buf
 	long		f_nSamples;
 	long		f_nFrames;
 
-	double		**f_sonogram[4];
-	double		*f_centroid[4];
-	double		*f_spread[4];
-	double		*f_skewness[4];
-	double		*f_kurtosis[4];
-
-	double		*f_maxAmp[4];
-	double		*f_minAmp[4];
-	double		*f_aveAmp[4];
+	t_sonogram	f_sono;
+	t_energy	f_ener;
+	t_moment	f_mome;
+	t_gradient	f_grad;
 
 	double		*f_rolloff[4];
 	double		*f_slope[4];
@@ -98,6 +95,11 @@ t_max_err channel_set(t_descriptor *x, t_object *attr, long argc, t_atom *argv);
 
 void buffer_setup(t_descriptor *x, long windowSize, long overlapping);
 void descriptor_compute(t_buf *x, t_window *w);
+void descriptor_sonogram(t_buf *x, double **complex, int channel, int frame);
+void descriptor_energy(t_buf *x, double **complex, int channel, int frame);
+void descriptor_moment(t_buf *x, double **complex, int channel, int frame, double frequencyBand);
+void descriptor_gradient(t_buf *x, double **complex, int channel, int frame, double frequencyBand, double sr);
+
 void buffer_free(t_buf *x);
 
 /* Paint *********************************************/
