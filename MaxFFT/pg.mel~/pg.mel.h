@@ -20,7 +20,6 @@ typedef struct _fft
 	t_sample		*f_mfcc;
 
 	long 			f_spew;
-	long			f_spew2;
 
 	long			f_windowSize;
 	long			f_arraySize;

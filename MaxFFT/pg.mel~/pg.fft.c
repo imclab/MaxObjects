@@ -13,6 +13,7 @@ void fft_setup(t_fft *x, int windowSize, int instance, int nbIntance, int nBands
 	x->f_real		= (t_sample *)fftw_malloc(x->f_windowSize * sizeof(t_sample));
 	x->f_complex	= (fftw_complex *)fftw_malloc(x->f_arraySize * sizeof(fftw_complex));
 	x->f_plan		= fftw_plan_dft_r2c_1d(x->f_windowSize, x->f_real, x->f_complex, FFTW_ESTIMATE);
+	
 	x->f_melBand	= (t_sample *)fftw_malloc(x->f_nBands  * sizeof(t_sample));
 	x->f_mffcoeff	= (t_sample *)fftw_malloc(x->f_nBands  * sizeof(t_sample));
 	x->f_planCos	= fftw_plan_r2r_1d(x->f_nBands, x->f_melBand, x->f_mffcoeff , FFTW_REDFT10, FFTW_ESTIMATE);
@@ -24,7 +25,6 @@ void fft_setup(t_fft *x, int windowSize, int instance, int nbIntance, int nBands
 		x->f_melBand[i] = 0.f;
 	}
 	x->f_spew = 0;
-	x->f_spew2 = 0;
 }
 
 void fft_free(t_fft *x)

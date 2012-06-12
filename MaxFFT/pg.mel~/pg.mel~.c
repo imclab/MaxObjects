@@ -8,6 +8,7 @@ int main()
 	c = class_new("pg.mel~", (method)mel_new, (method)mel_free, (short)sizeof(t_mel), 0L, A_GIMME, 0);
 	class_addmethod(c, (method)mel_dsp64,		"dsp64",		A_CANT,	0);
 	class_addmethod(c, (method)mel_assist,		"assist",		A_CANT,	0);
+	//class_addmethod(c, (method)mel_dspstatus,		"dspstatus",	A_CANT,	0);
 	
 	class_dspinit(c);
 	class_register(CLASS_BOX, c);
@@ -34,18 +35,21 @@ int main()
 	CLASS_ATTR_FILTER_CLIP		(c, "interval", 3, 5000);
 	CLASS_ATTR_DEFAULT			(c, "interval", 0, "10");
 	CLASS_ATTR_SAVE				(c, "interval", 1);
+	CLASS_ATTR_ORDER			(c, "interval", 0, "3");
 	
 	CLASS_ATTR_LONG				(c, "smooth", 0, t_mel, f_limit);
 	CLASS_ATTR_LABEL			(c, "smooth", 0, "Smooth");
 	CLASS_ATTR_FILTER_MIN		(c, "smooth", 0);
 	CLASS_ATTR_DEFAULT			(c, "smooth", 0, "5");
 	CLASS_ATTR_SAVE				(c, "smooth", 1);
-
+	CLASS_ATTR_ORDER			(c, "smooth", 0, "4");
+	
 	CLASS_ATTR_FLOAT			(c, "highpass", 0, t_mel, f_hightpass);
 	CLASS_ATTR_LABEL			(c, "highpass", 0, "Highpass filter");
 	CLASS_ATTR_FILTER_CLIP		(c, "highpass", 0., 1.);
 	CLASS_ATTR_DEFAULT			(c, "highpass", 0, "0.95");
 	CLASS_ATTR_SAVE				(c, "highpass", 1);
+	CLASS_ATTR_ORDER			(c, "highpass", 0, "5");
 
 	post("pg.mel~ by Pierre Guillot",0);
 	post("Universite Paris 8, France",0);
@@ -114,11 +118,12 @@ void *mel_new(t_symbol *s, int argc, t_atom *argv)
 		x->f_hightpass = 0.95;
 		x->f_result				= (t_sample *)getbytes(x->f_nBands * sizeof(t_sample));
 		x->f_output				= (t_atom *)getbytes(x->f_nBands * sizeof(t_atom));
-
+		x->f_spew = 0;
 		/* Inlet and Outlet Initialization ******************************/
 		dsp_setup((t_pxobject *)x, 1);
 		x->out1 = listout(x);
 		x->f_clock = clock_new(x, (method)mel_out);
+		clock_delay(x->f_clock, 0L);
 		attr_args_process (x, argc, argv);
 	}
 	return x;
@@ -137,7 +142,7 @@ void mel_dsp64(t_mel *x, t_object *dsp64, short *count, double samplerate, long 
 		fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping, x->f_nBands);
 	}
 	/* Clock Initialization ****************************************/
-	clock_delay(x->f_clock, 0L);
+	
 	object_method(dsp64, gensym("dsp_add64"), x, mel_perform64, 0, NULL);
 }
 
@@ -162,8 +167,7 @@ void mel_perform64(t_mel *x, t_object *dsp64, double **ins, long numins, double 
 				x->f_fft[i].f_real[x->f_fft[i].f_ramp] = in[j] * x->f_env.f_envelope[x->f_fft[i].f_ramp];
 			}
 
-			if (x->f_fft[i].f_spew2 > 1)
-			{
+
 				/* MFCC's perform */
 				if (x->f_mode != 0)
 				{
@@ -246,17 +250,15 @@ void mel_perform64(t_mel *x, t_object *dsp64, double **ins, long numins, double 
 					}
 					else if(x->f_fft[i].f_ramp == x->f_arraySize + x->f_nBands)
 					{
-						x->f_fft[i].f_spew = 1;
+						x->f_fft[i].f_spew = 0;
 					}
 				}
-			}
 			
 			x->f_fft[i].f_ramp++;
 			if (x->f_fft[i].f_ramp >= x->f_windowSize)
 			{
 				fftw_execute(x->f_fft[i].f_plan );
 				x->f_fft[i].f_ramp = 0;
-				x->f_fft[i].f_spew2 += 1;
 			}	
 		}
 	}
@@ -295,12 +297,10 @@ void mel_out(t_mel *x)
 			{
 				outlet_list(x->out1, 0L, x->f_nBands, x->f_output);
 			}
-
+			x->f_fft[i].f_spew = 0;
+			clock_delay(x->f_clock, x->f_interval);
 		}
-		x->f_fft[i].f_spew = 0;
 	}
-	clock_delay(x->f_clock, x->f_interval);
-	
 }
 
 void mel_free(t_mel *x)
