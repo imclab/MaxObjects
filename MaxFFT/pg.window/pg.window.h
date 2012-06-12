@@ -5,7 +5,7 @@
 
 typedef struct _window
 {
-	t_sample	*f_envelope;
+	double		*f_envelope;
 	long		f_size;
 	long		f_mode;
 }t_window;
@@ -24,7 +24,7 @@ void window_cosinus(t_window *x);
 void window_lanczos(t_window *x);
 void window_triangular(t_window *x);
 void window_gaussian(t_window *x);
-void window_kaiser(t_window *x); // Not yet //
+void window_kaiser(t_window *x);
 void window_bartlett_hann(t_window *x);
 void window_nuttall(t_window *x);
 void window_blackman_harris(t_window *x);

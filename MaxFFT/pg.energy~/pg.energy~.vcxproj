@@ -189,7 +189,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\SDKs\fftw-3.3.2-dll32\libfftw3-3.def" />
-    <None Include="pg.energy~.def" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

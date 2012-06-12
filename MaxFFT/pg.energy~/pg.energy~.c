@@ -2,13 +2,11 @@
 
 int main()
 {
-	t_class *c;
-
-	c = class_new("pg.energy~", (method)energy_new, (method)energy_free, (long)sizeof(t_energy), 0L, A_GIMME, 0);
+	t_class *c = class_new("pg.energy~", (method)energy_new, (method)energy_free, (long)sizeof(t_energy), 0L, A_GIMME, 0);
 	class_addmethod(c, (method)energy_dsp64,		"dsp64",		A_CANT,	0);
 	class_addmethod(c, (method)energy_dsp,			"dsp",			A_CANT,	0);
 	class_addmethod(c, (method)energy_assist,		"assist",		A_CANT,	0);
-
+	
 	CLASS_ATTR_LONG				(c, "window", 0, t_energy, f_winMode);
 	CLASS_ATTR_LABEL			(c, "window", 0, "Window function");
 	CLASS_ATTR_ENUMINDEX		(c, "window", 0, "Square \" \"Hanning \" \"Hamming \" \"Turkey \" \"Cosinus \" \"Lanczos \" \"Triangular \" \"Gaussian \" \"Bartlett-Hann \" \"Blackman \" \"Kaiser \" \"Nuttall \" \"Blackman-Harris \" \"Blackman-Nuttall \" \"Flat-Top \" \"Poisson");
@@ -17,7 +15,7 @@ int main()
 	CLASS_ATTR_SAVE				(c, "window", 1);
 	CLASS_ATTR_FILTER_CLIP		(c, "window", 0, 10);
 	CLASS_ATTR_ORDER			(c, "window", 0, "1");
-
+	
 	CLASS_ATTR_LONG				(c, "amplitude", 0, t_energy, f_ampMode);
 	CLASS_ATTR_LABEL			(c, "amplitude", 0, "Amplitude mode");
 	CLASS_ATTR_ENUMINDEX		(c, "amplitude", 0, "RMS \" \"Power \" \"Energy");
@@ -25,7 +23,7 @@ int main()
 	CLASS_ATTR_SAVE				(c, "amplitude", 1);
 	CLASS_ATTR_FILTER_CLIP		(c, "amplitude", 0, 2);
 	CLASS_ATTR_ORDER			(c, "amplitude", 0, "1");
-
+	
 	class_dspinit(c);
 	class_register(CLASS_BOX, c);
 	energy_class = c;
@@ -36,54 +34,57 @@ int main()
 	return 0;
 }
 
-void *energy_new(t_symbol *s, int argc, t_atom *argv)
+void *energy_new(t_symbol *s, long argc, t_atom *argv)
 {
-	t_energy *x = (t_energy *)object_alloc((t_class *)energy_class);
-
-	/* Sampling Rate initialization **************/
-	x->f_sr = sys_getsr();
-
-	/* Windows Size Initialization **************/
-	x->f_windowSize = 0; 
-	if( argv[0].a_type == A_LONG ) x->f_windowSize = (int)(argv[0].a_w.w_long);
-	if (x->f_windowSize%2 != 0)
-	{
-		x->f_windowSize = 1024;
-		object_post((t_object*)x, "Wrong window size initialization, set to default : 1024");
-	}
-	x->f_arraySize = x->f_windowSize/2;
-
-	/* Overlapping Initialization ***************/
-	x->f_overlapping = 0; 
-	if( argv[1].a_type == A_LONG ) x->f_overlapping = (int)(argv[1].a_w.w_long);
-	if (x->f_overlapping < 1)
-	{
-		x->f_overlapping = 2;
-		object_post((t_object*)x, "Wrong overlapping initialization, set to default : 2");
-	}
+	t_energy *x = NULL;
 		
-	/* Initialization of the window  ********************************/
-	
-	if( argv[2].a_type == A_LONG ) x->f_winMode = argv[2].a_w.w_long;
-	if (x->f_winMode < 0 || x->f_winMode > 15)
+	if(x = (t_energy *)object_alloc(energy_class))
 	{
+		/* Sampling Rate initialization **************/
+		x->f_sr = sys_getsr();
+		
+		/* Windows Size Initialization **************/
+		x->f_windowSize = 0; 
+		if( argv[0].a_type == A_LONG ) x->f_windowSize = (int)(argv[0].a_w.w_long);
+		if (x->f_windowSize%2 != 0)
+		{
+			x->f_windowSize = 1024;
+			object_post((t_object*)x, "Wrong window size initialization, set to default : 1024");
+		}
+		x->f_arraySize = x->f_windowSize/2;
+
+		/* Overlapping Initialization ***************/
+		x->f_overlapping = 0; 
+		if( argv[1].a_type == A_LONG ) x->f_overlapping = (int)(argv[1].a_w.w_long);
+		if (x->f_overlapping < 1)
+		{
+			x->f_overlapping = 2;
+			object_post((t_object*)x, "Wrong overlapping initialization, set to default : 2");
+		}
+		
+		/* Initialization of the window  ********************************/
 		x->f_winMode = 1;
-		object_post((t_object*)x, "Wrong window initialization, set to default : 1");
+		if( argv[2].a_type == A_LONG ) x->f_winMode = argv[2].a_w.w_long;
+		if (x->f_winMode < 0 || x->f_winMode > 15)
+		{
+			x->f_winMode = 1;
+			object_post((t_object*)x, "Wrong window initialization, set to default : 1");
+		}
+		window_setup(&x->f_env, x->f_windowSize, x->f_winMode);
+
+		x->f_min	= 0.;
+		x->f_max	= 0.;
+		x->f_ave	= 0.;
+		x->f_sum	= 0.;
+		
+		dsp_setup((t_pxobject *)x, 1);
+		outlet_new((t_pxobject *)x, "signal");
+		outlet_new((t_pxobject *)x, "signal");
+		outlet_new((t_pxobject *)x, "signal");
+		outlet_new((t_pxobject *)x, "signal");
+		x->f_ampMode = 0;
+		attr_args_process(x, argc, argv);
 	}
-	window_setup(&x->f_env, x->f_windowSize, x->f_winMode);
-
-	x->f_min	= 0.;
-	x->f_max	= 0.;
-	x->f_ave	= 0.;
-	x->f_sum	= 0.;
-
-	dsp_setup((t_pxobject *)x, 1);
-	outlet_new((t_pxobject *)x, "signal");
-	outlet_new((t_pxobject *)x, "signal");
-	outlet_new((t_pxobject *)x, "signal");
-	outlet_new((t_pxobject *)x, "signal");
-	x->f_ampMode = 0;
-	attr_args_process(x, argc, argv);
 	return (x);
 }			
 
@@ -105,12 +106,12 @@ void energy_dsp64(t_energy *x, t_object *dsp64, short *count, double samplerate,
 void energy_perform64(t_energy *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam)
 {
 	int i, j;
-	t_double amplitude;
-    t_double	*in		= ins[0];
-    t_double	*out1	= outs[0];
-	t_double	*out2	= outs[1];
-	t_double	*out3	= outs[2];
-	t_double	*out4	= outs[3];
+	double amplitude;
+    double	*in		= ins[0];
+    double	*out1	= outs[0];
+	double	*out2	= outs[1];
+	double	*out3	= outs[2];
+	double	*out4	= outs[3];
 	
 	for(i = 0; i < x->f_overlapping; i++)
 	{
@@ -133,7 +134,7 @@ void energy_perform64(t_energy *x, t_object *dsp64, double **ins, long numins, d
 				else if(x->f_ampMode == 2)
 				{
 					amplitude = 20. * log10(amplitude);
-					if (amplitude < -90.f) amplitude = -90.f;
+					if (amplitude < -90.f) amplitude = -90.;
 					x->f_fft[i].f_sum	+= pow(10., (amplitude / 10.));
 				}
 				if(amplitude < x->f_fft[i].f_min) x->f_fft[i].f_min = amplitude;
@@ -147,9 +148,9 @@ void energy_perform64(t_energy *x, t_object *dsp64, double **ins, long numins, d
 				x->f_max	= x->f_fft[i].f_max;
 				x->f_sum	= x->f_fft[i].f_sum;
 				if(x->f_ampMode == 2)
-					x->f_ave	= 10. * log10(x->f_sum / (t_double)x->f_arraySize);
+					x->f_ave	= 10. * log10(x->f_sum / (double)x->f_arraySize);
 				else
-				x->f_ave	= x->f_sum / (t_double)x->f_arraySize;
+				x->f_ave	= x->f_sum / (double)x->f_arraySize;
 
 
 				x->f_fft[i].f_min = 300.;
@@ -246,14 +247,14 @@ void energy_dsp(t_energy *x, t_signal **sp, short *count)
 t_int *energy_perform(t_int *w)
 {	
 	t_energy	*x		= (t_energy *)(w[1]);
-	t_sample	*in		= (t_sample *)	(w[2]);
-	t_sample	*out1	= (t_sample *)	(w[3]);
-	t_sample	*out2	= (t_sample *)	(w[4]);
-	t_sample	*out3	= (t_sample *)	(w[5]);
-	t_sample	*out4	= (t_sample *)	(w[6]);
+	float	*in		= (float *)	(w[2]);
+	float	*out1	= (float *)	(w[3]);
+	float	*out2	= (float *)	(w[4]);
+	float	*out3	= (float *)	(w[5]);
+	float	*out4	= (float *)	(w[6]);
 	int n				= (int)			(w[7]);
 
-	t_double amplitude;
+	double amplitude;
 	int i, j;
 	if (x->f_ob.z_disabled) return w + 8;
 
@@ -278,7 +279,7 @@ t_int *energy_perform(t_int *w)
 				else if(x->f_ampMode == 2)
 				{
 					amplitude = 20. * log10(amplitude);
-					if (amplitude < -90.f) amplitude = -90.f;
+					if (amplitude < -90.f) amplitude = -90.;
 					x->f_fft[i].f_sum	+= pow(10., (amplitude / 10.));
 				}
 				if(amplitude < x->f_fft[i].f_min) x->f_fft[i].f_min = amplitude;
@@ -292,9 +293,9 @@ t_int *energy_perform(t_int *w)
 				x->f_max	= x->f_fft[i].f_max;
 				x->f_sum	= x->f_fft[i].f_sum;
 				if(x->f_ampMode == 2)
-					x->f_ave	= 10. * log10(x->f_sum / (t_double)x->f_arraySize);
+					x->f_ave	= 10. * log10(x->f_sum / (double)x->f_arraySize);
 				else
-				x->f_ave	= x->f_sum / (t_double)x->f_arraySize;
+				x->f_ave	= x->f_sum / (double)x->f_arraySize;
 
 
 				x->f_fft[i].f_min = 300.;

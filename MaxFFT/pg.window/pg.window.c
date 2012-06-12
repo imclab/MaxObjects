@@ -4,7 +4,7 @@
 void window_square(t_window *x)
 {
 	int i, size;
-	t_sample j;
+	double j;
 	size = x->f_size;
 	j = size - 1;
 	for(i = 0; i < size; i++)
@@ -16,46 +16,46 @@ void window_square(t_window *x)
 void window_hamming(t_window *x)
 {
 	int i, size;
-	t_sample j;
+	double j;
 	size = x->f_size;
 	j = size - 1;
   
 	for(i = 0; i < size; i++)
 	{
-		x->f_envelope[i] = 0.54 - (0.46 * cos(2.0 * PI *(t_sample)i / j));
+		x->f_envelope[i] = 0.54 - (0.46 * cos(2.0 * PI *(double)i / j));
 	}
 }
 
 void window_hanning(t_window *x)
 {
 	int i, size;
-	t_sample j;
+	double j;
 	size = x->f_size;
 	j = size - 1;
   
 	for(i = 0; i < size; i++)
 	{
-		x->f_envelope[i] = 0.5 * (1.0 - cos(2.0 * PI * (t_sample)i /j));
+		x->f_envelope[i] = 0.5 * (1.0 - cos(2.0 * PI * (double)i /j));
 	}
 }
 
 void window_blackman(t_window *x)
 {
 	int i, size;
-	t_sample j;
+	double j;
 	size = x->f_size;
 	j = size - 1;
 
 	for(i = 0; i < size; i++)
     {
-		x->f_envelope[i] = 0.42 - (0.5 * cos(2.0 * PI * (t_sample)i / j)) + (0.08 * cos(4.0 * PI * (t_sample)i / j));
+		x->f_envelope[i] = 0.42 - (0.5 * cos(2.0 * PI * (double)i / j)) + (0.08 * cos(4.0 * PI * (double)i / j));
     }
 }
 
 void window_cosinus(t_window *x)
 {
 	int i, size;
-	t_sample j;
+	double j;
 	size = x->f_size;
 	j = size - 1;
 
@@ -68,13 +68,13 @@ void window_cosinus(t_window *x)
 void window_lanczos(t_window *x)
 {
 	int i, size;
-	t_sample j, alpha;
+	double j, alpha;
 	size = x->f_size;
 	j = size - 1;
 
 	for(i = 0; i < size; i++)
     {
-		alpha = PI * (((2. * (t_sample)i) / j) - 1.);
+		alpha = PI * (((2. * (double)i) / j) - 1.);
 		x->f_envelope[i] = sin(alpha)/alpha;
     }
 }
@@ -83,18 +83,18 @@ void window_lanczos(t_window *x)
 void window_kaiser(t_window *x)
 {
 	int i, size;
-	t_sample j, sumvalue, alpha;
+	double j, sumvalue, alpha;
 	size = x->f_size;
 	j = size - 1;
     sumvalue = 0.;
 	alpha = 3.;
     for (i = 0; i < size / 2; i++) 
 	{
-        sumvalue += window_besselI0(PI * alpha * sqrt(1. - pow(4. * (t_sample)i / (t_sample)size - 1., 2.)));
+        sumvalue += window_besselI0(PI * alpha * sqrt(1. - pow(4. * (double)i / (double)size - 1., 2.)));
         x->f_envelope[i] = sumvalue;
     }
     
-    sumvalue += window_besselI0(PI * alpha * sqrt(1. - pow(4. * ((t_sample)size /2. ) / (t_sample)size - 1., 2.)));
+    sumvalue += window_besselI0(PI * alpha * sqrt(1. - pow(4. * ((double)size /2. ) / (double)size - 1., 2.)));
 
     for (i = 0; i < size / 2; i++) 
 	{
@@ -106,13 +106,13 @@ void window_kaiser(t_window *x)
 void window_triangular(t_window *x)
 {
 	int i, size;
-	t_sample j, k, alpha;
+	double j, k, alpha;
 	size = x->f_size;
 	j = size - 1;
 	alpha = 0.5;
 	for(i = 0; i < size; i++)
     {
-		k = (t_sample)i -(j / 2.);
+		k = (double)i -(j / 2.);
 		x->f_envelope[i] = (2. / j) * ((j / 2.) - k);
     }
 }
@@ -120,7 +120,7 @@ void window_triangular(t_window *x)
 void window_gaussian(t_window *x)
 {
 	int i, size;
-	t_sample j, k, alpha;
+	double j, k, alpha;
 	size = x->f_size;
 	j = size - 1;
 	alpha = 0.5;
@@ -134,7 +134,7 @@ void window_gaussian(t_window *x)
 void window_bartlett_hann(t_window *x)
 {
 	int i, size;
-	t_sample j, a1, a2, a3, abso;
+	double j, a1, a2, a3, abso;
 	size = x->f_size;
 	j = size - 1;
 	a1 = 0.62;
@@ -142,16 +142,16 @@ void window_bartlett_hann(t_window *x)
 	a3 = 0.38;
 	for(i = 0; i < size; i++)
     {
-		abso = ((t_sample)i / (t_sample)j) - 0.5;
+		abso = ((double)i / (double)j) - 0.5;
 		if(abso < 0.) abso = -abso;
-		x->f_envelope[i] = a1 - a2 * abso - a3 * cos((2.0 * PI *(t_sample)i) / j);
+		x->f_envelope[i] = a1 - a2 * abso - a3 * cos((2.0 * PI *(double)i) / j);
     }
 }
 
 void window_nuttall(t_window *x)
 {
 	int i, size;
-	t_sample j, a1, a2, a3, a4;
+	double j, a1, a2, a3, a4;
 	size = x->f_size;
 	j = size - 1;
 	a1 = 0.255768;
@@ -160,14 +160,14 @@ void window_nuttall(t_window *x)
 	a4 = 0.012604;
 	for(i = 0; i < size; i++)
     {
-		x->f_envelope[i] = (a1 - a2 * (cos( (2.0 * PI * (t_sample)i) / j)) + a3 * (cos( (4.0 * PI * (t_sample)i) / j)) - a4 * (cos( (6.0 * PI * (t_sample)i) / j)) + 0.032 * (cos( (8.0 * PI * (t_sample)i) / j)));
+		x->f_envelope[i] = (a1 - a2 * (cos( (2.0 * PI * (double)i) / j)) + a3 * (cos( (4.0 * PI * (double)i) / j)) - a4 * (cos( (6.0 * PI * (double)i) / j)) + 0.032 * (cos( (8.0 * PI * (double)i) / j)));
     }
 }
 
 void window_blackman_harris(t_window *x)
 {
 	int i, size;
-	t_sample j, a1, a2, a3, a4;
+	double j, a1, a2, a3, a4;
 	size = x->f_size;
 	j = size - 1;
 	a1 = 0.35875;
@@ -176,14 +176,14 @@ void window_blackman_harris(t_window *x)
 	a4 = 0.01168;
 	for(i = 0; i < size; i++)
     {
-		x->f_envelope[i] = (a1 - a2 * (cos( (2.0 * PI * (t_sample)i) / j)) + a3 * (cos( (4.0 * PI * (t_sample)i) / j)) - a4 * (cos( (6.0 * PI * (t_sample)i) / j)) + 0.032 * (cos( (8.0 * PI * (t_sample)i) / j)));
+		x->f_envelope[i] = (a1 - a2 * (cos( (2.0 * PI * (double)i) / j)) + a3 * (cos( (4.0 * PI * (double)i) / j)) - a4 * (cos( (6.0 * PI * (double)i) / j)) + 0.032 * (cos( (8.0 * PI * (double)i) / j)));
     }
 }
 
 void window_blackman_nuttall(t_window *x)
 {
 	int i, size;
-	t_sample j, a1, a2, a3, a4;
+	double j, a1, a2, a3, a4;
 	size = x->f_size;
 	j = size - 1;
 	a1 = 0.3635819;
@@ -192,13 +192,13 @@ void window_blackman_nuttall(t_window *x)
 	a4 = 0.0106441;
 	for(i = 0; i < size; i++)
     {
-		x->f_envelope[i] = (a1 - a2 * (cos( (2.0 * PI * (t_sample)i) / j)) + a3 * (cos( (4.0 * PI * (t_sample)i) / j)) - a4 * (cos( (6.0 * PI * (t_sample)i) / j)) + 0.032 * (cos( (8.0 * PI * (t_sample)i) / j)));
+		x->f_envelope[i] = (a1 - a2 * (cos( (2.0 * PI * (double)i) / j)) + a3 * (cos( (4.0 * PI * (double)i) / j)) - a4 * (cos( (6.0 * PI * (double)i) / j)) + 0.032 * (cos( (8.0 * PI * (double)i) / j)));
     }
 }
 void window_flat_top(t_window *x)
 {
 	int i, size;
-	t_sample j, a1, a2, a3, a4;
+	double j, a1, a2, a3, a4;
 	size = x->f_size;
 	j = size - 1;
 	a1 = 1.;
@@ -207,20 +207,20 @@ void window_flat_top(t_window *x)
 	a4 = 0.388;
 	for(i = 0; i < size; i++)
     {
-		x->f_envelope[i] = (a1 - a2 * (cos( (2.0 * PI * (t_sample)i) / j)) + a3 * (cos( (4.0 * PI * (t_sample)i) / j)) - a4 * (cos( (6.0 * PI * (t_sample)i) / j)) + 0.032 * (cos( (8.0 * PI * (t_sample)i) / j))) * 0.2;
+		x->f_envelope[i] = (a1 - a2 * (cos( (2.0 * PI * (double)i) / j)) + a3 * (cos( (4.0 * PI * (double)i) / j)) - a4 * (cos( (6.0 * PI * (double)i) / j)) + 0.032 * (cos( (8.0 * PI * (double)i) / j))) * 0.2;
     }
 }
 
 void window_poisson(t_window *x)
 {
 	int i, size;
-	t_sample j, alpha, beta;
+	double j, alpha, beta;
 	size = x->f_size;
 	j = size - 1;
-	alpha = 1./ (((t_sample)size / 2.)/(60./8.69));
+	alpha = 1./ (((double)size / 2.)/(60./8.69));
 	for(i = 0; i < size; i++)
     {
-		beta = -1. * ((t_sample)i - (j / 2.));
+		beta = -1. * ((double)i - (j / 2.));
 		if (beta >= 0) beta = -beta;
 		beta *= alpha;
 		x->f_envelope[i] = exp(beta);
@@ -230,18 +230,18 @@ void window_poisson(t_window *x)
 void window_turkey(t_window *x)
 {
 	int i, size;
-	t_sample j, alpha;
+	double j, alpha;
 	size = x->f_size;
 	j = size - 1;
 	alpha = 0.5;
 	for(i = 0; i < size; i++)
     {
 		if(i <= ((alpha * j) / 2.))
-			x->f_envelope[i] = 0.5 * ( 1. + cos(PI * ( ((2 *(t_sample)i) / (alpha * j)) - 1.)));
+			x->f_envelope[i] = 0.5 * ( 1. + cos(PI * ( ((2 *(double)i) / (alpha * j)) - 1.)));
 		else if(i > ((alpha * j) / 2.) && i <= (j * (1. - ( alpha / 2.))))
 			x->f_envelope[i] = 1.;
 		else 
-			x->f_envelope[i] = 0.5 * ( 1. + cos(PI * ( ((2 *(t_sample)i) / (alpha * j)) + 1. - (2. / alpha))));
+			x->f_envelope[i] = 0.5 * ( 1. + cos(PI * ( ((2 *(double)i) / (alpha * j)) + 1. - (2. / alpha))));
     }
 }
 
@@ -269,7 +269,7 @@ void window_setup(t_window *x, long size, long mode)
 
 void window_free(t_window *x)
 {
-	if(x->f_envelope != NULL) freebytes(x->f_envelope, sizeof(t_sample)* x->f_size);
+	if(x->f_envelope != NULL) freebytes(x->f_envelope, sizeof(double)* x->f_size);
 }
 
 t_max_err window_mode_set(t_window *x, t_object *attr, long argc, t_atom *argv)
@@ -344,11 +344,11 @@ void window_Selector(t_window *x)
 	}
 }
 
-t_sample window_besselI0(t_sample x)
+double window_besselI0(double x)
 {
-    t_sample denominator;
-    t_sample numerator;
-    t_sample z;
+    double denominator;
+    double numerator;
+    double z;
     
     if (x == 0.0) 
 	{
