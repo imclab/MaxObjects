@@ -1,5 +1,10 @@
 ## The pg.library is a collection of externals for Max 5 and Max 6.
 
+### Links :
+
+[Project Page](https://github.com/pierreguillot/MaxObjects.git)
+[pg.library.rar](http://dl.dropbox.com/u/21891549/pg.library.rar)
+
 ### MaxData :
 
 * **pg.average** : Moving average.
@@ -26,7 +31,7 @@
 * **pg.descriptor~** : Sonogram and analysis of a buffer~ (beta).
 * **pg.mel~** : Spectrum above the mel scale and MFCCs (beta, crash sometimes).
 * **pg.gradient~** : Estimation of the slope or the decrease of the spectrum.
-* **
+* **pg.rolloff~** : Estimation of the rolloff frequency.
 
 ### Binaries :
 
