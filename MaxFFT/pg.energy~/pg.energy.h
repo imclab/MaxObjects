@@ -43,7 +43,7 @@ typedef struct  _energy
 	
 } t_energy;
 
-static t_class *energy_class = NULL;
+void *energy_class;
 
 void *energy_new(t_symbol *s, long argc, t_atom *argv);
 void energy_free(t_energy *x);

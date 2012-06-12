@@ -146,7 +146,7 @@ void rolloff_perform64(t_rolloff *x, t_object *dsp64, double **ins, long numins,
 			{
 				sumAmp = 0.;
 				rolloffAmp = x->f_value * x->f_fft[i].f_sumAmp;
-				for(k = 0; k < x->f_arraySize, sumAmp <= rolloffAmp; k++)
+				for(k = 0; k < x->f_arraySize || sumAmp <= rolloffAmp; k++)
 				{
 					sumAmp += x->f_fft[i].f_amp[k];
 				}
@@ -275,7 +275,7 @@ t_int *rolloff_perform(t_int *w)
 			{
 				sumAmp = 0.;
 				rolloffAmp = x->f_value * x->f_fft[i].f_sumAmp;
-				for(k = 0; k < x->f_arraySize, sumAmp <= rolloffAmp; k++)
+				for(k = 0; sumAmp <= rolloffAmp; k++)
 				{
 					sumAmp += x->f_fft[i].f_amp[k];
 				}

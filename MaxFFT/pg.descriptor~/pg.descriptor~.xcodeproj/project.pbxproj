@@ -19,8 +19,8 @@
 		DD18033D1584E91E0098DAE8 /* pg.drawAnalyse.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803301584E91E0098DAE8 /* pg.drawAnalyse.c */; };
 		DD18033E1584E91E0098DAE8 /* pg.drawContext.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803311584E91E0098DAE8 /* pg.drawContext.c */; };
 		DD18033F1584E91E0098DAE8 /* pg.interaction.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803321584E91E0098DAE8 /* pg.interaction.c */; };
-		DD1803401584E91E0098DAE8 /* pg.window.c in Sources */ = {isa = PBXBuildFile; fileRef = DD1803331584E91E0098DAE8 /* pg.window.c */; };
-		DD1803411584E91E0098DAE8 /* pg.window.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1803341584E91E0098DAE8 /* pg.window.h */; };
+		DD4E1A4115874F43003F83FB /* pg.window.c in Sources */ = {isa = PBXBuildFile; fileRef = DD4E1A3F15874F43003F83FB /* pg.window.c */; };
+		DD4E1A4215874F43003F83FB /* pg.window.h in Headers */ = {isa = PBXBuildFile; fileRef = DD4E1A4015874F43003F83FB /* pg.window.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,8 +38,8 @@
 		DD1803301584E91E0098DAE8 /* pg.drawAnalyse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.drawAnalyse.c; sourceTree = "<group>"; };
 		DD1803311584E91E0098DAE8 /* pg.drawContext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.drawContext.c; sourceTree = "<group>"; };
 		DD1803321584E91E0098DAE8 /* pg.interaction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.interaction.c; sourceTree = "<group>"; };
-		DD1803331584E91E0098DAE8 /* pg.window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.window.c; sourceTree = "<group>"; };
-		DD1803341584E91E0098DAE8 /* pg.window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.window.h; sourceTree = "<group>"; };
+		DD4E1A3F15874F43003F83FB /* pg.window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pg.window.c; path = ../pg.window/pg.window.c; sourceTree = SOURCE_ROOT; };
+		DD4E1A4015874F43003F83FB /* pg.window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pg.window.h; path = ../pg.window/pg.window.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +80,8 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				DD4E1A3F15874F43003F83FB /* pg.window.c */,
+				DD4E1A4015874F43003F83FB /* pg.window.h */,
 				DD1803281584E91E0098DAE8 /* pg.buffer.c */,
 				DD1803291584E91E0098DAE8 /* pg.buffer.h */,
 				DD18032A1584E91E0098DAE8 /* pg.compute.c */,
@@ -88,8 +90,6 @@
 				DD1803301584E91E0098DAE8 /* pg.drawAnalyse.c */,
 				DD1803311584E91E0098DAE8 /* pg.drawContext.c */,
 				DD1803321584E91E0098DAE8 /* pg.interaction.c */,
-				DD1803331584E91E0098DAE8 /* pg.window.c */,
-				DD1803341584E91E0098DAE8 /* pg.window.h */,
 				22CF10220EE984600054F513 /* maxmspsdk.xcconfig */,
 			);
 			name = Source;
@@ -113,7 +113,7 @@
 				DD1803111584E4110098DAE8 /* fftw3.h in Headers */,
 				DD1803361584E91E0098DAE8 /* pg.buffer.h in Headers */,
 				DD1803381584E91E0098DAE8 /* pg.descriptor.h in Headers */,
-				DD1803411584E91E0098DAE8 /* pg.window.h in Headers */,
+				DD4E1A4215874F43003F83FB /* pg.window.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,7 +194,7 @@
 				DD18033D1584E91E0098DAE8 /* pg.drawAnalyse.c in Sources */,
 				DD18033E1584E91E0098DAE8 /* pg.drawContext.c in Sources */,
 				DD18033F1584E91E0098DAE8 /* pg.interaction.c in Sources */,
-				DD1803401584E91E0098DAE8 /* pg.window.c in Sources */,
+				DD4E1A4115874F43003F83FB /* pg.window.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
