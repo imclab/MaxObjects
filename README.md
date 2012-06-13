@@ -33,6 +33,7 @@
 * **pg.mel~** : Spectrum above the mel scale and MFCCs.
 * **pg.gradient~** : Estimation of the slope or the decrease of the spectrum.
 * **pg.rolloff~** : Estimation of the rolloff frequency.
+* **pg.flux~** : Estimation of the difference of amplitude between frames.
 
 ### Binaries :
 
