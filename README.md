@@ -19,7 +19,7 @@
 * **pg.unpack~** : Unpack object for signal (Max5 only).
 * **pg.adaptor~** : Adapter for packed signal (Max5 only).
 
-### MaxFFT :
+### MaxFFT : (Max6 only)
 
 * **pg.analyser~** : Estimation of the centroid, the spread, the skewness and the kurtosis.
 * **pg.energy~** : Estimation of the minimum, the average, the maximum and the sum of the amplitude.
@@ -28,6 +28,8 @@
 * **pg.gradient~** : Estimation of the slope or the decrease of the spectrum.
 * **pg.rolloff~** : Estimation of the rolloff frequency.
 * **pg.flux~** : Estimation of the difference of amplitude between frames.
+
+This library uses the fftw3 : [fftw3](http://www.fftw.org/)
 
 ### Download Binaries (Windows & OsX):
 
