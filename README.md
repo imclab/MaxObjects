@@ -1,11 +1,5 @@
 ## The pg.library is a collection of externals for Max 5 and Max 6.
 
-### Links :
-
-[Project Page](https://github.com/pierreguillot/MaxObjects.git)
-
-[pg.library.rar](http://dl.dropbox.com/u/21891549/pg.library.rar)
-
 ### MaxData :
 
 * **pg.average** : Moving average.
@@ -35,7 +29,7 @@
 * **pg.rolloff~** : Estimation of the rolloff frequency.
 * **pg.flux~** : Estimation of the difference of amplitude between frames.
 
-### Binaries :
+### Download Binaries (Windows & OsX):
 
 [pg.library.rar](http://dl.dropbox.com/u/21891549/pg.library.rar)
 
