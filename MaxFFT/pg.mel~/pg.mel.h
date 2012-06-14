@@ -29,7 +29,7 @@ typedef struct  _mel
 {
 	t_pxobject	f_ob;
 
-	t_sample	f_sr;
+	double	f_sr;
 	void		*out1;
 
 	long		f_windowSize;
@@ -40,21 +40,21 @@ typedef struct  _mel
 	void 		*f_clock;
 	t_fft		*f_fft;
 
-	t_sample	*f_result;
+	double	*f_result;
 	t_atom		*f_output;
 	long		f_interval;
 
 	t_window	f_env;
 	long		f_winMode;
 
-	t_sample	**f_filterParameters;
+	double	**f_filterParameters;
 	
 	long		*f_melBandRef;
 	long		f_mode;
 
-	t_sample	f_filter;
-	t_sample	f_hightpass;
-	t_sample	f_rapportSize;
+	double	f_filter;
+	double	f_hightpass;
+	double	f_rapportSize;
 
 	int			f_spew;
 } t_mel;
@@ -76,3 +76,6 @@ t_max_err mode_set(t_mel *x, t_object *attr, long argc, t_atom *argv);
 
 void fft_setup(t_fft *x, int windowSize, int instance, int nbIntance, int nBands);
 void fft_free(t_fft *x);
+
+void mel_dsp(t_mel *x, t_signal **sp, short *count);
+t_int *mel_perform(t_int *w);

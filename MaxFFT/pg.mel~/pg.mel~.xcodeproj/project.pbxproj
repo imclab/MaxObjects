@@ -7,29 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		22CF119E0EE9A82E0054F513 /* MaxAudioAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22CF119D0EE9A82E0054F513 /* MaxAudioAPI.framework */; };
-		2FBBEADE08F335360078DB84 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54266BCE05E6E9780000000C /* MaxAPI.framework */; };
-		DD1803081584E3CC0098DAE8 /* libfftw3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1803071584E3CC0098DAE8 /* libfftw3.3.dylib */; };
+		DD0EF262158A152E0014EAE4 /* pg.mel.h in Headers */ = {isa = PBXBuildFile; fileRef = DD0EF260158A152E0014EAE4 /* pg.mel.h */; };
+		DD0EF263158A152E0014EAE4 /* pg.mel~.c in Sources */ = {isa = PBXBuildFile; fileRef = DD0EF261158A152E0014EAE4 /* pg.mel~.c */; };
 		DD1803111584E4110098DAE8 /* fftw3.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1803101584E4110098DAE8 /* fftw3.h */; };
-		DD4E1A5415874F97003F83FB /* pg.mel.h in Headers */ = {isa = PBXBuildFile; fileRef = DD4E1A5215874F97003F83FB /* pg.mel.h */; };
-		DD4E1A5515874F97003F83FB /* pg.mel~.c in Sources */ = {isa = PBXBuildFile; fileRef = DD4E1A5315874F97003F83FB /* pg.mel~.c */; };
 		DD5FDB6A15874AA0008CF30E /* pg.fft.c in Sources */ = {isa = PBXBuildFile; fileRef = DD5FDB6415874AA0008CF30E /* pg.fft.c */; };
 		DD5FDB6D15874ABB008CF30E /* pg.window.c in Sources */ = {isa = PBXBuildFile; fileRef = DD5FDB6B15874ABB008CF30E /* pg.window.c */; };
 		DD5FDB6E15874ABB008CF30E /* pg.window.h in Headers */ = {isa = PBXBuildFile; fileRef = DD5FDB6C15874ABB008CF30E /* pg.window.h */; };
+		DDCAF2B9158A09140049CBA1 /* libfftw3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCAF2B8158A09140049CBA1 /* libfftw3.3.dylib */; };
+		DDCAF2F7158A0A350049CBA1 /* MaxAudioAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCAF2F6158A0A350049CBA1 /* MaxAudioAPI.framework */; };
+		DDCAF2FB158A0A4E0049CBA1 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCAF2FA158A0A4E0049CBA1 /* MaxAPI.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		22CF10220EE984600054F513 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../../maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
-		22CF119D0EE9A82E0054F513 /* MaxAudioAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAudioAPI.framework; path = "../../../c74support/msp-includes/MaxAudioAPI.framework"; sourceTree = SOURCE_ROOT; };
 		2FBBEAE508F335360078DB84 /* pg.mel~.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "pg.mel~.mxo"; sourceTree = BUILT_PRODUCTS_DIR; };
-		54266BCE05E6E9780000000C /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
-		DD1803071584E3CC0098DAE8 /* libfftw3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfftw3.3.dylib; path = usr/local/lib/libfftw3.3.dylib; sourceTree = SDKROOT; };
+		DD0EF260158A152E0014EAE4 /* pg.mel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.mel.h; sourceTree = "<group>"; };
+		DD0EF261158A152E0014EAE4 /* pg.mel~.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "pg.mel~.c"; sourceTree = "<group>"; };
 		DD1803101584E4110098DAE8 /* fftw3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fftw3.h; path = /usr/include/fftw3.h; sourceTree = "<absolute>"; };
-		DD4E1A5215874F97003F83FB /* pg.mel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.mel.h; sourceTree = "<group>"; };
-		DD4E1A5315874F97003F83FB /* pg.mel~.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "pg.mel~.c"; sourceTree = "<group>"; };
 		DD5FDB6415874AA0008CF30E /* pg.fft.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pg.fft.c; sourceTree = "<group>"; };
 		DD5FDB6B15874ABB008CF30E /* pg.window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pg.window.c; path = ../pg.window/pg.window.c; sourceTree = SOURCE_ROOT; };
 		DD5FDB6C15874ABB008CF30E /* pg.window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pg.window.h; path = ../pg.window/pg.window.h; sourceTree = SOURCE_ROOT; };
+		DDCAF2B8158A09140049CBA1 /* libfftw3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfftw3.3.dylib; path = usr/local/lib/libfftw3.3.dylib; sourceTree = SDKROOT; };
+		DDCAF2F6158A0A350049CBA1 /* MaxAudioAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAudioAPI.framework; path = "/Users/pierreguillot/Documents/SDKs/MaxSDK-5.1.7/c74support/msp-includes/MaxAudioAPI.framework"; sourceTree = "<absolute>"; };
+		DDCAF2FA158A0A4E0049CBA1 /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "/Users/pierreguillot/Documents/SDKs/MaxSDK-5.1.7/c74support/max-includes/MaxAPI.framework"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,9 +37,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FBBEADE08F335360078DB84 /* MaxAPI.framework in Frameworks */,
-				22CF119E0EE9A82E0054F513 /* MaxAudioAPI.framework in Frameworks */,
-				DD1803081584E3CC0098DAE8 /* libfftw3.3.dylib in Frameworks */,
+				DDCAF2B9158A09140049CBA1 /* libfftw3.3.dylib in Frameworks */,
+				DDCAF2F7158A0A350049CBA1 /* MaxAudioAPI.framework in Frameworks */,
+				DDCAF2FB158A0A4E0049CBA1 /* MaxAPI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,9 +60,9 @@
 		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				54266BCE05E6E9780000000C /* MaxAPI.framework */,
-				22CF119D0EE9A82E0054F513 /* MaxAudioAPI.framework */,
-				DD1803071584E3CC0098DAE8 /* libfftw3.3.dylib */,
+				DDCAF2B8158A09140049CBA1 /* libfftw3.3.dylib */,
+				DDCAF2F6158A0A350049CBA1 /* MaxAudioAPI.framework */,
+				DDCAF2FA158A0A4E0049CBA1 /* MaxAPI.framework */,
 			);
 			name = "External Frameworks and Libraries";
 			sourceTree = "<group>";
@@ -70,8 +70,8 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				DD4E1A5215874F97003F83FB /* pg.mel.h */,
-				DD4E1A5315874F97003F83FB /* pg.mel~.c */,
+				DD0EF260158A152E0014EAE4 /* pg.mel.h */,
+				DD0EF261158A152E0014EAE4 /* pg.mel~.c */,
 				DD5FDB6B15874ABB008CF30E /* pg.window.c */,
 				DD5FDB6C15874ABB008CF30E /* pg.window.h */,
 				DD5FDB6415874AA0008CF30E /* pg.fft.c */,
@@ -97,7 +97,7 @@
 			files = (
 				DD1803111584E4110098DAE8 /* fftw3.h in Headers */,
 				DD5FDB6E15874ABB008CF30E /* pg.window.h in Headers */,
-				DD4E1A5415874F97003F83FB /* pg.mel.h in Headers */,
+				DD0EF262158A152E0014EAE4 /* pg.mel.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,7 +174,7 @@
 			files = (
 				DD5FDB6A15874AA0008CF30E /* pg.fft.c in Sources */,
 				DD5FDB6D15874ABB008CF30E /* pg.window.c in Sources */,
-				DD4E1A5515874F97003F83FB /* pg.mel~.c in Sources */,
+				DD0EF263158A152E0014EAE4 /* pg.mel~.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,8 +201,15 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../c74support/msp-includes\"",
+					"\"$(SDKROOT)/usr/local/lib\"",
+					"\"$(SRCROOT)/../../../../SDKs/MaxSDK-5.1.7/c74support/msp-includes\"",
+					"\"$(SRCROOT)/../../../../SDKs/MaxSDK-5.1.7/c74support/max-includes\"",
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../SDKs/MaxSDK-5.1.7/c74support/max-includes\"",
+				);
 			};
 			name = Development;
 		};
@@ -214,6 +221,13 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../c74support/msp-includes\"",
+					"\"$(SDKROOT)/usr/local/lib\"",
+					"\"$(SRCROOT)/../../../../SDKs/MaxSDK-5.1.7/c74support/msp-includes\"",
+					"\"$(SRCROOT)/../../../../SDKs/MaxSDK-5.1.7/c74support/max-includes\"",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../SDKs/MaxSDK-5.1.7/c74support/max-includes\"",
 				);
 			};
 			name = Deployment;

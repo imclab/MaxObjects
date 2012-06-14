@@ -4,9 +4,8 @@
 void window_square(t_window *x)
 {
 	int i, size;
-	double j;
+
 	size = x->f_size;
-	j = size - 1;
 	for(i = 0; i < size; i++)
 	{
 		x->f_envelope[i] = 1.;
@@ -67,8 +66,8 @@ void window_cosinus(t_window *x)
 
 void window_lanczos(t_window *x)
 {
-	int i, size;
-	double j, alpha;
+	int i, j, size;
+	double alpha;
 	size = x->f_size;
 	j = size - 1;
 
@@ -83,9 +82,8 @@ void window_lanczos(t_window *x)
 void window_kaiser(t_window *x)
 {
 	int i, size;
-	double j, sumvalue, alpha;
+	double sumvalue, alpha;
 	size = x->f_size;
-	j = size - 1;
     sumvalue = 0.;
 	alpha = 3.;
     for (i = 0; i < size / 2; i++) 
@@ -106,10 +104,9 @@ void window_kaiser(t_window *x)
 void window_triangular(t_window *x)
 {
 	int i, size;
-	double j, k, alpha;
+	double j, k;
 	size = x->f_size;
 	j = size - 1;
-	alpha = 0.5;
 	for(i = 0; i < size; i++)
     {
 		k = (double)i -(j / 2.);

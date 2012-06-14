@@ -32,4 +32,4 @@ void window_blackman_nuttall(t_window *x);
 void window_flat_top(t_window *x);
 void window_poisson(t_window *x);
 
-t_sample window_besselI0(t_sample x);
+double window_besselI0(double x);

@@ -16,21 +16,21 @@ typedef struct _fft
 	int				f_arraySize;
 	int				f_instance;
 
-	t_sample		f_sumAmpMul;
-	t_sample		f_sumAmpCar;
-	t_sample		f_sumAmpDel;
+	double			f_sumAmpMul;
+	double			f_sumAmpCar;
+	double			f_sumAmpDel;
 } t_fft;
 
 typedef struct  _flux 
 {
 	t_pxobject	f_ob;
-	t_sample	f_sr;
+	double	f_sr;
 
 	long		f_windowSize;
 	long		f_overlapping;
 	long		f_arraySize;
-	t_sample	f_rapportSize;
-	t_sample	f_rapportFreq;
+	double		f_rapportSize;
+	double		f_rapportFreq;
 
 	t_fft		*f_fft;
 	t_window	f_env;
@@ -38,10 +38,10 @@ typedef struct  _flux
 	long		f_winMode;
 	long		f_ampMode;
 
-	t_sample	f_flux;
+	double		f_flux;
 
-	int	f_value;
-	t_sample	*f_delsample[17];
+	int			f_value;
+	double		*f_delsample[17];
 	int			*f_count;
 } t_flux;
 
@@ -57,3 +57,6 @@ void flux_perform64(t_flux *x, t_object *dsp64, double **ins, long numins, doubl
 t_max_err mode_set(t_flux *x, t_object *attr, long argc, t_atom *argv);
 void fft_setup(t_fft *x, int windowSize, int instance, int nbIntance);
 void fft_free(t_fft *x);
+
+void flux_dsp(t_flux *x, t_signal **sp, short *count);
+t_int *flux_perform(t_int *w);

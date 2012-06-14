@@ -7,8 +7,8 @@ int main()
 
 	c = class_new("pg.mel~", (method)mel_new, (method)mel_free, (short)sizeof(t_mel), 0L, A_GIMME, 0);
 	class_addmethod(c, (method)mel_dsp64,		"dsp64",		A_CANT,	0);
+	class_addmethod(c, (method)mel_dsp,		"dsp",			A_CANT,	0);
 	class_addmethod(c, (method)mel_assist,		"assist",		A_CANT,	0);
-	//class_addmethod(c, (method)mel_dspstatus,		"dspstatus",	A_CANT,	0);
 	
 	class_dspinit(c);
 	class_register(CLASS_BOX, c);
@@ -98,16 +98,16 @@ void *mel_new(t_symbol *s, int argc, t_atom *argv)
 
 		/* Mel Filter Initialization **************/
 		x->f_melBandRef			= (long *)getbytes(x->f_arraySize * sizeof(long));
-		x->f_filterParameters	= (t_sample **)getbytes(x->f_nBands  * sizeof(t_sample *));
+		x->f_filterParameters	= (double **)getbytes(x->f_nBands  * sizeof(double *));
 		for(i = 0; i < x->f_nBands ; i++)
-			x->f_filterParameters[i] = (t_sample *)getbytes(x->f_arraySize  * sizeof(t_sample));
+			x->f_filterParameters[i] = (double *)getbytes(x->f_arraySize  * sizeof(double));
 		mel_filterParameter(x);
 				
 		x->f_interval = 5;		
 		x->f_mode = 0;
 		x->f_filter = 0.;
 		x->f_hightpass = 0.95;
-		x->f_result				= (t_sample *)getbytes(x->f_nBands * sizeof(t_sample));
+		x->f_result				= (double *)getbytes(x->f_nBands * sizeof(double));
 		x->f_output				= (t_atom *)getbytes(x->f_nBands * sizeof(t_atom));
 
 		/* Inlet and Outlet Initialization ******************************/
@@ -142,8 +142,8 @@ void mel_dsp64(t_mel *x, t_object *dsp64, short *count, double samplerate, long 
 void mel_perform64(t_mel *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam)
 {	
 	long i, j, alpha;
-	t_double	*in		= ins[0];
-	t_double energy;
+	double	*in		= ins[0];
+	double energy;
 	
 	for(i = 0; i < x->f_overlapping; i++)
 	{
@@ -281,15 +281,14 @@ void mel_free(t_mel *x)
 	int i;
 	
 	dsp_free((t_pxobject *)x);
-	freebytes(x->f_fft, x->f_overlapping * sizeof(t_fft));
 	
-	freebytes(x->f_result, x->f_nBands * sizeof(t_sample));
+	freebytes(x->f_result, x->f_nBands * sizeof(double));
 	freebytes(x->f_result, x->f_nBands * sizeof(t_atom));
 	freebytes(x->f_melBandRef , x->f_arraySize * sizeof(long));
 	for(i = 0; i < x->f_nBands; i++)
-		freebytes(x->f_filterParameters[i], x->f_arraySize * sizeof(t_sample));
+		freebytes(x->f_filterParameters[i], x->f_arraySize * sizeof(double));
 
-	freebytes(x->f_filterParameters, x->f_nBands * sizeof(t_sample));
+	freebytes(x->f_filterParameters, x->f_nBands * sizeof(double));
 	window_free(&x->f_env);
 	object_free(x->f_clock);
 
@@ -330,37 +329,37 @@ void mel_filterParameter(t_mel *x)
 {
 	int i, j, frequency;
 
-	t_sample maxMel;
-	t_sample melBandSize;
-	t_sample freqBandSize;
-	t_sample *melBandCenterMel;
-	t_sample *melBandCenterHerz;
-	t_sample twoMelBandSize;
-	t_sample *freqBandCenter;
-	t_sample *normalizeFactor;
+	double maxMel;
+	double melBandSize;
+	double freqBandSize;
+	double *melBandCenterMel;
+	double *melBandCenterHerz;
+	double twoMelBandSize;
+	double *freqBandCenter;
+	double *normalizeFactor;
 	
 	
-	maxMel = 2595. * log10(((((t_sample)(x->f_sr) / 2.) - 20.) / 700.) + 1.);
-	melBandSize = maxMel / (t_sample)x->f_nBands;
+	maxMel = 2595. * log10(((((double)(x->f_sr) / 2.) - 20.) / 700.) + 1.);
+	melBandSize = maxMel / (double)x->f_nBands;
 
-	melBandCenterMel = (t_sample *)getbytes(x->f_nBands  * sizeof(t_sample));
+	melBandCenterMel = (double *)getbytes(x->f_nBands  * sizeof(double));
 	for(i = 0; i < x->f_nBands; i++)
-		melBandCenterMel[i] = (t_sample)i * melBandSize  +  melBandSize / 2. ;
+		melBandCenterMel[i] = (double)i * melBandSize  +  melBandSize / 2. ;
 
-	melBandCenterHerz= (t_sample *)getbytes((x->f_nBands+1)  * sizeof(t_sample));
+	melBandCenterHerz= (double *)getbytes((x->f_nBands+1)  * sizeof(double));
 	for(i = 0; i < x->f_nBands; i++)
 		melBandCenterHerz[i]	= (700. * (pow(10., (melBandCenterMel[i] / 2595.)) - 1.)) + 20.;
 
 	melBandCenterHerz[x->f_nBands] = x->f_sr;
-	freqBandSize = x->f_sr / (t_sample)x->f_windowSize;
+	freqBandSize = x->f_sr / (double)x->f_windowSize;
 
-	freqBandCenter = (t_sample *)getbytes(x->f_arraySize  * sizeof(t_sample));
+	freqBandCenter = (double *)getbytes(x->f_arraySize  * sizeof(double));
 	for(i = 0; i < x->f_arraySize; i++)
-		freqBandCenter[i] = ((t_sample)i * freqBandSize) + (freqBandSize / 2.);
+		freqBandCenter[i] = ((double)i * freqBandSize) + (freqBandSize / 2.);
 	
 	for(i = 0; i < x->f_arraySize; i++)
 	{
-		frequency = (t_sample)i * freqBandSize;
+		frequency = (double)i * freqBandSize;
 		for(j = 0; j < x->f_nBands; j++)
 		{
 			if( frequency < melBandCenterHerz[0])
@@ -374,7 +373,7 @@ void mel_filterParameter(t_mel *x)
 		}
 	}
 	
-	normalizeFactor = (t_sample *)getbytes(x->f_nBands  * sizeof(t_sample));
+	normalizeFactor = (double *)getbytes(x->f_nBands  * sizeof(double));
 	for(i = 0; i < x->f_nBands; i++)
 	{
 		normalizeFactor[i] = 0;
@@ -408,14 +407,151 @@ void mel_filterParameter(t_mel *x)
 			}
 	}
 	
-	freebytes(melBandCenterMel, x->f_nBands * sizeof(t_sample));
-	freebytes(melBandCenterHerz, (x->f_nBands + 1) * sizeof(t_sample));
-	freebytes(freqBandCenter, x->f_arraySize * sizeof(t_sample));
-	freebytes(freqBandCenter, x->f_nBands * sizeof(t_sample));
+	freebytes(melBandCenterMel, x->f_nBands * sizeof(double));
+	freebytes(melBandCenterHerz, (x->f_nBands + 1) * sizeof(double));
+	freebytes(freqBandCenter, x->f_arraySize * sizeof(double));
+	freebytes(freqBandCenter, x->f_nBands * sizeof(double));
 }
 
 t_max_err mode_set(t_mel *x, t_object *attr, long argc, t_atom *argv)
 {
 	window_mode_set(&x->f_env, attr, argc, argv);
 	return 0;
+}
+
+void mel_dsp(t_mel *x, t_signal **sp, short *count)
+{
+	int i;
+	x->f_sr = (double)sp[0]->s_sr;
+	x->f_rapportSize	= (double)(PI * (1. / (double)x->f_arraySize));
+	
+	/* FFt initialization ***********************/
+	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
+	for(i = 0; i < x->f_overlapping; i++)
+	{
+		fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping, x->f_nBands);
+	}
+	/* Clock Initialization ****************************************/
+	
+	dsp_add(mel_perform, 3, x, sp[0]->s_vec, sp[0]->s_n);
+}
+
+t_int *mel_perform(t_int *w)
+{
+    t_mel	*x		= (t_mel *)(w[1]);
+	float	*in		= (float *)	(w[2]);
+	int n			= (int)		(w[3]);
+	long i, j, alpha;
+	double energy;
+	
+	if (x->f_ob.z_disabled) return w + 4;
+	
+	for(i = 0; i < x->f_overlapping; i++)
+	{
+		for(j = 0; j < n; j++)
+		{
+			/* Lowpass filter for Mfccs */
+			if (x->f_mode != 0)
+			{
+				x->f_fft[i].f_real[x->f_fft[i].f_ramp] = (in[j] - (x->f_hightpass * x->f_filter)) * x->f_env.f_envelope[x->f_fft[i].f_ramp];
+				x->f_filter = in[j];
+			}
+			else
+			{
+				x->f_fft[i].f_real[x->f_fft[i].f_ramp] = in[j] * x->f_env.f_envelope[x->f_fft[i].f_ramp];
+			}
+			/* MFCC's perform */
+			if (x->f_mode != 0)
+			{
+				/* First : Scale above the mel scale */
+				if (x->f_fft[i].f_ramp >= 0 && x->f_fft[i].f_ramp <  x->f_arraySize )
+				{
+					alpha = x->f_melBandRef[x->f_fft[i].f_ramp];
+					energy = (sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0])+(x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1])));
+					// Si la bande frequentielle appartient au flitre de la bande mel alpha, il appartient aussi au filtre de la bande alpha+1
+					// sauf lorque j-1 car la bande j-1 existe pas, donc elle appartient seulement a la bande j+1.
+					if(alpha != -1)
+					{
+						x->f_fft[i].f_melBand[alpha] += energy * x->f_filterParameters[alpha][x->f_fft[i].f_ramp];
+					}
+					// Sauf pour la dernire bande car la position +1 de la derniere n'existe pas, elle appartient seulement a la bande alpha.
+					if(alpha != x->f_nBands-1)
+					{
+						x->f_fft[i].f_melBand[alpha+1] += energy * x->f_filterParameters[alpha+1][x->f_fft[i].f_ramp];
+					}
+					
+				}
+				/* Second : Take the logarithm */
+				else if(x->f_fft[i].f_ramp >= x->f_arraySize && x->f_fft[i].f_ramp < x->f_arraySize+x->f_nBands)
+				{
+					alpha = x->f_fft[i].f_ramp - x->f_arraySize ;
+					if(x->f_fft[i].f_melBand[alpha] != 0.)
+					{
+						x->f_fft[i].f_melBand[alpha] = log10(x->f_fft[i].f_melBand[alpha]);
+					}
+					else
+					{
+						x->f_fft[i].f_melBand[alpha] = -90.f;
+					}
+				}
+				/* Third : Perfom the cosinus transform */
+				else if(x->f_fft[i].f_ramp == x->f_arraySize + x->f_nBands)
+				{
+					fftw_execute(x->f_fft[i].f_planCos );
+				}
+				/* Fourth : Record the result */
+				else if(x->f_fft[i].f_ramp >= x->f_arraySize + 1 + x->f_nBands && x->f_fft[i].f_ramp < x->f_arraySize + (2 * x->f_nBands) + 1)
+				{
+					alpha = x->f_fft[i].f_ramp - (x->f_arraySize + x->f_nBands + 1);
+					
+					x->f_result[alpha] = x->f_fft[i].f_mffcoeff[alpha];
+					x->f_fft[i].f_melBand[alpha] = 0.f;
+					if(alpha == x->f_nBands - 1)
+					{
+						x->f_spew = 1;
+						x->f_fft[i].f_melBand[alpha] = 0.f;
+					}
+				}
+			}
+			/* Mel perform */
+			else
+			{
+				if (x->f_fft[i].f_ramp >= 0 && x->f_fft[i].f_ramp <  x->f_arraySize )
+				{
+					
+					alpha = x->f_melBandRef[x->f_fft[i].f_ramp];
+					energy =  (sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0])+(x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]*x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1])));
+					
+					if(alpha != -1)
+					{
+						x->f_fft[i].f_melBand[alpha] += energy * x->f_filterParameters[alpha][x->f_fft[i].f_ramp];
+					}
+					if(alpha != x->f_nBands-1)
+					{
+						x->f_fft[i].f_melBand[alpha+1] += energy * x->f_filterParameters[alpha+1][x->f_fft[i].f_ramp];
+					}
+					
+				}
+				else if(x->f_fft[i].f_ramp >= x->f_arraySize && x->f_fft[i].f_ramp < x->f_arraySize + x->f_nBands)
+				{
+					alpha = x->f_fft[i].f_ramp - x->f_arraySize;
+					
+					x->f_result[alpha] = x->f_fft[i].f_melBand[alpha];
+					x->f_fft[i].f_melBand[alpha] = 0.f;
+				}
+				else if(x->f_fft[i].f_ramp == x->f_arraySize + x->f_nBands)
+				{
+					x->f_spew = 1;
+				}
+			}
+			
+			x->f_fft[i].f_ramp++;
+			if (x->f_fft[i].f_ramp >= x->f_windowSize)
+			{
+				fftw_execute(x->f_fft[i].f_plan );
+				x->f_fft[i].f_ramp = 0;
+			}	
+		}
+	}
+	return w + 4;
 }

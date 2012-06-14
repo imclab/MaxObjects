@@ -2,7 +2,6 @@
 
 void fft_setup(t_fft *x, int windowSize, int instance, int nbIntance, int nBands)
 {
-	int i;
 	x->f_windowSize = windowSize;
 	x->f_arraySize = x->f_windowSize / 2;
 	x->f_instance = instance;

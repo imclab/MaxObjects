@@ -6,7 +6,7 @@ int main()
 
 	c = class_new("pg.moment~", (method)moment_new, (method)moment_free, (short)sizeof(t_moment), 0L, A_GIMME, 0);
 	class_addmethod(c, (method)moment_dsp64,		"dsp64",		A_CANT,	0);
-	class_addmethod(c, (method)moment_dsp,			"dsp",		A_CANT,	0);
+	class_addmethod(c, (method)moment_dsp,			"dsp",			A_CANT,	0);
 	class_addmethod(c, (method)moment_assist,		"assist",		A_CANT,	0);
 
 	CLASS_ATTR_LONG				(c, "window", 0, t_moment, f_winMode);
@@ -92,7 +92,7 @@ void moment_dsp64(t_moment *x, t_object *dsp64, short *count, double samplerate,
 	int i;
 	x->f_sr = samplerate;
 	x->f_rapportSize	= (double)(PI * (1. / (double)x->f_arraySize));
-	x->f_rapportFreq = x->f_sr / (t_sample)x->f_windowSize;
+	x->f_rapportFreq = x->f_sr / (double)x->f_windowSize;
 
 	/* FFt initialization ***********************/
 	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
@@ -106,12 +106,12 @@ void moment_dsp64(t_moment *x, t_object *dsp64, short *count, double samplerate,
 void moment_perform64(t_moment *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam)
 {
 	int i, j;
-	t_double amplitude, frequency, rapport, logAdd;
-    t_double	*in		= ins[0];
-    t_double	*out1	= outs[0];
-	t_double	*out2	= outs[1];
-	t_double	*out3	= outs[2];
-	t_double	*out4	= outs[3];
+	double amplitude, frequency, rapport;
+    double	*in		= ins[0];
+    double	*out1	= outs[0];
+	double	*out2	= outs[1];
+	double	*out3	= outs[2];
+	double	*out4	= outs[3];
 	
 	for(i = 0; i < x->f_overlapping; i++)
 	{
@@ -122,7 +122,7 @@ void moment_perform64(t_moment *x, t_object *dsp64, double **ins, long numins, d
 			if (x->f_fft[i].f_ramp < x->f_arraySize && x->f_fft[i].f_ramp > 0)
 			{
 				amplitude = sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]) + (x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]));
-				frequency = (t_double)x->f_fft[i].f_ramp * x->f_rapportFreq;
+				frequency = (double)x->f_fft[i].f_ramp * x->f_rapportFreq;
 				rapport = frequency - x->f_centroid;
 
 				if(x->f_ampMode == 0)
@@ -191,7 +191,6 @@ void moment_perform64(t_moment *x, t_object *dsp64, double **ins, long numins, d
 void moment_free(t_moment *x)
 {
 	dsp_free((t_pxobject *)x);
-	freebytes(x->f_fft, x->f_overlapping * sizeof(t_fft));
 	window_free(&x->f_env);
 }
 
@@ -239,7 +238,7 @@ void moment_dsp(t_moment *x, t_signal **sp, short *count)
 	int i;
 	x->f_sr = (double)sp[0]->s_sr;
 	x->f_rapportSize	= (double)(PI * (1. / (double)x->f_arraySize));
-	x->f_rapportFreq = x->f_sr / (t_sample)x->f_windowSize;
+	x->f_rapportFreq = x->f_sr / (double)x->f_windowSize;
 
 	/* FFt initialization ***********************/
 	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
@@ -257,15 +256,15 @@ void moment_dsp(t_moment *x, t_signal **sp, short *count)
 t_int *moment_perform(t_int *w)
 {	
 	t_moment	*x		= (t_moment *)(w[1]);
-	t_sample	*in		= (t_sample *)	(w[2]);
-	t_sample	*out1	= (t_sample *)	(w[3]);
-	t_sample	*out2	= (t_sample *)	(w[4]);
-	t_sample	*out3	= (t_sample *)	(w[5]);
-	t_sample	*out4	= (t_sample *)	(w[6]);
+	float	*in		= (float *)	(w[2]);
+	float	*out1	= (float *)	(w[3]);
+	float	*out2	= (float *)	(w[4]);
+	float	*out3	= (float *)	(w[5]);
+	float	*out4	= (float *)	(w[6]);
 	int n				= (int)			(w[7]);
 	
 	int i, j;
-	t_double amplitude, frequency, rapport, logAdd;
+	double amplitude, frequency, rapport, logAdd;
 	if (x->f_ob.z_disabled) return w + 8;
 
 	for(i = 0; i < x->f_overlapping; i++)
@@ -277,7 +276,7 @@ t_int *moment_perform(t_int *w)
 			if (x->f_fft[i].f_ramp < x->f_arraySize && x->f_fft[i].f_ramp > 0)
 			{
 				amplitude = sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]) + (x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]));
-				frequency = (t_double)x->f_fft[i].f_ramp * x->f_rapportFreq;
+				frequency = (double)x->f_fft[i].f_ramp * x->f_rapportFreq;
 				rapport = frequency - x->f_centroid;
 
 				if(x->f_ampMode == 0)

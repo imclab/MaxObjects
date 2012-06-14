@@ -16,24 +16,24 @@ typedef struct _fft
 	int				f_arraySize;
 	int				f_instance;
 
-	t_sample		f_sumAmp;
+	double		f_sumAmp;
 
-	t_sample		f_centroid;
-	t_sample		f_spread;
-	t_sample		f_skewness;
-	t_sample		f_kurtosis;
+	double		f_centroid;
+	double		f_spread;
+	double		f_skewness;
+	double		f_kurtosis;
 } t_fft;
 
 typedef struct  _moment 
 {
 	t_pxobject	f_ob;
-	t_sample	f_sr;
+	double	f_sr;
 
 	long		f_windowSize;
 	long		f_overlapping;
 	long		f_arraySize;
-	t_sample	f_rapportFreq;
-	t_sample	f_rapportSize;
+	double	f_rapportFreq;
+	double	f_rapportSize;
 
 	t_fft		*f_fft;
 	t_window	f_env;
@@ -41,11 +41,11 @@ typedef struct  _moment
 	long		f_winMode;
 	long		f_ampMode;
 
-	t_sample	f_centroid;
-	t_sample	f_spread;
-	t_sample	f_deviation;
-	t_sample	f_skewness;
-	t_sample	f_kurtosis;
+	double	f_centroid;
+	double	f_spread;
+	double	f_deviation;
+	double	f_skewness;
+	double	f_kurtosis;
 } t_moment;
 
 void *moment_class;

@@ -6,6 +6,7 @@ int main()
 
 	c = class_new("pg.flux~", (method)flux_new, (method)flux_free, (short)sizeof(t_flux), 0L, A_GIMME, 0);
 	class_addmethod(c, (method)flux_dsp64,		"dsp64",		A_CANT,	0);
+	class_addmethod(c, (method)flux_dsp,		"dsp",			A_CANT,	0);
 	class_addmethod(c, (method)flux_assist,		"assist",		A_CANT,	0);
 
 	CLASS_ATTR_LONG				(c, "window", 0, t_flux, f_winMode);
@@ -83,7 +84,7 @@ void *flux_new(t_symbol *s, int argc, t_atom *argv)
 	for(i = 0; i < x->f_overlapping; i++)
 		x->f_count[i] = i;
 	for(i = 0; i < 17; i++)
-		x->f_delsample[i] = (t_sample *)getbytes(x->f_arraySize * sizeof(t_sample));
+		x->f_delsample[i] = (double *)getbytes(x->f_arraySize * sizeof(double));
 
 	x->f_flux	= 0.;
 	x->f_value		= 0.95;
@@ -99,7 +100,7 @@ void flux_dsp64(t_flux *x, t_object *dsp64, short *count, double samplerate, lon
 	int i;
 	x->f_sr = samplerate;
 	x->f_rapportSize	= (double)(PI * (1. / (double)x->f_arraySize));
-	x->f_rapportFreq = x->f_sr / (t_sample)x->f_windowSize;
+	x->f_rapportFreq = x->f_sr / (double)x->f_windowSize;
 
 	/* FFt initialization ***********************/
 	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
@@ -113,9 +114,9 @@ void flux_dsp64(t_flux *x, t_object *dsp64, short *count, double samplerate, lon
 void flux_perform64(t_flux *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam)
 {
 	int i, j, index;
-	t_double amplitude, fluxAmp;
-    t_double	*in		= ins[0];
-    t_double	*out1	= outs[0];
+	double amplitude;
+    double	*in		= ins[0];
+    double	*out1	= outs[0];
 	
 	for(i = 0; i < x->f_overlapping; i++)
 	{
@@ -171,12 +172,11 @@ void flux_free(t_flux *x)
 {
 	int i;
 	dsp_free((t_pxobject *)x);
-	freebytes(x->f_fft, x->f_overlapping * sizeof(t_fft));
 	window_free(&x->f_env);
 
 	freebytes(x->f_count, x->f_overlapping * sizeof(int));
 	for(i = 0; i < 17; i++)
-		freebytes(x->f_delsample[i],x->f_arraySize * sizeof(t_sample));
+		freebytes(x->f_delsample[i],x->f_arraySize * sizeof(double));
 }
 
 void flux_assist(t_flux *x, void *b, long m, long a, char *s)
@@ -209,3 +209,80 @@ t_max_err mode_set(t_flux *x, t_object *attr, long argc, t_atom *argv)
 	return 0;
 }
 
+void flux_dsp(t_flux *x, t_signal **sp, short *count)
+{
+	int i;
+	x->f_sr = (double)sp[0]->s_sr;
+	x->f_rapportSize	= (double)(PI * (1. / (double)x->f_arraySize));
+	x->f_rapportFreq = x->f_sr / (double)x->f_windowSize;
+	
+	/* FFt initialization ***********************/
+	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
+	for(i = 0; i < x->f_overlapping; i++)
+	{
+		fft_setup(&x->f_fft[i], x->f_windowSize, i, x->f_overlapping);
+	}
+	dsp_add(flux_perform, 4, x, sp[0]->s_vec, sp[1]->s_vec, sp[0]->s_n);
+}
+
+t_int *flux_perform(t_int *w)
+{	
+	t_flux	*x		= (t_flux *)(w[1]);
+	float	*in		= (float *)	(w[2]);
+	float	*out1	= (float *)	(w[3]);
+	int n			= (int)	(w[4]);
+	int i, j, index;
+	double amplitude;
+
+	if (x->f_ob.z_disabled) return w + 5;
+	
+	for(i = 0; i < x->f_overlapping; i++)
+	{
+		index = x->f_count[i] - x->f_value;
+		if(index < 0) index += 17;
+		for(j = 0; j < n; j++)
+		{
+			x->f_fft[i].f_real[x->f_fft[i].f_ramp] = in[j] * x->f_env.f_envelope[x->f_fft[i].f_ramp];
+			
+			if (x->f_fft[i].f_ramp < x->f_arraySize && x->f_fft[i].f_ramp > 0)
+			{
+				amplitude = sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]) + (x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]));
+				if(x->f_ampMode == 1)
+					amplitude *= amplitude;
+				
+				x->f_delsample[x->f_count[i]][x->f_fft[i].f_ramp] = amplitude;
+				
+				x->f_fft[i].f_sumAmpMul += amplitude * x->f_delsample[index][x->f_fft[i].f_ramp];
+				x->f_fft[i].f_sumAmpCar	+= amplitude * amplitude;
+				x->f_fft[i].f_sumAmpDel += x->f_delsample[index][x->f_fft[i].f_ramp] * x->f_delsample[index][x->f_fft[i].f_ramp];
+			}
+			else if (x->f_fft[i].f_ramp == x->f_arraySize)
+			{
+				
+				x->f_flux = 1. - (x->f_fft[i].f_sumAmpMul / (sqrt(x->f_fft[i].f_sumAmpDel) * sqrt(x->f_fft[i].f_sumAmpCar)));
+				
+				x->f_fft[i].f_sumAmpMul	= 0.;
+				x->f_fft[i].f_sumAmpCar = 0.;
+				x->f_fft[i].f_sumAmpDel = 0.;
+				
+				x->f_count[i] += x->f_overlapping;
+				if(x->f_count[i] >= 17) x->f_count[i] -= 17;
+			}
+			
+			x->f_fft[i].f_ramp++;
+			if (x->f_fft[i].f_ramp == x->f_windowSize)
+			{
+				fftw_execute(x->f_fft[i].f_plan);
+				x->f_fft[i].f_ramp = 0;
+			}
+			
+		}
+		
+	}
+	
+	for(j = 0; j < n; j++)
+	{
+		out1[j] = x->f_flux;
+	}
+	return w + 5;
+}

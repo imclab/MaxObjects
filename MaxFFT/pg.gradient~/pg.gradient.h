@@ -16,22 +16,22 @@ typedef struct _fft
 	int				f_arraySize;
 	int				f_instance;
 
-	t_sample		f_sumAmp;
-	t_sample		f_sumFreq;
-	t_sample		f_firstAmp;
+	double		f_sumAmp;
+	double		f_sumFreq;
+	double		f_firstAmp;
 
 } t_fft;
 
 typedef struct  _gradient 
 {
 	t_pxobject	f_ob;
-	t_sample	f_sr;
+	double	f_sr;
 
 	long		f_windowSize;
 	long		f_overlapping;
 	long		f_arraySize;
-	t_sample	f_rapportSize;
-	t_sample	f_rapportFreq;
+	double	f_rapportSize;
+	double	f_rapportFreq;
 
 	t_fft		*f_fft;
 	t_window	f_env;
@@ -39,9 +39,9 @@ typedef struct  _gradient
 	long		f_winMode;
 	long		f_mode;
 
-	t_sample	f_gradient;
-	t_sample	f_sumFreq;
-	t_sample	f_sumFreqCar;
+	double	f_gradient;
+	double	f_sumFreq;
+	double	f_sumFreqCar;
 
 } t_gradient;
 

@@ -182,7 +182,6 @@ void energy_perform64(t_energy *x, t_object *dsp64, double **ins, long numins, d
 void energy_free(t_energy *x)
 {
 	dsp_free((t_pxobject *)x);
-	freebytes(x->f_fft, x->f_overlapping * sizeof(t_fft));
 	window_free(&x->f_env);
 }
 

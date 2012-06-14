@@ -16,20 +16,20 @@ typedef struct _fft
 	int				f_arraySize;
 	int				f_instance;
 
-	t_sample		f_sumAmp;
-	t_sample		*f_amp;
+	double		f_sumAmp;
+	double		*f_amp;
 } t_fft;
 
 typedef struct  _rolloff 
 {
 	t_pxobject	f_ob;
-	t_sample	f_sr;
+	double	f_sr;
 
 	long		f_windowSize;
 	long		f_overlapping;
 	long		f_arraySize;
-	t_sample	f_rapportSize;
-	t_sample	f_rapportFreq;
+	double	f_rapportSize;
+	double	f_rapportFreq;
 
 	t_fft		*f_fft;
 	t_window	f_env;
@@ -37,8 +37,8 @@ typedef struct  _rolloff
 	long		f_winMode;
 	long		f_ampMode;
 
-	t_sample	f_rolloff;
-	t_sample	f_value;
+	double	f_rolloff;
+	double	f_value;
 } t_rolloff;
 
 void *rolloff_class;

@@ -93,7 +93,7 @@ void rolloff_dsp64(t_rolloff *x, t_object *dsp64, short *count, double samplerat
 	int i;
 	x->f_sr = samplerate;
 	x->f_rapportSize	= (double)(PI * (1. / (double)x->f_arraySize));
-	x->f_rapportFreq = x->f_sr / (t_sample)x->f_windowSize;
+	x->f_rapportFreq = x->f_sr / (double)x->f_windowSize;
 
 	/* FFt initialization ***********************/
 	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
@@ -107,9 +107,9 @@ void rolloff_dsp64(t_rolloff *x, t_object *dsp64, short *count, double samplerat
 void rolloff_perform64(t_rolloff *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam)
 {
 	int i, j, k;
-	t_double amplitude, logAdd, sumAmp, diff, rolloffAmp;
-    t_double	*in		= ins[0];
-    t_double	*out1	= outs[0];
+	double amplitude, sumAmp, diff, rolloffAmp;
+    double	*in		= ins[0];
+    double	*out1	= outs[0];
 	
 	for(i = 0; i < x->f_overlapping; i++)
 	{
@@ -145,7 +145,7 @@ void rolloff_perform64(t_rolloff *x, t_object *dsp64, double **ins, long numins,
 				diff = sumAmp - (sumAmp - x->f_fft[i].f_amp[k-1]);
 				rolloffAmp -= (sumAmp - x->f_fft[i].f_amp[k-1]);
 				rolloffAmp /= diff;
-				x->f_rolloff = ((t_double)k - rolloffAmp) * x->f_rapportFreq;
+				x->f_rolloff = ((double)k - rolloffAmp) * x->f_rapportFreq;
 
 				x->f_fft[i].f_sumAmp	= 0.;
 			}
@@ -170,7 +170,6 @@ void rolloff_perform64(t_rolloff *x, t_object *dsp64, double **ins, long numins,
 void rolloff_free(t_rolloff *x)
 {
 	dsp_free((t_pxobject *)x);
-	freebytes(x->f_fft, x->f_overlapping * sizeof(t_fft));
 	window_free(&x->f_env);
 }
 
@@ -210,7 +209,7 @@ void rolloff_dsp(t_rolloff *x, t_signal **sp, short *count)
 	int i;
 	x->f_sr = (double)sp[0]->s_sr;
 	x->f_rapportSize	= (double)(PI * (1. / (double)x->f_arraySize));
-	x->f_rapportFreq = x->f_sr / (t_sample)x->f_windowSize;
+	x->f_rapportFreq = x->f_sr / (double)x->f_windowSize;
 
 	/* FFt initialization ***********************/
 	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
@@ -224,12 +223,12 @@ void rolloff_dsp(t_rolloff *x, t_signal **sp, short *count)
 t_int *rolloff_perform(t_int *w)
 {
     t_rolloff	*x		= (t_rolloff *)(w[1]);
-	t_sample	*in		= (t_sample *)	(w[2]);
-	t_sample	*out1	= (t_sample *)	(w[3]);
+	float	*in		= (float *)	(w[2]);
+	float	*out1	= (float *)	(w[3]);
 	int n				= (int)			(w[4]);
 
 	int i, j, k;
-	t_double amplitude, logAdd, sumAmp, diff, rolloffAmp;
+	double amplitude, logAdd, sumAmp, diff, rolloffAmp;
 
 	if (x->f_ob.z_disabled) return w + 5;
 	for(i = 0; i < x->f_overlapping; i++)
@@ -274,7 +273,7 @@ t_int *rolloff_perform(t_int *w)
 				diff = sumAmp - (sumAmp - x->f_fft[i].f_amp[k-1]);
 				rolloffAmp -= (sumAmp - x->f_fft[i].f_amp[k-1]);
 				rolloffAmp /= diff;
-				x->f_rolloff = ((t_double)k - rolloffAmp) * x->f_rapportFreq;
+				x->f_rolloff = ((double)k - rolloffAmp) * x->f_rapportFreq;
 
 				x->f_fft[i].f_sumAmp	= 0.;
 			}

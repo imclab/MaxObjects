@@ -118,9 +118,9 @@ void gradient_dsp64(t_gradient *x, t_object *dsp64, short *count, double sampler
 void gradient_perform64(t_gradient *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam)
 {
 	int i, j;
-	t_double amplitude, frequency, logAdd;
-    t_double	*in		= ins[0];
-    t_double	*out1	= outs[0];
+	double amplitude, frequency, logAdd;
+    double	*in		= ins[0];
+    double	*out1	= outs[0];
 	
 	for(i = 0; i < x->f_overlapping; i++)
 	{
@@ -134,7 +134,7 @@ void gradient_perform64(t_gradient *x, t_object *dsp64, double **ins, long numin
 				if (x->f_fft[i].f_ramp < x->f_arraySize && x->f_fft[i].f_ramp > 0)
 				{
 					amplitude = x->f_rapportSize * sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]) + (x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]));
-					frequency = (t_double)x->f_fft[i].f_ramp * x->f_rapportFreq;
+					frequency = (double)x->f_fft[i].f_ramp * x->f_rapportFreq;
 					
 					if(x->f_ampMode == 0)
 					{
@@ -153,11 +153,11 @@ void gradient_perform64(t_gradient *x, t_object *dsp64, double **ins, long numin
 				{
 					if(x->f_fft[i].f_sumAmp != 0.)
 					{
-						x->f_gradient = x->f_fft[i].f_sumFreq * (t_double)x->f_arraySize;
+						x->f_gradient = x->f_fft[i].f_sumFreq * (double)x->f_arraySize;
 						x->f_gradient -= (x->f_sumFreq * x->f_fft[i].f_sumAmp);
 						x->f_gradient /= x->f_sumFreqCar;
 						x->f_gradient /= x->f_fft[i].f_sumAmp;
-						x->f_gradient *= (t_sample)x->f_sr / 4.;
+						x->f_gradient *= (double)x->f_sr / 4.;
 					}
 					else 
 					{
@@ -180,7 +180,7 @@ void gradient_perform64(t_gradient *x, t_object *dsp64, double **ins, long numin
 						else
 						{
 							x->f_fft[i].f_sumAmp	+= amplitude - x->f_fft[i].f_firstAmp;
-							x->f_fft[i].f_sumFreq	+= amplitude * (t_sample)(x->f_fft[i].f_ramp - 1);
+							x->f_fft[i].f_sumFreq	+= amplitude * (double)(x->f_fft[i].f_ramp - 1);
 						}
 					}
 					else if(x->f_ampMode == 1)
@@ -191,7 +191,7 @@ void gradient_perform64(t_gradient *x, t_object *dsp64, double **ins, long numin
 						else
 						{
 							x->f_fft[i].f_sumAmp	+= amplitude - x->f_fft[i].f_firstAmp;
-							x->f_fft[i].f_sumFreq	+= amplitude * (t_sample)(x->f_fft[i].f_ramp - 1);
+							x->f_fft[i].f_sumFreq	+= amplitude * (double)(x->f_fft[i].f_ramp - 1);
 						}
 					}
 					else if(x->f_ampMode == 2)
@@ -205,7 +205,7 @@ void gradient_perform64(t_gradient *x, t_object *dsp64, double **ins, long numin
 						else
 						{
 							x->f_fft[i].f_sumAmp	+= logAdd - x->f_fft[i].f_firstAmp;
-							x->f_fft[i].f_sumFreq	+= logAdd * (t_sample)(x->f_fft[i].f_ramp - 1);
+							x->f_fft[i].f_sumFreq	+= logAdd * (double)(x->f_fft[i].f_ramp - 1);
 						}
 					}
 				}
@@ -244,7 +244,6 @@ void gradient_perform64(t_gradient *x, t_object *dsp64, double **ins, long numin
 void gradient_free(t_gradient *x)
 {
 	dsp_free((t_pxobject *)x);
-	freebytes(x->f_fft, x->f_overlapping * sizeof(t_fft));
 	window_free(&x->f_env);
 }
 
@@ -286,7 +285,7 @@ void gradient_dsp(t_gradient *x, t_signal **sp, short *count)
 	int i;
 	x->f_sr = (double)sp[0]->s_sr;
 	x->f_rapportSize	= (double)(PI * (1. / (double)x->f_arraySize));
-	x->f_rapportFreq = x->f_sr / (t_sample)x->f_windowSize;
+	x->f_rapportFreq = x->f_sr / (double)x->f_windowSize;
 
 	/* FFt initialization ***********************/
 	x->f_fft = (t_fft *)getbytes(x->f_overlapping  * sizeof(t_fft));
@@ -310,13 +309,13 @@ void gradient_dsp(t_gradient *x, t_signal **sp, short *count)
 
 t_int *gradient_perform(t_int *w)
 {
-    t_gradient	*x		= (t_gradient *)(w[1]);
-	t_sample	*in		= (t_sample *)	(w[2]);
-	t_sample	*out1	= (t_sample *)	(w[3]);
-	int n				= (int)			(w[4]);
+    t_gradient	*x	= (t_gradient *)(w[1]);
+	float	*in		= (float *)	(w[2]);
+	float	*out1	= (float *)	(w[3]);
+	int n			= (int)			(w[4]);
 
 	int i, j;
-	t_double amplitude, frequency, logAdd;
+	double amplitude, frequency, logAdd;
 	if (x->f_ob.z_disabled) return w + 5;
 
 	for(i = 0; i < x->f_overlapping; i++)
@@ -331,7 +330,7 @@ t_int *gradient_perform(t_int *w)
 				if (x->f_fft[i].f_ramp < x->f_arraySize && x->f_fft[i].f_ramp > 0)
 				{
 					amplitude = x->f_rapportSize * sqrt((x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][0]) + (x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1] * x->f_fft[i].f_complex[x->f_fft[i].f_ramp][1]));
-					frequency = (t_double)x->f_fft[i].f_ramp * x->f_rapportFreq;
+					frequency = (double)x->f_fft[i].f_ramp * x->f_rapportFreq;
 					
 					if(x->f_ampMode == 0)
 					{
@@ -358,11 +357,11 @@ t_int *gradient_perform(t_int *w)
 				{
 					if(x->f_fft[i].f_sumAmp != 0.)
 					{
-						x->f_gradient = x->f_fft[i].f_sumFreq * (t_double)x->f_arraySize;
+						x->f_gradient = x->f_fft[i].f_sumFreq * (double)x->f_arraySize;
 						x->f_gradient -= (x->f_sumFreq * x->f_fft[i].f_sumAmp);
 						x->f_gradient /= x->f_sumFreqCar;
 						x->f_gradient /= x->f_fft[i].f_sumAmp;
-						x->f_gradient *= (t_sample)x->f_sr / 4.;
+						x->f_gradient *= (double)x->f_sr / 4.;
 					}
 					else 
 					{
@@ -385,7 +384,7 @@ t_int *gradient_perform(t_int *w)
 						else
 						{
 							x->f_fft[i].f_sumAmp	+= amplitude - x->f_fft[i].f_firstAmp;
-							x->f_fft[i].f_sumFreq	+= amplitude * (t_sample)(x->f_fft[i].f_ramp - 1);
+							x->f_fft[i].f_sumFreq	+= amplitude * (double)(x->f_fft[i].f_ramp - 1);
 						}
 					}
 					else if(x->f_ampMode == 1)
@@ -396,7 +395,7 @@ t_int *gradient_perform(t_int *w)
 						else
 						{
 							x->f_fft[i].f_sumAmp	+= amplitude - x->f_fft[i].f_firstAmp;
-							x->f_fft[i].f_sumFreq	+= amplitude * (t_sample)(x->f_fft[i].f_ramp - 1);
+							x->f_fft[i].f_sumFreq	+= amplitude * (double)(x->f_fft[i].f_ramp - 1);
 						}
 					}
 					else if(x->f_ampMode == 2)
@@ -410,7 +409,7 @@ t_int *gradient_perform(t_int *w)
 						else
 						{
 							x->f_fft[i].f_sumAmp	+= logAdd - x->f_fft[i].f_firstAmp;
-							x->f_fft[i].f_sumFreq	+= logAdd * (t_sample)(x->f_fft[i].f_ramp - 1);
+							x->f_fft[i].f_sumFreq	+= logAdd * (double)(x->f_fft[i].f_ramp - 1);
 						}
 					}
 				}
