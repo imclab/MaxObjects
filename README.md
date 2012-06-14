@@ -19,7 +19,7 @@
 * **pg.unpack~** : Unpack object for signal (Max5 only).
 * **pg.adaptor~** : Adapter for packed signal (Max5 only).
 
-### MaxFFT : (Max6 only)
+### MaxFFT :
 
 * **pg.analyser~** : Estimation of the centroid, the spread, the skewness and the kurtosis.
 * **pg.energy~** : Estimation of the minimum, the average, the maximum and the sum of the amplitude.
@@ -29,10 +29,18 @@
 * **pg.rolloff~** : Estimation of the rolloff frequency.
 * **pg.flux~** : Estimation of the difference of amplitude between frames.
 
-This library uses the fftw3 : [fftw3](http://www.fftw.org/)
+This library uses the fftw3 : [FFTW3](http://www.fftw.org/)
+The fftw3 is a dynamic library, you need to compile it ot install precompiled binary.
+
+Precompiled OSX binary for FFTW library :
+[OSX link 1](http://pdb.finkproject.org/pdb/package.php/fftw3?rel_id=10.7-x86_64-current-stable)
+[OSX link 2](http://antst.net/Site/FFTW_for_MAC_OS_X.html)
+
+Precompiled WINDOWS DLL is in the package or:
+[WIN link 1](http://web.media.mit.edu/~tristan/)
 
 ### Download Binaries (Windows & OsX):
 
-[pg.library.rar](http://dl.dropbox.com/u/21891549/pg.library.rar)
+[PG.LIBRARY.RAR](http://dl.dropbox.com/u/21891549/pg.library.rar)
 
 Please report bugs. Other objects will come out!
