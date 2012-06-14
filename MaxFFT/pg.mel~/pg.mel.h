@@ -4,7 +4,7 @@
 #include "ext_common.h"
 #include "z_dsp.h"
 #include <math.h>
-#include "pg.window.h"
+#include "../pg.window/pg.window.h"
 #include <fftw3.h>
 
 typedef struct _fft
@@ -40,7 +40,7 @@ typedef struct  _mel
 	void 		*f_clock;
 	t_fft		*f_fft;
 
-	double	*f_result;
+	double		*f_result;
 	t_atom		*f_output;
 	long		f_interval;
 

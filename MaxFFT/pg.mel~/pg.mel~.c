@@ -279,11 +279,10 @@ void mel_out(t_mel *x)
 void mel_free(t_mel *x)
 {
 	int i;
-	
 	dsp_free((t_pxobject *)x);
 	
 	freebytes(x->f_result, x->f_nBands * sizeof(double));
-	freebytes(x->f_result, x->f_nBands * sizeof(t_atom));
+	freebytes(x->f_output, x->f_nBands * sizeof(t_atom));
 	freebytes(x->f_melBandRef , x->f_arraySize * sizeof(long));
 	for(i = 0; i < x->f_nBands; i++)
 		freebytes(x->f_filterParameters[i], x->f_arraySize * sizeof(double));

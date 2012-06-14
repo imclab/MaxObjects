@@ -65,7 +65,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\msp-includes;.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\msp-includes;.\..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\max-includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN_VERSION;WIN32;_DEBUG;_WINDOWS;_USRDLL;WIN_EXT_VERSION;_CRT_NOFORCE_MANIFEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling>
@@ -96,7 +96,7 @@
       <AdditionalDependencies>MaxAPI.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).mxe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>.\..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\msp-includes;.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\msp-includes;.\..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\max-includes;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
@@ -130,7 +130,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>.\..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\msp-includes;.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\msp-includes;.\..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\max-includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN_VERSION;WIN32;NDEBUG;_WINDOWS;_USRDLL;WIN_EXT_VERSION;_CRT_NOFORCE_MANIFEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>
@@ -161,7 +161,7 @@
       <AdditionalDependencies>MaxAPI.lib;MaxAudio.lib;maxcrt.lib;libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).mxe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>.\..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\msp-includes;.\..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\msp-includes;.\..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\max-includes;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>MSVCRT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
@@ -178,7 +178,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes\common\dllmain_win.c" />
+    <ClCompile Include="..\..\..\..\SDKs\MaxSDK-5.1.7\c74support\max-includes\common\dllmain_win.c" />
     <ClCompile Include="..\pg.window\pg.window.c" />
     <ClCompile Include="pg.energy~.c" />
     <ClCompile Include="pg.fft.c" />
