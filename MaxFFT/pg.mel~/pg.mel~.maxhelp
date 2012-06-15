@@ -30,6 +30,20 @@
 				"box" : 				{
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
+					"id" : "obj-59",
+					"linecount" : 2,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 500.0, 14.5, 150.0, 33.0 ],
+					"text" : "© 2012 Pierre Guillot\nUniversite Paris 8"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 11.595187,
 					"id" : "obj-8",
 					"linecount" : 2,
 					"maxclass" : "comment",
@@ -355,16 +369,16 @@
 ,
 					"patching_rect" : [ 488.6875, 162.5, 97.0, 20.0 ],
 					"saved_object_attributes" : 					{
+						"default_fontsize" : 12.0,
+						"description" : "",
+						"fontname" : "Arial",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
 						"globalpatchername" : "",
 						"digest" : "",
-						"default_fontname" : "Arial",
-						"default_fontsize" : 12.0,
-						"description" : "",
-						"fontname" : "Arial",
-						"tags" : ""
+						"tags" : "",
+						"default_fontname" : "Arial"
 					}
 ,
 					"text" : "p audioPanic 32"
@@ -602,16 +616,16 @@
 ,
 													"patching_rect" : [ 75.0, 135.0, 47.0, 20.0 ],
 													"saved_object_attributes" : 													{
+														"default_fontsize" : 12.0,
+														"description" : "",
+														"fontname" : "Arial",
 														"fontface" : 0,
 														"default_fontface" : 0,
 														"fontsize" : 12.0,
 														"globalpatchername" : "",
 														"digest" : "",
-														"default_fontname" : "Arial",
-														"default_fontsize" : 12.0,
-														"description" : "",
-														"fontname" : "Arial",
-														"tags" : ""
+														"tags" : "",
+														"default_fontname" : "Arial"
 													}
 ,
 													"text" : "p noisy"
@@ -1754,9 +1768,7 @@
 					"outlettype" : [ "list" ],
 					"patching_rect" : [ 91.0, 300.0, 117.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"window" : 2,
-						"highpass" : 272008302207532160000000.0,
-						"interval" : 5
+						"window" : 2
 					}
 ,
 					"text" : "pg.mel~ 1024 2 2 24"
@@ -2505,16 +2517,16 @@
 ,
 									"patching_rect" : [ 270.0, 435.0, 53.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
-										"default_fontname" : "Arial",
-										"default_fontsize" : 12.0,
-										"description" : "",
-										"fontname" : "Arial",
-										"tags" : ""
+										"tags" : "",
+										"default_fontname" : "Arial"
 									}
 ,
 									"text" : "p nodes"
@@ -2794,16 +2806,16 @@
 ,
 									"patching_rect" : [ 30.0, 435.0, 85.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
-										"default_fontname" : "Arial",
-										"default_fontsize" : 12.0,
-										"description" : "",
-										"fontname" : "Arial",
-										"tags" : ""
+										"tags" : "",
+										"default_fontname" : "Arial"
 									}
 ,
 									"text" : "p vowel name"
@@ -3163,16 +3175,16 @@
 ,
 									"patching_rect" : [ 571.0, 160.0, 63.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
-										"default_fontname" : "Arial",
-										"default_fontsize" : 12.0,
-										"description" : "",
-										"fontname" : "Arial",
-										"tags" : ""
+										"tags" : "",
+										"default_fontname" : "Arial"
 									}
 ,
 									"text" : "p Oooooo"
@@ -3494,16 +3506,16 @@
 ,
 									"patching_rect" : [ 466.0, 160.0, 63.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
-										"default_fontname" : "Arial",
-										"default_fontsize" : 12.0,
-										"description" : "",
-										"fontname" : "Arial",
-										"tags" : ""
+										"tags" : "",
+										"default_fontname" : "Arial"
 									}
 ,
 									"text" : "p Uuuuuu"
@@ -3825,16 +3837,16 @@
 ,
 									"patching_rect" : [ 361.0, 160.0, 62.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
-										"default_fontname" : "Arial",
-										"default_fontsize" : 12.0,
-										"description" : "",
-										"fontname" : "Arial",
-										"tags" : ""
+										"tags" : "",
+										"default_fontname" : "Arial"
 									}
 ,
 									"text" : "p Eeeeee"
@@ -4156,16 +4168,16 @@
 ,
 									"patching_rect" : [ 256.0, 160.0, 61.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
-										"default_fontname" : "Arial",
-										"default_fontsize" : 12.0,
-										"description" : "",
-										"fontname" : "Arial",
-										"tags" : ""
+										"tags" : "",
+										"default_fontname" : "Arial"
 									}
 ,
 									"text" : "p Aaaaaa"
@@ -4506,9 +4518,9 @@
 									"patching_rect" : [ 255.0, 105.0, 176.0, 20.0 ],
 									"saved_object_attributes" : 									{
 										"window" : 2,
+										"interval" : 5,
 										"mode" : 1,
-										"highpass" : 1.0,
-										"interval" : 5
+										"highpass" : 1.0
 									}
 ,
 									"text" : "pg.mel~ 2048 2 2 24 @mode 1"
@@ -4834,16 +4846,16 @@
 ,
 					"patching_rect" : [ 180.0, 600.0, 77.0, 20.0 ],
 					"saved_object_attributes" : 					{
+						"default_fontsize" : 12.0,
+						"description" : "",
+						"fontname" : "Arial",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
 						"globalpatchername" : "",
 						"digest" : "",
-						"default_fontname" : "Arial",
-						"default_fontsize" : 12.0,
-						"description" : "",
-						"fontname" : "Arial",
-						"tags" : ""
+						"tags" : "",
+						"default_fontname" : "Arial"
 					}
 ,
 					"text" : "p recognition"
@@ -5009,20 +5021,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 238.5, 292.5, 183.5, 95.0 ]
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"fontname" : "Arial",
-					"fontsize" : 11.595187,
-					"id" : "obj-59",
-					"linecount" : 2,
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 510.0, 15.0, 150.0, 33.0 ],
-					"text" : "Pierre Guillot\nUniversite Paris 8"
 				}
 
 			}
@@ -5430,16 +5428,16 @@
 ,
 					"patching_rect" : [ 570.0, 390.0, 48.0, 20.0 ],
 					"saved_object_attributes" : 					{
+						"default_fontsize" : 12.0,
+						"description" : "",
+						"fontname" : "Arial",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
 						"globalpatchername" : "",
 						"digest" : "",
-						"default_fontname" : "Arial",
-						"default_fontsize" : 12.0,
-						"description" : "",
-						"fontname" : "Arial",
-						"tags" : ""
+						"tags" : "",
+						"default_fontname" : "Arial"
 					}
 ,
 					"text" : "p slider"

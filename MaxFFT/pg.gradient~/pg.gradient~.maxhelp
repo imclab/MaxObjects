@@ -244,16 +244,16 @@
 ,
 													"patching_rect" : [ 75.0, 135.0, 47.0, 20.0 ],
 													"saved_object_attributes" : 													{
-														"tags" : "",
+														"default_fontsize" : 12.0,
+														"description" : "",
+														"fontname" : "Arial",
 														"fontface" : 0,
 														"default_fontface" : 0,
 														"fontsize" : 12.0,
 														"globalpatchername" : "",
 														"digest" : "",
-														"default_fontname" : "Arial",
-														"default_fontsize" : 12.0,
-														"description" : "",
-														"fontname" : "Arial"
+														"tags" : "",
+														"default_fontname" : "Arial"
 													}
 ,
 													"text" : "p noisy"
@@ -295,7 +295,7 @@
 													"outlettype" : [ "list", "float", "float", "float", "float", "list", "int" ],
 													"parameter_enable" : 0,
 													"patching_rect" : [ 12.0, 27.5, 198.0, 77.5 ],
-													"setfilter" : [ 0, 3, 0, 0, 0, 8129.54541, 1.0, 3.041667, 0.0001, 22050.0, 0.0001, 16.0, 0.5, 25.0 ]
+													"setfilter" : [ 0, 3, 0, 0, 0, 17261.363281, 1.0, 25.0, 0.0001, 22050.0, 0.0001, 16.0, 0.5, 25.0 ]
 												}
 
 											}
@@ -1644,16 +1644,16 @@
 ,
 									"patching_rect" : [ 215.0, 100.0, 42.0, 20.0 ],
 									"saved_object_attributes" : 									{
-										"tags" : "",
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
-										"default_fontname" : "Arial",
-										"default_fontsize" : 12.0,
-										"description" : "",
-										"fontname" : "Arial"
+										"tags" : "",
+										"default_fontname" : "Arial"
 									}
 ,
 									"text" : "p filter"
@@ -2061,16 +2061,16 @@
 ,
 									"patching_rect" : [ 215.0, 165.0, 67.0, 20.0 ],
 									"saved_object_attributes" : 									{
-										"tags" : "",
+										"default_fontsize" : 18.0,
+										"description" : "",
+										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 18.0,
 										"globalpatchername" : "",
 										"digest" : "",
-										"default_fontname" : "Arial",
-										"default_fontsize" : 18.0,
-										"description" : "",
-										"fontname" : "Arial"
+										"tags" : "",
+										"default_fontname" : "Arial"
 									}
 ,
 									"text" : "p draw_lcd"
@@ -2134,16 +2134,16 @@
 ,
 					"patching_rect" : [ 135.0, 375.0, 59.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"tags" : "",
+						"default_fontsize" : 12.0,
+						"description" : "",
+						"fontname" : "Arial",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
 						"globalpatchername" : "",
 						"digest" : "",
-						"default_fontname" : "Arial",
-						"default_fontsize" : 12.0,
-						"description" : "",
-						"fontname" : "Arial"
+						"tags" : "",
+						"default_fontname" : "Arial"
 					}
 ,
 					"text" : "p display"
@@ -2507,16 +2507,16 @@
 ,
 					"patching_rect" : [ 526.75, 151.5, 97.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"tags" : "",
+						"default_fontsize" : 12.0,
+						"description" : "",
+						"fontname" : "Arial",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
 						"globalpatchername" : "",
 						"digest" : "",
-						"default_fontname" : "Arial",
-						"default_fontsize" : 12.0,
-						"description" : "",
-						"fontname" : "Arial"
+						"tags" : "",
+						"default_fontname" : "Arial"
 					}
 ,
 					"text" : "p audioPanic 32"
@@ -2756,7 +2756,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 497.75, 6.0, 150.0, 33.0 ],
-					"text" : "Pierre Guillot\nUniversite Paris 8"
+					"text" : "© 2012 Pierre Guillot\nUniversite Paris 8"
 				}
 
 			}
@@ -2801,7 +2801,8 @@
 					"outlettype" : [ "signal" ],
 					"patching_rect" : [ 75.0, 268.0, 124.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"amplitude" : 2
+						"gradient" : 1,
+						"amplitude" : 1
 					}
 ,
 					"text" : "pg.gradient~ 2048 8 1"
@@ -2846,12 +2847,12 @@
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"id" : "obj-5",
-					"linecount" : 5,
+					"linecount" : 3,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 7.0, 56.0, 597.0, 73.0 ],
-					"text" : "pg.gradient~ computes the slope or the decrease of the spectra.\nSpectral slope is an estimation of the amount of spectral magnitude decreasing, computed by a linear regression on the magnitude spectrum.\nDecrease reports the amount of spectral magnitude decreasing. Decrease it is supposed to be more  correlated to humain perception",
+					"patching_rect" : [ 7.0, 56.0, 597.0, 46.0 ],
+					"text" : "pg.gradient~ computes the slope or the decrease of the spectrum.\nSpectral slope is an estimation of the gradient of the spectrum.\nDecrease is another estimation of the gradient and is supposed to be more  correlated to human perception.",
 					"varname" : "autohelp_top_description"
 				}
 

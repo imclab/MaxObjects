@@ -30,6 +30,40 @@
 				"box" : 				{
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
+					"id" : "obj-11",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "signal" ],
+					"patching_rect" : [ 75.0, 274.5, 110.0, 20.0 ],
+					"saved_object_attributes" : 					{
+						"window" : 1,
+						"rolloff" : 0.9974,
+						"amplitude" : 1
+					}
+,
+					"text" : "pg.rolloff~ 2048 8 1"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 11.595187,
+					"id" : "obj-59",
+					"linecount" : 2,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 508.625, 6.0, 150.0, 33.0 ],
+					"text" : "© 2012 Pierre Guillot\nUniversite Paris 8"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 11.595187,
 					"id" : "obj-32",
 					"maxclass" : "flonum",
 					"maximum" : 1.0,
@@ -38,7 +72,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "float", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 447.625, 485.0, 50.0, 20.0 ]
+					"patching_rect" : [ 447.625, 485.0, 55.0, 20.0 ]
 				}
 
 			}
@@ -301,16 +335,16 @@
 ,
 									"patching_rect" : [ 50.0, 100.0, 42.0, 20.0 ],
 									"saved_object_attributes" : 									{
+										"default_fontsize" : 12.0,
+										"description" : "",
 										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
-										"tags" : "",
 										"globalpatchername" : "",
 										"digest" : "",
-										"default_fontname" : "Arial",
-										"default_fontsize" : 12.0,
-										"description" : ""
+										"tags" : "",
+										"default_fontname" : "Arial"
 									}
 ,
 									"text" : "p filter"
@@ -365,16 +399,16 @@
 ,
 					"patching_rect" : [ 120.0, 390.0, 59.0, 20.0 ],
 					"saved_object_attributes" : 					{
+						"default_fontsize" : 12.0,
+						"description" : "",
 						"fontname" : "Arial",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
-						"tags" : "",
 						"globalpatchername" : "",
 						"digest" : "",
-						"default_fontname" : "Arial",
-						"default_fontsize" : 12.0,
-						"description" : ""
+						"tags" : "",
+						"default_fontname" : "Arial"
 					}
 ,
 					"text" : "p display"
@@ -913,16 +947,16 @@
 ,
 					"patching_rect" : [ 467.625, 129.0, 97.0, 20.0 ],
 					"saved_object_attributes" : 					{
+						"default_fontsize" : 12.0,
+						"description" : "",
 						"fontname" : "Arial",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
-						"tags" : "",
 						"globalpatchername" : "",
 						"digest" : "",
-						"default_fontname" : "Arial",
-						"default_fontsize" : 12.0,
-						"description" : ""
+						"tags" : "",
+						"default_fontname" : "Arial"
 					}
 ,
 					"text" : "p audioPanic 32"
@@ -1147,16 +1181,16 @@
 ,
 													"patching_rect" : [ 75.0, 135.0, 47.0, 20.0 ],
 													"saved_object_attributes" : 													{
+														"default_fontsize" : 12.0,
+														"description" : "",
 														"fontname" : "Arial",
 														"fontface" : 0,
 														"default_fontface" : 0,
 														"fontsize" : 12.0,
-														"tags" : "",
 														"globalpatchername" : "",
 														"digest" : "",
-														"default_fontname" : "Arial",
-														"default_fontsize" : 12.0,
-														"description" : ""
+														"tags" : "",
+														"default_fontname" : "Arial"
 													}
 ,
 													"text" : "p noisy"
@@ -1198,7 +1232,7 @@
 													"outlettype" : [ "list", "float", "float", "float", "float", "list", "int" ],
 													"parameter_enable" : 0,
 													"patching_rect" : [ 12.0, 27.5, 198.0, 77.5 ],
-													"setfilter" : [ 0, 1, 0, 0, 0, 5456.818359, 1.0, 1.058824, 0.0001, 22050.0, 0.0001, 16.0, 0.5, 25.0 ]
+													"setfilter" : [ 0, 1, 0, 0, 0, 7238.63623, 1.0, 1.058824, 0.0001, 22050.0, 0.0001, 16.0, 0.5, 25.0 ]
 												}
 
 											}
@@ -2321,20 +2355,6 @@
 				"box" : 				{
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"id" : "obj-59",
-					"linecount" : 2,
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 497.75, 6.0, 150.0, 33.0 ],
-					"text" : "Pierre Guillot\nUniversite Paris 8"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"fontname" : "Arial",
-					"fontsize" : 11.595187,
 					"id" : "obj-4",
 					"maxclass" : "newobj",
 					"numinlets" : 0,
@@ -2358,25 +2378,6 @@
 					"outlettype" : [ "signal", "float" ],
 					"patching_rect" : [ 75.0, 342.5, 64.0, 20.0 ],
 					"sig" : 0.0
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"fontname" : "Arial",
-					"fontsize" : 11.595187,
-					"id" : "obj-11",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "signal" ],
-					"patching_rect" : [ 75.0, 247.0, 110.0, 20.0 ],
-					"saved_object_attributes" : 					{
-						"window" : 1,
-						"amplitude" : 1
-					}
-,
-					"text" : "pg.rolloff~ 2048 8 1"
 				}
 
 			}
@@ -2418,11 +2419,12 @@
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"id" : "obj-5",
+					"linecount" : 2,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 7.0, 56.0, 591.0, 20.0 ],
-					"text" : "pg.rolloff~ get the roll-off frequency  behind which x% (default 0.95%) of the amplitude of the signal is included.",
+					"patching_rect" : [ 7.0, 56.0, 591.0, 33.0 ],
+					"text" : "pg.rolloff~ get the roll-off frequency behind which x% (default 0.95%) of the amplitude of the signal is included.\nIt's correlated with noise cutting frequency.",
 					"varname" : "autohelp_top_description"
 				}
 

@@ -29,6 +29,20 @@
 		"boxes" : [ 			{
 				"box" : 				{
 					"fontname" : "Arial",
+					"fontsize" : 11.595187,
+					"id" : "obj-59",
+					"linecount" : 2,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 493.625, 4.0, 150.0, 33.0 ],
+					"text" : "© 2012 Pierre Guillot\nUniversite Paris 8"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
 					"fontsize" : 12.0,
 					"id" : "obj-17",
 					"maxclass" : "newobj",
@@ -259,7 +273,6 @@
 ,
 					"patching_rect" : [ 75.0, 390.0, 74.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"tags" : "",
 						"default_fontsize" : 12.0,
 						"description" : "",
 						"fontname" : "Arial",
@@ -268,6 +281,7 @@
 						"fontsize" : 12.0,
 						"globalpatchername" : "",
 						"digest" : "",
+						"tags" : "",
 						"default_fontname" : "Arial"
 					}
 ,
@@ -327,12 +341,12 @@
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"id" : "obj-25",
-					"linecount" : 2,
+					"linecount" : 3,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 448.0, 455.0, 105.0, 33.0 ],
-					"text" : "Set the delay value (frame) :"
+					"patching_rect" : [ 447.625, 442.0, 104.0, 46.0 ],
+					"text" : "Set the delay between frames (frame) :"
 				}
 
 			}
@@ -860,7 +874,6 @@
 ,
 					"patching_rect" : [ 467.625, 129.0, 97.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"tags" : "",
 						"default_fontsize" : 12.0,
 						"description" : "",
 						"fontname" : "Arial",
@@ -869,6 +882,7 @@
 						"fontsize" : 12.0,
 						"globalpatchername" : "",
 						"digest" : "",
+						"tags" : "",
 						"default_fontname" : "Arial"
 					}
 ,
@@ -1094,7 +1108,6 @@
 ,
 													"patching_rect" : [ 75.0, 135.0, 47.0, 20.0 ],
 													"saved_object_attributes" : 													{
-														"tags" : "",
 														"default_fontsize" : 12.0,
 														"description" : "",
 														"fontname" : "Arial",
@@ -1103,6 +1116,7 @@
 														"fontsize" : 12.0,
 														"globalpatchername" : "",
 														"digest" : "",
+														"tags" : "",
 														"default_fontname" : "Arial"
 													}
 ,
@@ -1145,7 +1159,7 @@
 													"outlettype" : [ "list", "float", "float", "float", "float", "list", "int" ],
 													"parameter_enable" : 0,
 													"patching_rect" : [ 12.0, 27.5, 198.0, 77.5 ],
-													"setfilter" : [ 0, 3, 0, 0, 0, 9465.90918, 1.0, 0.503704, 0.0001, 22050.0, 0.0001, 16.0, 0.5, 25.0 ]
+													"setfilter" : [ 0, 3, 0, 0, 0, 11359.09082, 1.0, 6.266667, 0.0001, 22050.0, 0.0001, 16.0, 0.5, 25.0 ]
 												}
 
 											}
@@ -2268,20 +2282,6 @@
 				"box" : 				{
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
-					"id" : "obj-59",
-					"linecount" : 2,
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 497.75, 6.0, 150.0, 33.0 ],
-					"text" : "Pierre Guillot\nUniversite Paris 8"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"fontname" : "Arial",
-					"fontsize" : 11.595187,
 					"id" : "obj-4",
 					"maxclass" : "newobj",
 					"numinlets" : 0,
@@ -2320,8 +2320,8 @@
 					"outlettype" : [ "signal" ],
 					"patching_rect" : [ 75.0, 247.0, 100.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"amplitude" : 1,
-						"window" : 1
+						"window" : 1,
+						"amplitude" : 1
 					}
 ,
 					"text" : "pg.flux~ 2048 8 1"
