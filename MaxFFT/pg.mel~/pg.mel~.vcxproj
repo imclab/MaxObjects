@@ -187,8 +187,8 @@
     <None Include="pg.mel~.def" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\pg.window\pg.window.h" />
     <ClInclude Include="pg.mel.h" />
-    <ClInclude Include="pg.window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
