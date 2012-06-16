@@ -39,30 +39,7 @@ void buffer_setup(t_descriptor *x, long windowSize, long overlapping)
 	}
 	if(x->f_buf.f_windowSize != windowSize || x->f_buf.f_overlapping != overlapping || x->f_buf.f_nSamples != nSamples || x->f_changes == 1)
 	{
-		for(i = 0; i < 4; i++)
-		{
-			for(j = 0; j < x->f_buf.f_nFrames; j++)
-			{
-				if(x->f_buf.f_sonogram[i])
-					freebytes(x->f_buf.f_sonogram[i][j], x->f_buf.f_arraySize * sizeof(double));
-			}
-			if(x->f_buf.f_sonogram)
-				freebytes(x->f_buf.f_sonogram[i], x->f_nFrames * sizeof(double *));
-			if(x->f_buf.f_centroid)
-				freebytes(x->f_buf.f_centroid[i], x->f_nFrames * sizeof(double));
-			if(x->f_buf.f_spread)
-				freebytes(x->f_buf.f_spread[i], x->f_nFrames * sizeof(double));
-			if(x->f_buf.f_skewness)
-				freebytes(x->f_buf.f_skewness[i], x->f_nFrames * sizeof(double));
-			if(x->f_buf.f_kurtosis)
-				freebytes(x->f_buf.f_kurtosis[i], x->f_nFrames * sizeof(double));
-			if(x->f_buf.f_maxAmp)
-				freebytes(x->f_buf.f_maxAmp[i], x->f_nFrames * sizeof(double));
-			if(x->f_buf.f_minAmp)
-				freebytes(x->f_buf.f_minAmp[i], x->f_nFrames * sizeof(double));
-			if(x->f_buf.f_aveAmp)
-				freebytes(x->f_buf.f_aveAmp[i], x->f_nFrames * sizeof(double));
-		}
+		analysis_free(&x->f_buf);
 		x->f_buf.f_windowSize = windowSize;
 		x->f_buf.f_arraySize = x->f_buf.f_windowSize / 2;
 		x->f_buf.f_overlapping = overlapping;
@@ -70,21 +47,7 @@ void buffer_setup(t_descriptor *x, long windowSize, long overlapping)
 		x->f_buf.f_nSamples = nSamples;
 		x->f_buf.f_nFrames = (x->f_buf.f_nSamples / x->f_buf.f_windowSize) * x->f_buf.f_overlapping;
 
-		for(i = 0; i < 4; i++)
-		{
-			x->f_buf.f_sonogram[i] = (double **)getbytes(x->f_buf.f_nFrames * sizeof(double *));
-			for(j = 0; j < x->f_buf.f_nFrames; j++)
-			{
-				x->f_buf.f_sonogram[i][j] = (double *)getbytes(x->f_buf.f_arraySize * sizeof(double));
-			}
-			x->f_buf.f_centroid[i] = (double *)getbytes(x->f_buf.f_nFrames * sizeof(double));
-			x->f_buf.f_spread[i] = (double *)getbytes(x->f_buf.f_nFrames * sizeof(double));
-			x->f_buf.f_skewness[i] = (double *)getbytes(x->f_buf.f_nFrames * sizeof(double));
-			x->f_buf.f_kurtosis[i] = (double *)getbytes(x->f_buf.f_nFrames * sizeof(double));
-			x->f_buf.f_maxAmp[i] = (double *)getbytes(x->f_buf.f_nFrames * sizeof(double));
-			x->f_buf.f_minAmp[i] = (double *)getbytes(x->f_buf.f_nFrames * sizeof(double));
-			x->f_buf.f_aveAmp[i] = (double *)getbytes(x->f_buf.f_nFrames * sizeof(double));
-		}
+		analysis_setup(&x->f_buf);
 
 		x->f_buf.f_rapportSize = (float)(PI * (1.0 / (float)x->f_buf.f_arraySize));
 		descriptor_compute(&x->f_buf, &x->f_window);
@@ -207,21 +170,5 @@ t_max_err overlapping_set(t_descriptor *x, t_object *attr, long argc, t_atom *ar
 
 void buffer_free(t_buf *x)
 {
-	int i, j;
-	for(i = 0; i < 4; i++)
-	{
-		freebytes(x->f_centroid[i], x->f_nFrames * sizeof(double));
-		freebytes(x->f_spread[i], x->f_nFrames * sizeof(double));
-		freebytes(x->f_skewness[i], x->f_nFrames * sizeof(double));
-		freebytes(x->f_kurtosis[i], x->f_nFrames * sizeof(double));
-		freebytes(x->f_maxAmp[i], x->f_nFrames * sizeof(double));
-		freebytes(x->f_minAmp[i], x->f_nFrames * sizeof(double));
-		freebytes(x->f_aveAmp[i], x->f_nFrames * sizeof(double));
-
-		for(j = 0; j < x->f_nFrames; j++)
-		{
-			freebytes(x->f_sonogram[i][j], x->f_arraySize * sizeof(double));
-		}
-		freebytes(x->f_sonogram[i], x->f_nFrames * sizeof(double *));
-	}
+	analysis_free(x);
 }

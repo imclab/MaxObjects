@@ -52,10 +52,6 @@ typedef struct _buf
 	t_energy	f_ener;
 	t_moment	f_mome;
 	t_gradient	f_grad;
-
-	double		*f_rolloff[4];
-	double		*f_slope[4];
-	double		*f_decrease[4];
 } t_buf;
 
 typedef struct  _descriptor 
@@ -113,6 +109,8 @@ t_max_err buffer_set(t_descriptor *x, t_object *attr, long argc, t_atom *argv);
 t_max_err channel_set(t_descriptor *x, t_object *attr, long argc, t_atom *argv);
 
 void buffer_setup(t_descriptor *x, long windowSize, long overlapping);
+void analysis_setup(t_buf *x);
+void analysis_free(t_buf *x);
 void descriptor_compute(t_buf *x, t_window *w);
 void descriptor_sonogram(t_buf *x, double **complex, int channel, int frame);
 void descriptor_energy(t_buf *x, int channel, int frame);

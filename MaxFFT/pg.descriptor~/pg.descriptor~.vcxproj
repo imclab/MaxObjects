@@ -180,6 +180,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes\common\dllmain_win.c" />
     <ClCompile Include="..\pg.window\pg.window.c" />
+    <ClCompile Include="pg.analysis.c" />
     <ClCompile Include="pg.buffer.c" />
     <ClCompile Include="pg.compute.c" />
     <ClCompile Include="pg.descriptor~.c" />

@@ -214,20 +214,6 @@ void gradient_perform64(t_gradient *x, t_object *dsp64, double **ins, long numin
 							x->f_fft[i].f_sumFreq	+= amplitude * (double)(x->f_fft[i].f_ramp - 1);
 						}
 					}
-					else if(x->f_ampMode == 2)
-					{
-						amplitude = 20. * log10(amplitude);
-						if (amplitude < -90.f) amplitude = -90.f;
-						logAdd = pow(10., (amplitude / 10.));
-						
-						if(x->f_fft[i].f_ramp == 1)
-							x->f_fft[i].f_firstAmp = logAdd;
-						else
-						{
-							x->f_fft[i].f_sumAmp	+= logAdd - x->f_fft[i].f_firstAmp;
-							x->f_fft[i].f_sumFreq	+= logAdd * (double)(x->f_fft[i].f_ramp - 1);
-						}
-					}
 				}
 				else if (x->f_fft[i].f_ramp == x->f_arraySize)
 				{

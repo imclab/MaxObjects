@@ -21,7 +21,7 @@
 
 ### MaxFFT :
 
-* **pg.analyser~** : Estimation of the centroid, the spread, the skewness and the kurtosis.
+* **pg.moment~** : Estimation of the centroid, the spread, the skewness and the kurtosis.
 * **pg.energy~** : Estimation of the minimum, the average, the maximum and the sum of the amplitude.
 * **pg.descriptor~** : Sonogram and analysis of a buffer~ (beta).
 * **pg.mel~** : Spectrum above the mel scale and MFCCs.

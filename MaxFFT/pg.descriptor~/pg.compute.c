@@ -114,7 +114,7 @@ void descriptor_energy(t_buf *x, int channel, int frame)
 	x->f_ener.f_maxPow[channel][frame] = -300.;
 	x->f_ener.f_sumPow[channel][frame] = 0.;
 
-	for(i = 0; i < x->f_arraySize; i++)
+	for(i = 1; i < x->f_arraySize; i++)
 	{
 		value = x->f_sono.f_sonogramRms[channel][frame][i];
 		x->f_ener.f_sumRms[channel][frame] += value;
@@ -151,7 +151,7 @@ void descriptor_moment(t_buf *x, int channel, int frame, double frequencyBand)
 	x->f_mome.f_skewnessPow[channel][frame] = 0.;
 	x->f_mome.f_kurtosisPow[channel][frame] = 0.;
 
-	for(i = 0; i < x->f_arraySize; i++)
+	for(i = 1; i < x->f_arraySize; i++)
 	{
 		frequency = (double)i * frequencyBand;
 
@@ -162,7 +162,7 @@ void descriptor_moment(t_buf *x, int channel, int frame, double frequencyBand)
 		x->f_mome.f_centroidPow[channel][frame]	+= value * frequency;
 	}
 
-	for(i = 0; i < x->f_arraySize; i++)
+	for(i = 1; i < x->f_arraySize; i++)
 	{
 		frequency = (double)i * frequencyBand;
 
@@ -184,8 +184,9 @@ void descriptor_gradient(t_buf *x, int channel, int frame, double frequencyBand,
 {
 	int i;
 	double sumFreqSim, sumFreqCar;
-	double sumAmp, sumFreqRms, sumFreqPow, value ;
+	double sumAmp, sumAmpPow, sumFreqRms, sumFreqPow, value ;
 
+	/* Slope */
 	sumFreqRms = sumFreqPow = sumFreqSim = sumFreqCar = 0.;
 	for(i = 0; i < x->f_arraySize; i++)
 	{
@@ -217,5 +218,25 @@ void descriptor_gradient(t_buf *x, int channel, int frame, double frequencyBand,
 	x->f_grad.f_slopePow[channel][frame] /= sumAmp;
 	x->f_grad.f_slopePow[channel][frame] *= sr / 4.;
 
-	// Need Gradient 
+	/* Decrease */
+	sumFreqRms = sumFreqPow = 0.;
+	for(i = 2; i < x->f_arraySize; i++)
+	{
+		value = x->f_sono.f_sonogramRms[channel][frame][i];
+		sumFreqRms += value * (double)(i - 1);
+		sumAmp	+= value - x->f_sono.f_sonogramRms[channel][frame][1];
+
+		value = x->f_sono.f_sonogramPow[channel][frame][i];
+		sumFreqPow  += value * (double)(i - 1);
+		sumAmpPow += value - x->f_sono.f_sonogramRms[channel][frame][1];
+	}
+	if(sumFreqRms != 0.)
+		x->f_grad.f_decreRms[channel][frame] = sumAmp / sumFreqRms;
+	else 
+		x->f_grad.f_decreRms[channel][frame] = 0.;
+	if(sumFreqPow != 0.)
+		x->f_grad.f_decrePow[channel][frame] = sumAmpPow / sumFreqPow;
+	else 
+		x->f_grad.f_decrePow[channel][frame] = 0.;
+
 }

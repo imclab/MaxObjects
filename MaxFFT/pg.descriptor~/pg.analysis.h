@@ -52,11 +52,13 @@ typedef struct _moment
 	double		*f_deviatioRms[4];
 	double		*f_skewnessRms[4];
 	double		*f_kurtosisRms[4];
+	double		*f_rollofffRms[4];
 
 	double		*f_centroidPow[4];
 	double		*f_deviatioPow[4];
 	double		*f_skewnessPow[4];
 	double		*f_kurtosisPow[4];
+	double		*f_rollofffPow[4];
 }t_moment;
 
 typedef struct _gradient
