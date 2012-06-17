@@ -43,7 +43,7 @@ void delay_resize(t_delay *c, double sr)
 		c->f_lenght += 64;
 		if (c->f_lenght < 1)
 			c->f_lenght = 1;
-		c->f_vector = (double *)getbytes(( c->f_lenght + XTRASAMPS) * sizeof(double));
+		c->f_vector = (double *)getbytes((c->f_lenght + XTRASAMPS) * sizeof(double));
 		c->f_phase = XTRASAMPS;
 	}
 }
@@ -99,7 +99,7 @@ double delay_read_sample(t_delay *c, int delay)
 
 void delay_free(t_delay *c)
 {
-    freebytes((double *)c->f_vector,	(c->f_lenght + XTRASAMPS) * sizeof(double));
+    freebytes(c->f_vector, (c->f_lenght + XTRASAMPS) * sizeof(double));
 }
 
 

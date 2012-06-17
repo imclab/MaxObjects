@@ -29,14 +29,21 @@
 typedef struct  _alechinsky 
 {
 	t_pxobject	f_ob;
+	
+	void		*f_proxy;
+	long		f_inlet;
+
 	double		f_sr;
 	t_delay		f_delay;
-	double		f_value;
+
 	double		*f_windowOne;
 	double		*f_delayOne;
 	double		*f_windowTwo;
 	double		*f_delayTwo;
-	int			f_incOne;
+
+	double		f_value;
+	double		f_inc;
+	double		f_grain;
 	double		f_factor;
 } t_alechinsky;
 
@@ -45,12 +52,17 @@ void *alechinsky_class;
 void *alechinsky_new(t_symbol *s, int argc, t_atom *argv);
 void alechinsky_free(t_alechinsky *x);
 void alechinsky_assist(t_alechinsky *x, void *b, long m, long a, char *s);
-void alechinsky_tukey(t_alechinsky *x, double factor);
+
 
 void alechinsky_dsp64(t_alechinsky *x, t_object *dsp64, short *count, double samplerate, long maxvectorsize, long flags);
 void alechinsky_perform64(t_alechinsky *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam);
 
+void alechinsky_int(t_alechinsky *x, long n);
+void alechinsky_float(t_alechinsky *x, double n);
 t_max_err factor_set(t_alechinsky *x, t_object *attr, long argc, t_atom *argv);
+void alechinsky_tukey(t_alechinsky *x, double factor);
+t_max_err delay_set(t_alechinsky *x, t_object *attr, long argc, t_atom *argv);
+void alechinsky_delay(t_alechinsky *x, double delay);
 
 void alechinsky_dsp(t_alechinsky *x, t_signal **sp, short *count);
 t_int *alechinsky_perform(t_int *w);
