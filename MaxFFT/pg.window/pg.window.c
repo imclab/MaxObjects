@@ -243,7 +243,7 @@ void window_poisson(t_window *x)
     }
 }
 
-void window_turkey(t_window *x)
+void window_tukey(t_window *x)
 {
 	int i, size;
 	double j, alpha;
@@ -318,7 +318,7 @@ void window_Selector(t_window *x)
 				window_hamming(x);
 				break;
 			case 3:
-				window_turkey(x);
+				window_tukey(x);
 				break;
 			case 4:
 				window_cosinus(x);

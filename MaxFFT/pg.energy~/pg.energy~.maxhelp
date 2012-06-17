@@ -78,20 +78,6 @@
 						"tags" : "",
 						"boxes" : [ 							{
 								"box" : 								{
-									"fontname" : "Arial",
-									"fontsize" : 12.0,
-									"id" : "obj-27",
-									"maxclass" : "newobj",
-									"numinlets" : 4,
-									"numoutlets" : 4,
-									"outlettype" : [ "bang", "bang", "bang", "" ],
-									"patching_rect" : [ 450.0, 60.0, 59.5, 20.0 ],
-									"text" : "sel 0 1 2"
-								}
-
-							}
-, 							{
-								"box" : 								{
 									"embed" : 1,
 									"id" : "obj-14",
 									"maxclass" : "bpatcher",
@@ -584,6 +570,20 @@
 ,
 									"patching_rect" : [ 0.0, 0.0, 330.0, 180.0 ],
 									"varname" : "rmsView"
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"fontname" : "Arial",
+									"fontsize" : 12.0,
+									"id" : "obj-27",
+									"maxclass" : "newobj",
+									"numinlets" : 4,
+									"numoutlets" : 4,
+									"outlettype" : [ "bang", "bang", "bang", "" ],
+									"patching_rect" : [ 450.0, 60.0, 59.5, 20.0 ],
+									"text" : "sel 0 1 2"
 								}
 
 							}
@@ -1898,16 +1898,16 @@
 ,
 									"patching_rect" : [ 300.0, -30.0, 74.0, 20.0 ],
 									"saved_object_attributes" : 									{
-										"default_fontsize" : 12.0,
-										"description" : "",
-										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
+										"default_fontname" : "Arial",
 										"tags" : "",
-										"default_fontname" : "Arial"
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial"
 									}
 ,
 									"text" : "p average 5"
@@ -2147,16 +2147,16 @@
 ,
 									"patching_rect" : [ 217.0, -30.0, 74.0, 20.0 ],
 									"saved_object_attributes" : 									{
-										"default_fontsize" : 12.0,
-										"description" : "",
-										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
+										"default_fontname" : "Arial",
 										"tags" : "",
-										"default_fontname" : "Arial"
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial"
 									}
 ,
 									"text" : "p average 5"
@@ -2420,16 +2420,16 @@
 ,
 									"patching_rect" : [ 128.0, -30.0, 74.0, 20.0 ],
 									"saved_object_attributes" : 									{
-										"default_fontsize" : 12.0,
-										"description" : "",
-										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
+										"default_fontname" : "Arial",
 										"tags" : "",
-										"default_fontname" : "Arial"
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial"
 									}
 ,
 									"text" : "p average 5"
@@ -2669,16 +2669,16 @@
 ,
 									"patching_rect" : [ 45.0, -30.0, 74.0, 20.0 ],
 									"saved_object_attributes" : 									{
-										"default_fontsize" : 12.0,
-										"description" : "",
-										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
+										"default_fontname" : "Arial",
 										"tags" : "",
-										"default_fontname" : "Arial"
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial"
 									}
 ,
 									"text" : "p average 5"
@@ -3041,7 +3041,7 @@
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"id" : "obj-77",
-					"items" : [ "Square", ",", "Hanning", ",", "Hamming", ",", "Turkey", ",", "Cosinus", ",", "Lancsoz", ",", "Triangular", ",", "Gaussian", ",", "Bartlett-Hann", ",", "Blackman", ",", "Kaizer", ",", "Nuttall", ",", "Blackman-Harris", ",", "Blackman-Nuttall", ",", "Flat-Top", ",", "Poisson" ],
+					"items" : [ "Square", ",", "Hanning", ",", "Hamming", ",", "Tukey", ",", "Cosinus", ",", "Lancsoz", ",", "Triangular", ",", "Gaussian", ",", "Bartlett-Hann", ",", "Blackman", ",", "Kaizer", ",", "Nuttall", ",", "Blackman-Harris", ",", "Blackman-Nuttall", ",", "Flat-Top", ",", "Poisson" ],
 					"maxclass" : "umenu",
 					"numinlets" : 1,
 					"numoutlets" : 3,
@@ -3408,16 +3408,16 @@
 ,
 					"patching_rect" : [ 463.625, 140.0, 97.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"default_fontsize" : 12.0,
-						"description" : "",
-						"fontname" : "Arial",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
 						"globalpatchername" : "",
 						"digest" : "",
+						"default_fontname" : "Arial",
 						"tags" : "",
-						"default_fontname" : "Arial"
+						"default_fontsize" : 12.0,
+						"description" : "",
+						"fontname" : "Arial"
 					}
 ,
 					"text" : "p audioPanic 32"
@@ -3642,16 +3642,16 @@
 ,
 													"patching_rect" : [ 75.0, 135.0, 47.0, 20.0 ],
 													"saved_object_attributes" : 													{
-														"default_fontsize" : 12.0,
-														"description" : "",
-														"fontname" : "Arial",
 														"fontface" : 0,
 														"default_fontface" : 0,
 														"fontsize" : 12.0,
 														"globalpatchername" : "",
 														"digest" : "",
+														"default_fontname" : "Arial",
 														"tags" : "",
-														"default_fontname" : "Arial"
+														"default_fontsize" : 12.0,
+														"description" : "",
+														"fontname" : "Arial"
 													}
 ,
 													"text" : "p noisy"
@@ -4961,8 +4961,7 @@
 					"outlettype" : [ "signal", "signal", "signal", "signal" ],
 					"patching_rect" : [ 75.0, 240.0, 241.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"window" : 1,
-						"amplitude" : 2
+						"window" : 1
 					}
 ,
 					"text" : "pg.energy~ 2048 8 1"

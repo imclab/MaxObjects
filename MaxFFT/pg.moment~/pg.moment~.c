@@ -31,7 +31,7 @@ int main()
 
 	CLASS_ATTR_LONG				(c, "window", 0, t_moment, f_winMode);
 	CLASS_ATTR_LABEL			(c, "window", 0, "Window function");
-	CLASS_ATTR_ENUMINDEX		(c, "window", 0, "Square \" \"Hanning \" \"Hamming \" \"Turkey \" \"Cosinus \" \"Lanczos \" \"Triangular \" \"Gaussian \" \"Bartlett-Hann \" \"Blackman \" \"Kaiser \" \"Nuttall \" \"Blackman-Harris \" \"Blackman-Nuttall \" \"Flat-Top \" \"Poisson");
+	CLASS_ATTR_ENUMINDEX		(c, "window", 0, "Square \" \"Hanning \" \"Hamming \" \"Tukey \" \"Cosinus \" \"Lanczos \" \"Triangular \" \"Gaussian \" \"Bartlett-Hann \" \"Blackman \" \"Kaiser \" \"Nuttall \" \"Blackman-Harris \" \"Blackman-Nuttall \" \"Flat-Top \" \"Poisson");
 	CLASS_ATTR_ACCESSORS		(c, "window", NULL, mode_set);
 	CLASS_ATTR_DEFAULT			(c, "window", 0, "0");
 	CLASS_ATTR_SAVE				(c, "window", 1);

@@ -1,4 +1,3 @@
-
 /*
 * Copyright (C) 2012 Pierre Guillot, Universite Paris 8
 * 
@@ -38,7 +37,7 @@ void window_square(t_window *x);
 void window_hamming(t_window *x);
 void window_hanning(t_window *x);
 void window_blackman(t_window *x);
-void window_turkey(t_window *x);
+void window_tukey(t_window *x);
 void window_cosinus(t_window *x);
 void window_lanczos(t_window *x);
 void window_triangular(t_window *x);

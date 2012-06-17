@@ -1,0 +1,7 @@
+;pg.alechinsky~.def
+
+LIBRARY pg.alechinsky~.mxe
+
+EXPORTS
+	main
+

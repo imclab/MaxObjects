@@ -49,8 +49,8 @@ void draw_spectrogram(t_descriptor *x, t_object *view, t_rect *rect)
 					x2 = width * ratioWidth;
 					y2 = height* ratioHeight;
 
-					red = 1. - (x->f_buf.f_sonogram[channel][(int)i][(int)j] / -90.);
-					green = x->f_buf.f_sonogram[channel][(int)i][(int)j] / -90.;
+					red = 1. - (x->f_buf.f_sono.f_sonogramEne[channel][(int)i][(int)j] / -90.);
+					green = x->f_buf.f_sono.f_sonogramEne[channel][(int)i][(int)j] / -90.;
 					jgraphics_set_source_rgba(g, red, green, 0., 1.);
 					jgraphics_rectangle_fill_fast(g, x1, y1, x2, y2);
 
@@ -85,8 +85,8 @@ void draw_centroid(t_descriptor *x, t_object *view, t_rect *rect)
 				x1 = i * ratioWidth;
 				x2 = (i + width) * ratioWidth;
 
-				y1 = height - (x->f_buf.f_centroid[channel][(int)i] / (double)x->f_buf.f_buffer->b_sr) * height;
-				y2 = height - (x->f_buf.f_centroid[channel][(int)(i + width)] / (double)x->f_buf.f_buffer->b_sr) * height;
+				y1 = height - (x->f_buf.f_mome.f_centroidRms[channel][(int)i] / (double)x->f_buf.f_buffer->b_sr) * height;
+				y2 = height - (x->f_buf.f_mome.f_centroidRms[channel][(int)(i + width)] / (double)x->f_buf.f_buffer->b_sr) * height;
 				jgraphics_line_draw_fast(g, x1, y1, x2, y2, 1.);
 			}
 		}
@@ -118,12 +118,12 @@ void draw_spread(t_descriptor *x, t_object *view, t_rect *rect)
 				x1 = i * ratioWidth;
 				x2 = (i + width) * ratioWidth;
 
-				y1 = height - ((x->f_buf.f_centroid[channel][(int)i] + x->f_buf.f_spread[channel][(int)i]) / (double)x->f_buf.f_buffer->b_sr) * height;
-				y2 = height - ((x->f_buf.f_centroid[channel][(int)(i + width)] + x->f_buf.f_spread[channel][(int)(i + width)]) / (double)x->f_buf.f_buffer->b_sr) * height;
+				y1 = height - ((x->f_buf.f_mome.f_centroidRms[channel][(int)i] + x->f_buf.f_mome.f_deviatioRms[channel][(int)i]) / (double)x->f_buf.f_buffer->b_sr) * height;
+				y2 = height - ((x->f_buf.f_mome.f_centroidRms[channel][(int)(i + width)] + x->f_buf.f_mome.f_deviatioRms[channel][(int)(i + width)]) / (double)x->f_buf.f_buffer->b_sr) * height;
 				jgraphics_line_draw_fast(g, x1, y1, x2, y2, 1.);
 
-				y1 = height - ((x->f_buf.f_centroid[channel][(int)i] - x->f_buf.f_spread[channel][(int)i]) / (double)x->f_buf.f_buffer->b_sr) * height;
-				y2 = height - ((x->f_buf.f_centroid[channel][(int)(i + width)] - x->f_buf.f_spread[channel][(int)(i + width)]) / (double)x->f_buf.f_buffer->b_sr) * height;
+				y1 = height - ((x->f_buf.f_mome.f_centroidRms[channel][(int)i] - x->f_buf.f_mome.f_deviatioRms[channel][(int)i]) / (double)x->f_buf.f_buffer->b_sr) * height;
+				y2 = height - ((x->f_buf.f_mome.f_centroidRms[channel][(int)(i + width)] - x->f_buf.f_mome.f_deviatioRms[channel][(int)(i + width)]) / (double)x->f_buf.f_buffer->b_sr) * height;
 				if(y1 <= height) y1 = height;
 				if(y2 <= height) y2 = height;
 				jgraphics_line_draw_fast(g, x1, y1, x2, y2, 1.);
@@ -157,14 +157,14 @@ void draw_skewness(t_descriptor *x, t_object *view, t_rect *rect)
 				x1 = i * ratioWidth;
 				x2 = (i + width) * ratioWidth;
 
-				value = x->f_buf.f_skewness[channel][(int)i];
+				value = x->f_buf.f_mome.f_skewnessRms[channel][(int)i];
 				if(value > 10.) value = 10.;
 				if(value < -10.) value = -10.;
 				value += 10.;
 				value /= 20.;
 				y1 = rect->height - x->f_offset - (value * height);
 
-				value = x->f_buf.f_skewness[channel][(int)(i + width)];
+				value = x->f_buf.f_mome.f_skewnessRms[channel][(int)(i + width)];
 				if(value > 10.) value = 10.;
 				if(value < -10.) value = -10.;
 				value += 10.;
@@ -206,12 +206,12 @@ void draw_kurtosis(t_descriptor *x, t_object *view, t_rect *rect)
 				x1 = i * ratioWidth;
 				x2 = (i + width) * ratioWidth;
 
-				value = x->f_buf.f_kurtosis[channel][(int)i];
+				value = x->f_buf.f_mome.f_kurtosisRms[channel][(int)i];
 				if(value > 100.) value = 100.;
 				value /= 100.;
 				y1 = rect->height - x->f_offset - (value * height);
 
-				value = x->f_buf.f_kurtosis[channel][(int)(i + width)];
+				value = x->f_buf.f_mome.f_kurtosisRms[channel][(int)(i + width)];
 				if(value > 100.) value = 100.;
 				value /= 100.;
 				y2 = rect->height - x->f_offset - (value * height);
@@ -251,31 +251,31 @@ void draw_amplitude(t_descriptor *x, t_object *view, t_rect *rect)
 			{
 				x1 = i * ratioWidth ;
 				x2 = (i + width) * ratioWidth;
-				value = x->f_buf.f_minAmp[channel][(int)i];
+				value = x->f_buf.f_ener.f_minEne[channel][(int)i];
 				value /= 90.;
 				value += 1.;
 				y1 = rect->height - (value * height);
-				value = x->f_buf.f_minAmp[channel][(int)(i + width)];
+				value = x->f_buf.f_ener.f_minEne[channel][(int)(i + width)];
 				value /= 90.;
 				value += 1.;
 				y2 = rect->height - (value * height);
 				jgraphics_line_draw_fast(g, x1, y1, x2, y2, 1.);
 
-				value = x->f_buf.f_aveAmp[channel][(int)i];
+				value = x->f_buf.f_ener.f_aveEne[channel][(int)i];
 				value /= 90.;
 				value += 1.;
 				y1 = rect->height - (value * height);
-				value = x->f_buf.f_aveAmp[channel][(int)(i + width)];
+				value = x->f_buf.f_ener.f_aveEne[channel][(int)(i + width)];
 				value /= 90.;
 				value += 1.;
 				y2 = rect->height - (value * height);
 				jgraphics_line_draw_fast(g, x1, y1, x2, y2, 1.);
 
-				value = x->f_buf.f_maxAmp[channel][(int)i];
+				value = x->f_buf.f_ener.f_maxEne[channel][(int)i];
 				value /= 90.;
 				value += 1.;
 				y1 = rect->height - (value * height);
-				value = x->f_buf.f_maxAmp[channel][(int)(i + width)];
+				value = x->f_buf.f_ener.f_maxEne[channel][(int)(i + width)];
 				value /= 90.;
 				value += 1.;
 				y2 = rect->height - (value * height);

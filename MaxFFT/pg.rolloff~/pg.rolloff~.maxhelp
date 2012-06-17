@@ -38,7 +38,6 @@
 					"patching_rect" : [ 75.0, 274.5, 110.0, 20.0 ],
 					"saved_object_attributes" : 					{
 						"window" : 1,
-						"rolloff" : 0.9974,
 						"amplitude" : 1
 					}
 ,
@@ -335,16 +334,16 @@
 ,
 									"patching_rect" : [ 50.0, 100.0, 42.0, 20.0 ],
 									"saved_object_attributes" : 									{
-										"default_fontsize" : 12.0,
-										"description" : "",
-										"fontname" : "Arial",
 										"fontface" : 0,
 										"default_fontface" : 0,
 										"fontsize" : 12.0,
 										"globalpatchername" : "",
 										"digest" : "",
+										"default_fontname" : "Arial",
 										"tags" : "",
-										"default_fontname" : "Arial"
+										"default_fontsize" : 12.0,
+										"description" : "",
+										"fontname" : "Arial"
 									}
 ,
 									"text" : "p filter"
@@ -399,16 +398,16 @@
 ,
 					"patching_rect" : [ 120.0, 390.0, 59.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"default_fontsize" : 12.0,
-						"description" : "",
-						"fontname" : "Arial",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
 						"globalpatchername" : "",
 						"digest" : "",
+						"default_fontname" : "Arial",
 						"tags" : "",
-						"default_fontname" : "Arial"
+						"default_fontsize" : 12.0,
+						"description" : "",
+						"fontname" : "Arial"
 					}
 ,
 					"text" : "p display"
@@ -580,7 +579,7 @@
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"id" : "obj-77",
-					"items" : [ "Square", ",", "Hanning", ",", "Hamming", ",", "Turkey", ",", "Cosinus", ",", "Lancsoz", ",", "Triangular", ",", "Gaussian", ",", "Bartlett-Hann", ",", "Blackman", ",", "Kaizer", ",", "Nuttall", ",", "Blackman-Harris", ",", "Blackman-Nuttall", ",", "Flat-Top", ",", "Poisson" ],
+					"items" : [ "Square", ",", "Hanning", ",", "Hamming", ",", "Tukey", ",", "Cosinus", ",", "Lancsoz", ",", "Triangular", ",", "Gaussian", ",", "Bartlett-Hann", ",", "Blackman", ",", "Kaizer", ",", "Nuttall", ",", "Blackman-Harris", ",", "Blackman-Nuttall", ",", "Flat-Top", ",", "Poisson" ],
 					"maxclass" : "umenu",
 					"numinlets" : 1,
 					"numoutlets" : 3,
@@ -947,16 +946,16 @@
 ,
 					"patching_rect" : [ 467.625, 129.0, 97.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"default_fontsize" : 12.0,
-						"description" : "",
-						"fontname" : "Arial",
 						"fontface" : 0,
 						"default_fontface" : 0,
 						"fontsize" : 12.0,
 						"globalpatchername" : "",
 						"digest" : "",
+						"default_fontname" : "Arial",
 						"tags" : "",
-						"default_fontname" : "Arial"
+						"default_fontsize" : 12.0,
+						"description" : "",
+						"fontname" : "Arial"
 					}
 ,
 					"text" : "p audioPanic 32"
@@ -1181,16 +1180,16 @@
 ,
 													"patching_rect" : [ 75.0, 135.0, 47.0, 20.0 ],
 													"saved_object_attributes" : 													{
-														"default_fontsize" : 12.0,
-														"description" : "",
-														"fontname" : "Arial",
 														"fontface" : 0,
 														"default_fontface" : 0,
 														"fontsize" : 12.0,
 														"globalpatchername" : "",
 														"digest" : "",
+														"default_fontname" : "Arial",
 														"tags" : "",
-														"default_fontname" : "Arial"
+														"default_fontsize" : 12.0,
+														"description" : "",
+														"fontname" : "Arial"
 													}
 ,
 													"text" : "p noisy"

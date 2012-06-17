@@ -20,23 +20,24 @@
 
 #include "ext.h"
 #include "ext_obex.h"
-#include "buffer.h"
-#include "ext_atomic.h"
-#include "ext_obex.h"
 #include "z_dsp.h"
+     
+#define XTRASAMPS	4
 
-typedef struct _buf
+typedef struct delay
 {
-	t_symbol	*f_name;
-	t_buffer	*f_buffer;
+    int			f_lenght;
+	double		f_lenghtMs;
+	int			f_phase;
+	double		f_sr;
+    double		*f_vector;
+	double		f_alpha;
+} t_delay;
 
-	long		f_waveformSize;
-	double		*f_waveform[4];
-	long		f_spectrogramSize;
-	double		*f_spectrogram[4];
-} t_buf;
+void delay_setup(t_delay *c, double msec);
+void delay_resize(t_delay *c, double sr);
+void delay_write(t_delay *c, double sample);
+double delay_read_ms(t_delay *c, double delay);
+double delay_read_sample(t_delay *c, int delay);
+void delay_free(t_delay *c);
 
-void buffer_init(t_buf *x);
-void buffer_set(t_buf *x, t_symbol *name, long arraySize);
-void waveform_compute(t_buf *x);
-void buffer_free(t_buf *x);

@@ -5,7 +5,7 @@
 // /*                         POLLOCK	                           */ //
 // /*                                                              */ //
 // /* Auteur: Pierre GUILLOT                                       */ //
-// /*         Etudiant Universite Paris 8						   */ //
+// /*         Universite Paris 8									*/ //
 // /*                                                              */ //
 // /*                                                              */ //
 // /*                                                              */ //

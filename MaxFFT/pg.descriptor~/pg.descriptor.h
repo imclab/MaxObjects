@@ -25,12 +25,59 @@
 #include "jpatcher_syms.h"
 #include "ext_dictionary.h"
 #include "ext_globalsymbol.h"
-#include "pg.analysis.h"
-#include "z_dsp.h"
 #include "buffer.h"
-#include "../pg.window/pg.window.h"
 #include <fftw3.h>
+#include "../pg.window/pg.window.h"
 
+
+typedef struct _sonogram
+{
+	double		**f_sonogramRms[4];
+	double		**f_sonogramPow[4];
+	double		**f_sonogramEne[4];
+} t_sonogram;
+
+typedef struct _energy
+{
+	double		*f_minRms[4];
+	double		*f_aveRms[4];
+	double		*f_maxRms[4];
+	double		*f_sumRms[4];
+
+	double		*f_minPow[4];
+	double		*f_avePow[4];
+	double		*f_maxPow[4];
+	double		*f_sumPow[4];
+
+	double		*f_minEne[4];
+	double		*f_aveEne[4];
+	double		*f_maxEne[4];
+	double		*f_sumEne[4];
+} t_energy;
+
+typedef struct _moment
+{
+	double		*f_centroidRms[4];
+	double		*f_deviatioRms[4];
+	double		*f_skewnessRms[4];
+	double		*f_kurtosisRms[4];
+	double		*f_rollofffRms[4];
+
+	double		*f_centroidPow[4];
+	double		*f_deviatioPow[4];
+	double		*f_skewnessPow[4];
+	double		*f_kurtosisPow[4];
+	double		*f_rollofffPow[4];
+} t_moment;
+
+typedef struct _gradient
+{
+	double		*f_slopeRms[4];
+	double		*f_decreRms[4];
+
+	double		*f_slopePow[4];
+	double		*f_decrePow[4];
+} t_gradient;
 
 typedef struct _buf
 {
@@ -52,6 +99,7 @@ typedef struct _buf
 	t_energy	f_ener;
 	t_moment	f_mome;
 	t_gradient	f_grad;
+
 } t_buf;
 
 typedef struct  _descriptor 
@@ -146,3 +194,7 @@ void descriptor_mousewheel(t_descriptor *x, t_object *patcherview, t_pt pt, long
 
 void descriptor_post(t_descriptor *x, double posX,  t_object *view);
 void descriptor_postAve(t_descriptor *x, double posX1, double posX2,  t_object *view);
+
+void buffer_init(t_buf *x);
+void waveform_compute(t_buf *x);
+void buffer_free(t_buf *x);

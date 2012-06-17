@@ -148,8 +148,8 @@ void descriptor_post(t_descriptor *x, double posX,  t_object *view)
 	t_atom time[1];
 	t_rect rect;
 	t_atom *spectrum;
-	t_atom analysis[4];
-	t_atom amplitude[3];
+	t_atom analysis[5];
+	t_atom amplitude[4];
 	jbox_get_rect_for_view((t_object *)x, view, &rect);
 
 	if(x->f_buf.f_buffer != NULL)
@@ -167,17 +167,19 @@ void descriptor_post(t_descriptor *x, double posX,  t_object *view)
 		atom_setfloat(time, value);
 		for(i = 0; i < x->f_buf.f_arraySize; i++)
 		{
-			atom_setfloat(spectrum + i, (float)x->f_buf.f_sonogram[channel][index][i]);
+			atom_setfloat(spectrum + i, (float)x->f_buf.f_sono.f_sonogramEne[channel][index][i]);
 		}
 
-		atom_setfloat(analysis, x->f_buf.f_centroid[channel][index]);
-		atom_setfloat(analysis + 1, x->f_buf.f_spread[channel][index]);
-		atom_setfloat(analysis + 2, x->f_buf.f_skewness[channel][index]);
-		atom_setfloat(analysis + 3, x->f_buf.f_kurtosis[channel][index]);
+		atom_setfloat(analysis, x->f_buf.f_mome.f_centroidRms[channel][index]);
+		atom_setfloat(analysis + 1, x->f_buf.f_mome.f_deviatioRms[channel][index]);
+		atom_setfloat(analysis + 2, x->f_buf.f_mome.f_skewnessRms[channel][index]);
+		atom_setfloat(analysis + 3, x->f_buf.f_mome.f_kurtosisRms[channel][index]);
+		atom_setfloat(analysis + 4, x->f_buf.f_mome.f_rollofffRms[channel][index]);
 
-		atom_setfloat(amplitude, x->f_buf.f_minAmp[channel][index]);
-		atom_setfloat(amplitude + 1, x->f_buf.f_maxAmp[channel][index]);
-		atom_setfloat(amplitude + 2, x->f_buf.f_aveAmp[channel][index]);
+		atom_setfloat(amplitude, x->f_buf.f_ener.f_minEne[channel][index]);
+		atom_setfloat(amplitude + 1, x->f_buf.f_ener.f_aveEne[channel][index]);
+		atom_setfloat(amplitude + 2, x->f_buf.f_ener.f_maxEne[channel][index]);
+		atom_setfloat(amplitude + 2, x->f_buf.f_ener.f_sumEne[channel][index]);
 
 		outlet_list(x->j_out1, 0, 1, time);
 		outlet_list(x->j_out2, 0, x->f_buf.f_arraySize, spectrum);
@@ -189,7 +191,7 @@ void descriptor_post(t_descriptor *x, double posX,  t_object *view)
 }
 
 void descriptor_postAve(t_descriptor *x, double posX1, double posX2,  t_object *view)
-{
+{ /*
 	int i, j, index1, index2, channel;
 	double value, minAmp, aveAmp, maxAmp, centroid ,spread, skewness, kurtosis, ratio;
 	t_atom	time[2];
@@ -281,5 +283,5 @@ void descriptor_postAve(t_descriptor *x, double posX1, double posX2,  t_object *
 			freebytes(spectrumAve, x->f_buf.f_arraySize * sizeof(double));
 		}
 	}
-	
+	*/
 }
