@@ -34,7 +34,7 @@ typedef struct delay
 	double		f_alpha;
 } t_delay;
 
-void delay_setup(t_delay *c, double msec);
+void delay_setup(t_delay *c, double msec, double sr);
 void delay_resize(t_delay *c, double sr);
 void delay_write(t_delay *c, double sample);
 double delay_read_ms(t_delay *c, double delay);

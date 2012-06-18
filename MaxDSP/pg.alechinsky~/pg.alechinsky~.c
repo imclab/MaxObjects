@@ -28,22 +28,8 @@ int main()
 	class_addmethod(c, (method)alechinsky_dsp64,		"dsp64",		A_CANT,	0);
 	//class_addmethod(c, (method)alechinsky_dsp,		"dsp",			A_CANT,	0);
 	class_addmethod(c, (method)alechinsky_assist,		"assist",		A_CANT,	0);
-
-	CLASS_ATTR_DOUBLE			(c, "delay", 0, t_alechinsky, f_value);
-	CLASS_ATTR_LABEL			(c, "delay", 0, "Delay Time");
-	CLASS_ATTR_DEFAULT			(c, "delay", 0, "2000");
-	CLASS_ATTR_ACCESSORS		(c, "delay", NULL, delay_set);
-	CLASS_ATTR_SAVE				(c, "delay", 1);
-	CLASS_ATTR_FILTER_MIN		(c, "delay", 1);
-	CLASS_ATTR_ORDER			(c, "delay", 0, "1");
-
-	CLASS_ATTR_DOUBLE			(c, "tukey", 0, t_alechinsky, f_factor);
-	CLASS_ATTR_LABEL			(c, "tukey", 0, "Tukey factor");
-	CLASS_ATTR_ACCESSORS		(c, "tukey", NULL, factor_set);
-	CLASS_ATTR_DEFAULT			(c, "tukey", 0, "0.5");
-	CLASS_ATTR_SAVE				(c, "tukey", 1);
-	CLASS_ATTR_FILTER_CLIP		(c, "tukey", 0, 1);
-	CLASS_ATTR_ORDER			(c, "tukey", 0, "2");
+	class_addmethod(c, (method)alechinsky_int,			"int",			A_LONG,	0);
+	class_addmethod(c, (method)alechinsky_float,		"float",		A_FLOAT,0);
 
 	class_dspinit(c);
 	class_register(CLASS_BOX, c);
@@ -58,28 +44,36 @@ int main()
 void *alechinsky_new(t_symbol *s, int argc, t_atom *argv)
 {
 	int i;
+	double	maxDelay, initDelay, factor;
+	
 	t_alechinsky *x = (t_alechinsky *)object_alloc((t_class *)alechinsky_class);
 
-	/* Sampling Rate initialization **************/
 	x->f_sr = sys_getsr();
 
-	/* Windows Size Initialization **************/
-	x->f_value = 0; 
-	if( argv[0].a_type == A_LONG ) x->f_value = (int)(argv[0].a_w.w_long);
-	if (x->f_value < 1)
-	{
-		x->f_value = 2000.;
-	}
+	maxDelay = 10000.;
+	if( argv[0].a_type == A_LONG ) maxDelay = (double)(argv[0].a_w.w_long) * 2.;
+	else if( argv[0].a_type == A_FLOAT ) maxDelay = (double)(argv[0].a_w.w_float) * 2.;
+	if (maxDelay < 1.)
+		maxDelay = 10000.;
+	delay_setup(&x->f_delay, maxDelay, x->f_sr);
+
+	initDelay = 2500.;
+	if( argv[1].a_type == A_LONG ) initDelay = (double)(argv[1].a_w.w_long);
+	else if( argv[1].a_type == A_FLOAT ) initDelay = (double)(argv[1].a_w.w_float);
+	alechinsky_delay(x, initDelay);
+
+	x->f_window = (double *)getbytes((WINSIZE + 1) * sizeof(double));
+	x->f_delayVec = (double *)getbytes((WINSIZE + 1) * sizeof(double));
+
+	factor = 0.2;
+	if( argv[2].a_type == A_LONG ) factor = (double)(argv[2].a_w.w_long);
+	else if( argv[2].a_type == A_FLOAT ) factor = (double)(argv[2].a_w.w_float);
+	alechinsky_tukey(x, factor);
+
 	x->f_inc = 0.;
-
-	x->f_windowOne = (double *)getbytes((WINSIZE + 1) * sizeof(double));
-	x->f_delayOne = (double *)getbytes((WINSIZE + 1) * sizeof(double));
-	x->f_windowTwo = (double *)getbytes((WINSIZE + 1) * sizeof(double));
-	x->f_delayTwo = (double *)getbytes((WINSIZE + 1) * sizeof(double));
-	alechinsky_tukey(x, 0.2);
-
-	delay_setup(&x->f_delay, 10000.);
-
+	
+	x->f_proxy = proxy_new((t_object *)x, 2, &x->f_inlet);
+	x->f_proxy = proxy_new((t_object *)x, 1, &x->f_inlet);
 	dsp_setup((t_pxobject *)x, 1);
 	outlet_new((t_pxobject *)x, "signal");
 	
@@ -88,28 +82,42 @@ void *alechinsky_new(t_symbol *s, int argc, t_atom *argv)
 
 void alechinsky_dsp64(t_alechinsky *x, t_object *dsp64, short *count, double samplerate, long maxvectorsize, long flags)
 {
-	int i;
 	x->f_sr = samplerate;
 	delay_resize(&x->f_delay, x->f_sr);
+
 	object_method(dsp64, gensym("dsp_add64"), x, alechinsky_perform64, 0, NULL);
 }
 
 void alechinsky_perform64(t_alechinsky *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam)
 {
-	int i;
+	int i, index, indexTwo;
 	double *in = ins[0];
 	double *out = outs[0];
-	double sigDelayOne, sigDelayTwo;
+	double sigDelayOne, sigDelayTwo, ratio;
+	double delayOne, delayTwo;
+	double windoOne, windoTwo;
 
 	for(i = 0; i < sampleframes; i++)
 	{
 		delay_write(&x->f_delay, in[i]);
 
-		sigDelayOne = delay_read_ms(&x->f_delay, x->f_delayOne[(int)x->f_inc] * x->f_value);
-		sigDelayTwo = delay_read_ms(&x->f_delay, x->f_delayTwo[(int)x->f_inc] * x->f_value);
-		sigDelayOne *= x->f_windowOne[(int)x->f_inc];
-		sigDelayTwo *= x->f_windowTwo[(int)x->f_inc];
-		out[i] = sigDelayOne;
+		index = x->f_inc;
+		indexTwo = x->f_inc + WINSIZE / 2;
+		if(indexTwo >= WINSIZE)
+			indexTwo -= WINSIZE;
+		ratio = x->f_inc - index;
+
+		delayOne = (x->f_delayVec[index + 1] * ratio +  x->f_delayVec[index] * (1. - ratio)) * x->f_value * 2.;
+		delayTwo = (x->f_delayVec[indexTwo + 1] * ratio +  x->f_delayVec[indexTwo] * (1. - ratio)) * x->f_value * 2.;
+
+		sigDelayOne = delay_read_ms(&x->f_delay, delayOne);
+		sigDelayTwo = delay_read_ms(&x->f_delay, delayTwo);
+
+		windoOne = (x->f_window[index + 1] * ratio +  x->f_window[index] * (1. - ratio));
+		windoTwo =	(x->f_window[indexTwo + 1] * ratio +  x->f_window[indexTwo] * (1. - ratio));
+		sigDelayOne *= windoOne;
+		sigDelayTwo *= windoTwo;
+		out[i] = sigDelayOne + sigDelayTwo;
 
 		x->f_inc += x->f_grain;
 		if(x->f_inc >= WINSIZE)
@@ -122,10 +130,8 @@ void alechinsky_free(t_alechinsky *x)
 	dsp_free((t_pxobject *)x);
 	delay_free(&x->f_delay);
 
-	freebytes(x->f_windowOne, (WINSIZE + 1) * sizeof(double));
-	freebytes(x->f_delayOne, (WINSIZE + 1) * sizeof(double));
-	freebytes(x->f_windowTwo, (WINSIZE + 1) * sizeof(double));
-	freebytes(x->f_delayTwo, (WINSIZE + 1) * sizeof(double));
+	freebytes(x->f_window, (WINSIZE + 1) * sizeof(double));
+	freebytes(x->f_delayVec, (WINSIZE + 1) * sizeof(double));
 }
 
 void alechinsky_assist(t_alechinsky *x, void *b, long m, long a, char *s)
@@ -156,24 +162,16 @@ void alechinsky_assist(t_alechinsky *x, void *b, long m, long a, char *s)
 	}
 }
 
-t_max_err factor_set(t_alechinsky *x, t_object *attr, long argc, t_atom *argv)
-{
-	if ( atom_gettype(argv) == A_FLOAT)
-		alechinsky_tukey(x, atom_getfloat(argv));
-	return 0;
-}
-
-t_max_err delay_set(t_alechinsky *x, t_object *attr, long argc, t_atom *argv)
-{
-	if ( atom_gettype(argv) == A_FLOAT)
-		alechinsky_delay(x, atom_getfloat(argv));
-	return 0;
-}
-
 void alechinsky_delay(t_alechinsky *x, double delay)
 {
+	if(delay < 1.)
+		delay = 1.;
+	else if(delay * 2 > x->f_delay.f_lenghtMs)
+		delay = x->f_delay.f_lenghtMs / 2.;
+
+	x->f_grain = delay * 2. * 0.001 * x->f_sr;
+	x->f_grain = ((double)(WINSIZE) * 2.) / x->f_grain;
 	x->f_value = delay;
-	x->f_grain = x->f_value * 0.001 * x->f_sr;
 }
 
 void alechinsky_tukey(t_alechinsky *x, double factor)
@@ -192,45 +190,33 @@ void alechinsky_tukey(t_alechinsky *x, double factor)
 	for(i = 0; i < WINSIZE; i++)
     {
 		if(i <= ((factor * (double)sizeMinus) / 2.))
-		{
-			x->f_windowOne[i] = 0.5 * ( 1. + cos(PI * ( ((2. *(double)i) / (factor * (double)sizeMinus)) - 1.)));
-			x->f_delayOne[i] = (double)i / (double)sizeMinus;
-		}
+			x->f_window[i] = 0.5 * ( 1. + cos(PI * ( ((2. *(double)i) / (factor * (double)sizeMinus)) - 1.)));
 		else if(i > ((factor * (double)sizeMinus) / 2.) && i <= ((double)sizeMinus * (1. - (factor / 2.))))
-		{
-			x->f_windowOne[i] = 1.;
-			x->f_delayOne[i] = (double)i / (double)sizeMinus;
-		}
+			x->f_window[i] = 1.;
 		else if(i  > ((double)sizeMinus * (1. - (factor / 2.))) && i <= sizeMinus)
-		{
-			x->f_windowOne[i] = 0.5 * ( 1. + cos(PI * ( ((2. *(double)i) / (factor * (double)sizeMinus)) + 1. - (2. / factor))));
-			x->f_delayOne[i] = (double)i / (double)sizeMinus;
-		}
+			x->f_window[i] = 0.5 * ( 1. + cos(PI * ( ((2. *(double)i) / (factor * (double)sizeMinus)) + 1. - (2. / factor))));
 		else 
-		{
-			x->f_windowOne[i] = 0.;
-			x->f_delayOne[i] = 0.;
-		}
-		x->f_windowTwo[i] = 1. - x->f_windowOne[i];
-		x->f_delayTwo[i] = 1. - x->f_delayOne[i];
+			x->f_window[i] = 0.;
     }
+	for(i = 0; i < WINSIZE; i++)
+    {
+		x->f_delayVec[i] = (double)i / (double)WINSIZE;
+	}
 
-	x->f_windowOne[WINSIZE] = x->f_windowOne[0];
-	x->f_delayOne[WINSIZE] = x->f_delayOne[0];
-	x->f_windowTwo[WINSIZE] = x->f_windowTwo[0];
-	x->f_delayTwo[WINSIZE] = x->f_delayOne[0];
+	x->f_window[WINSIZE] = x->f_window[0];
+	x->f_delayVec[WINSIZE] = x->f_delayVec[0];
+	alechinsky_delay(x, x->f_value);
 }
-/*
+
 void alechinsky_int(t_alechinsky *x, long n)	
 {
-	t_atom argv[1];
 	switch (proxy_getinlet((t_object *)x))
 	{
 		case 1: 
-			object_method_double((t_object)x, gensym("delay"), n, argv);
+			alechinsky_delay(x, n);
 			break;
 		case 2: 
-			object_method(x, gensym("factor"), 1, argv[1]);
+			alechinsky_tukey(x, n);
 			break;
 	}
 	
@@ -238,17 +224,14 @@ void alechinsky_int(t_alechinsky *x, long n)
 
 void alechinsky_float(t_alechinsky *x, double n)	
 {
-	t_atom argv[1];
 	switch (proxy_getinlet((t_object *)x))
 	{
-		atom_setfloat(argv, n);
 		case 1:
-			object_method(x, gensym("delay"), 1, argv[1]);
+			alechinsky_delay(x, n);
 			break;
 		case 2: 
-			object_method(x, gensym("factor"), 1, argv[1]);
+			alechinsky_tukey(x, n);
 			break;
 	}
 	
 }
-*/

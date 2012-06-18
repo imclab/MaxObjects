@@ -20,9 +20,9 @@
 
 #include "pg.delay.h"
 
-void delay_setup(t_delay *c, double msec)
+void delay_setup(t_delay *c, double msec, double sr)
 {
-	c->f_sr = sys_getsr();
+	c->f_sr = sr;
 	c->f_lenghtMs = msec;
     c->f_lenght =  c->f_lenghtMs * (double)sys_getsr() * 0.001;
 	c->f_lenght += 64;

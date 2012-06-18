@@ -36,10 +36,8 @@ typedef struct  _alechinsky
 	double		f_sr;
 	t_delay		f_delay;
 
-	double		*f_windowOne;
-	double		*f_delayOne;
-	double		*f_windowTwo;
-	double		*f_delayTwo;
+	double		*f_window;
+	double		*f_delayVec;
 
 	double		f_value;
 	double		f_inc;
@@ -59,9 +57,7 @@ void alechinsky_perform64(t_alechinsky *x, t_object *dsp64, double **ins, long n
 
 void alechinsky_int(t_alechinsky *x, long n);
 void alechinsky_float(t_alechinsky *x, double n);
-t_max_err factor_set(t_alechinsky *x, t_object *attr, long argc, t_atom *argv);
 void alechinsky_tukey(t_alechinsky *x, double factor);
-t_max_err delay_set(t_alechinsky *x, t_object *attr, long argc, t_atom *argv);
 void alechinsky_delay(t_alechinsky *x, double delay);
 
 void alechinsky_dsp(t_alechinsky *x, t_signal **sp, short *count);
