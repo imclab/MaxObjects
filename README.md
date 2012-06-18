@@ -19,6 +19,7 @@
 * **pg.unpack~** : Unpack object for signal (Max5 only & souce code only).
 * **pg.adaptor~** : Adapter for packed signal (Max5 only & souce code only).
                 * 
+                * 
 Please look at the Jamoma AudioGraph project to pack signal.
 [Jamoma](http://www.jamoma.org/)
 
