@@ -138,7 +138,7 @@ void gradient_dsp64(t_gradient *x, t_object *dsp64, short *count, double sampler
 void gradient_perform64(t_gradient *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam)
 {
 	int i, j;
-	double amplitude, frequency, logAdd;
+	double amplitude, frequency;
     double	*in		= ins[0];
     double	*out1	= outs[0];
 	
