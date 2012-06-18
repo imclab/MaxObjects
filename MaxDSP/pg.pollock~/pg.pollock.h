@@ -1,14 +1,22 @@
-/***************************************************
-defStruct
-Par Pierre Guillot
 
-
-defStruct.h
-
-Contient la structure de l'objet et les #defines
-****************************************************/
-#ifndef DEF_POLLOCK
-#define DEF_POLLOCK
+/*
+* Copyright (C) 2012 Pierre Guillot, Universite Paris 8
+* 
+* This library is free software; you can redistribute it and/or modify it 
+* under the terms of the GNU Library General Public License as published 
+* by the Free Software Foundation; either version 2 of the License.
+* 
+* This library is distributed in the hope that it will be useful, but WITHOUT 
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+* FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public 
+* License for more details.
+*
+* You should have received a copy of the GNU Library General Public License 
+* along with this library; if not, write to the Free Software Foundation, 
+* Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*
+* guillotpierre6@gmail.com
+*/
 
 #include "ext.h"
 #include "ext_obex.h"
@@ -19,7 +27,7 @@ Contient la structure de l'objet et les #defines
 #include "buffer.h"
 
 #include "pg.window.h"
-#include "pg.delay.h"
+#include "../pg.delay/pg.delay.h"
 
 
 #define SIZETAB		10000
@@ -36,35 +44,30 @@ typedef struct _pollock
     t_pxobject f_obj;
 	
 	/**** Audio parameters ******************************************/
-	t_float f_sr;				/* Sampling rate					*/
-    t_float f_sb;				/* Vector size						*/
+	t_double f_sr;				/* Sampling rate					*/
+    t_double f_sb;				/* Vector size						*/
 	
 	/**** Inlets ****************************************************/
 	void	*x_proxy;			/* Proxy ptr						*/
 	long	f_inlet;			/* Inlets space						*/
 	
-	float	f_grainLenght;		/* Grain lenght						*/
-	float	f_delayTime;		/* Delai time in ms					*/ 
-	float	f_feedback;			/* Feedback							*/
-	float	f_rarefaction;		/* Rarefaction						*/
+	double	f_grainLenght;		/* Grain lenght						*/
+	double	f_delayTime;		/* Delai time in ms					*/ 
+	double	f_feedback;			/* Feedback							*/
+	double	f_rarefaction;		/* Rarefaction						*/
 	
 	/**** Parameters ************************************************/
 	int			f_voices;		/* Number of instances				*/
 	int			f_modEnv;		/* Envelope Type					*/
-	float		f_modDel;		/* Delay modulation					*/
-	float		f_modAmp;		/* Amplitude modulation				*/
-	float		f_modLen;		/* Grain lenght modulation			*/
+	double		f_modDel;		/* Delay modulation					*/
+	double		f_modAmp;		/* Amplitude modulation				*/
+	double		f_modLen;		/* Grain lenght modulation			*/
 	
 	/**** Granulation ***********************************************/
 	t_window	f_envelope;		/* Envellope du grain				*/
 	t_delay		*f_delay;		/* Delais							*/
 	t_sample	*f_inputSig;	/* Vector for input signal			*/
 } t_pollock;
-
-t_symbol *ps_buffer;
-/********************************************************************/
-/*							PROTOTYPES							    */
-/********************************************************************/
 
 void *pollock_class;
 
@@ -73,12 +76,10 @@ void pollock_dsp(t_pollock *x, t_signal **sp, short *count);
 void pollock_free(t_pollock *x);
 void pollock_assist(t_pollock *x, void *b, long m, long a, char *s);
 void pollock_int(t_pollock *x, long n);
-void pollock_float(t_pollock *x, double n);
+void pollock_double(t_pollock *x, double n);
 void pollock_dblclick(t_pollock *x);
 t_int *pollock_perform(t_int *w);
 t_int *result_perform(t_int *w);
 
 t_max_err mode_set(t_pollock *x, t_object *attr, long argc, t_atom *argv);
-
-#endif
 

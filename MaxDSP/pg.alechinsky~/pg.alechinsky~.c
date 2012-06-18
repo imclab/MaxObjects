@@ -26,7 +26,7 @@ int main()
 
 	c = class_new("pg.alechinsky~", (method)alechinsky_new, (method)alechinsky_free, (short)sizeof(t_alechinsky), 0L, A_GIMME, 0);
 	class_addmethod(c, (method)alechinsky_dsp64,		"dsp64",		A_CANT,	0);
-	//class_addmethod(c, (method)alechinsky_dsp,		"dsp",			A_CANT,	0);
+	class_addmethod(c, (method)alechinsky_dsp,			"dsp",			A_CANT,	0);
 	class_addmethod(c, (method)alechinsky_assist,		"assist",		A_CANT,	0);
 	class_addmethod(c, (method)alechinsky_int,			"int",			A_LONG,	0);
 	class_addmethod(c, (method)alechinsky_float,		"float",		A_FLOAT,0);
@@ -235,3 +235,57 @@ void alechinsky_float(t_alechinsky *x, double n)
 	}
 	
 }
+
+void alechinsky_dsp(t_alechinsky *x, t_signal **sp, short *count)
+{
+	x->f_sr = (double)sp[0]->s_sr;
+	delay_resize(&x->f_delay, x->f_sr);
+
+	dsp_add(alechinsky_perform, 4, x, sp[0]->s_vec, sp[1]->s_vec, sp[0]->s_n);
+}
+
+t_int *alechinsky_perform(t_int *w)
+{
+	int i, index, indexTwo;
+
+	t_alechinsky *x		= (t_alechinsky *)(w[1]);
+    float		 *in	= (float *)(w[2]);
+	float		*out	= (float *)(w[3]);
+	int n				= (int)w[4];
+
+	double sigDelayOne, sigDelayTwo, ratio;
+	double delayOne, delayTwo;
+	double windoOne, windoTwo;
+
+	if(x->f_ob.z_disabled) return w + 5;
+
+	for(i = 0; i < n; i++)
+	{
+		delay_write(&x->f_delay, (double)in[i]);
+
+		index = x->f_inc;
+		indexTwo = x->f_inc + WINSIZE / 2;
+		if(indexTwo >= WINSIZE)
+			indexTwo -= WINSIZE;
+		ratio = x->f_inc - index;
+
+		delayOne = (x->f_delayVec[index + 1] * ratio +  x->f_delayVec[index] * (1. - ratio)) * x->f_value * 2.;
+		delayTwo = (x->f_delayVec[indexTwo + 1] * ratio +  x->f_delayVec[indexTwo] * (1. - ratio)) * x->f_value * 2.;
+
+		sigDelayOne = delay_read_ms(&x->f_delay, delayOne);
+		sigDelayTwo = delay_read_ms(&x->f_delay, delayTwo);
+
+		windoOne = (x->f_window[index + 1] * ratio +  x->f_window[index] * (1. - ratio));
+		windoTwo =	(x->f_window[indexTwo + 1] * ratio +  x->f_window[indexTwo] * (1. - ratio));
+		sigDelayOne *= windoOne;
+		sigDelayTwo *= windoTwo;
+		out[i] = float(sigDelayOne + sigDelayTwo);
+
+		x->f_inc += x->f_grain;
+		if(x->f_inc >= WINSIZE)
+			x->f_inc = 0;
+	}
+
+	return w + 5;
+}
+

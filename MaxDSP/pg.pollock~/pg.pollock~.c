@@ -1,28 +1,24 @@
-/**********************************************************************/
-//                                                                    //
-// /****************************************************************/ //
-// /*                                                              */ //
-// /*                         POLLOCK	                           */ //
-// /*                                                              */ //
-// /* Auteur: Pierre GUILLOT                                       */ //
-// /*         Universite Paris 8									*/ //
-// /*                                                              */ //
-// /*                                                              */ //
-// /*                                                              */ //
-// /****************************************************************/ //
-//                                                                    //
-/**********************************************************************/
 
-
-/********************************************************************/
-/*                          EN TETE                                 */
-/********************************************************************/
+/*
+* Copyright (C) 2012 Pierre Guillot, Universite Paris 8
+* 
+* This library is free software; you can redistribute it and/or modify it 
+* under the terms of the GNU Library General Public License as published 
+* by the Free Software Foundation; either version 2 of the License.
+* 
+* This library is distributed in the hope that it will be useful, but WITHOUT 
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+* FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public 
+* License for more details.
+*
+* You should have received a copy of the GNU Library General Public License 
+* along with this library; if not, write to the Free Software Foundation, 
+* Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*
+* guillotpierre6@gmail.com
+*/
 
 #include "pg.pollock.h"
-
-/**********************************************************************/
-/*							FONCTION MAIN	                          */
-/**********************************************************************/
 
 int main(void)
 {
@@ -32,7 +28,7 @@ int main(void)
     
     class_addmethod(c, (method)pollock_dsp,			"dsp",			A_CANT,		0); 
     class_addmethod(c, (method)pollock_int,			"int",			A_LONG,		0);
-	class_addmethod(c, (method)pollock_float,		"float",		A_FLOAT,	0);
+	class_addmethod(c, (method)pollock_double,		"double",		A_double,	0);
     class_addmethod(c, (method)pollock_assist,		"assist",		A_CANT,		0);
 	class_addmethod(c, (method)pollock_dblclick,	"dblclick",		A_CANT,		0);
 	
@@ -50,19 +46,19 @@ int main(void)
 	CLASS_ATTR_FILTER_CLIP		(c, "envelope", 0, 5);
 	CLASS_ATTR_ORDER			(c, "envelope", 0, "1");
 	
-	CLASS_ATTR_FLOAT			(c, "ampmod", 0, t_pollock, f_modAmp);
+	CLASS_ATTR_double			(c, "ampmod", 0, t_pollock, f_modAmp);
 	CLASS_ATTR_LABEL			(c, "ampmod", 0, "Amplitude modulation");
 	CLASS_ATTR_DEFAULT			(c, "ampmod", 0, "0.");
 	CLASS_ATTR_SAVE				(c, "ampmod", 1);
 	CLASS_ATTR_FILTER_CLIP		(c, "ampmod", 0., 100.);
 	
-	CLASS_ATTR_FLOAT			(c, "lenmod", 0, t_pollock, f_modLen);
+	CLASS_ATTR_double			(c, "lenmod", 0, t_pollock, f_modLen);
 	CLASS_ATTR_LABEL			(c, "lenmod", 0, "Grain lenght modulation");
 	CLASS_ATTR_DEFAULT			(c, "lenmod", 0, "0.");
 	CLASS_ATTR_SAVE				(c, "lenmod", 1);
 	CLASS_ATTR_FILTER_CLIP		(c, "lenmod", 0., 100.);
 	
-	CLASS_ATTR_FLOAT			(c, "delmod", 0, t_pollock, f_modDel);
+	CLASS_ATTR_double			(c, "delmod", 0, t_pollock, f_modDel);
 	CLASS_ATTR_LABEL			(c, "delmod", 0, "Delay modulation");
 	CLASS_ATTR_DEFAULT			(c, "delmod", 0, "100.");
 	CLASS_ATTR_SAVE				(c, "delmod", 1);
@@ -99,7 +95,7 @@ void *pollock_new(t_symbol *s, int argc, t_atom *argv)
 		else x->f_voices = 2;
 
 		x->f_delay = (t_delay *)getbytes(x->f_voices * sizeof(t_delay));
-		for(i = 0; i < x->f_voices; i++) delay_init(&x->f_delay[i], SIZETAB);
+		for(i = 0; i < x->f_voices; i++) delay_setup(&x->f_delay[i], SIZETAB);
 		
 		x->f_inputSig = (t_sample *)getbytes(x->f_sb * sizeof(t_sample));
 		for(i = 0; i < x->f_sb; i++) x->f_inputSig[i] = 0.f;
@@ -119,7 +115,7 @@ void *pollock_new(t_symbol *s, int argc, t_atom *argv)
 				window_poison(&x->f_envelope);
 				break;
 			case 3:
-				window_turkey(&x->f_envelope);
+				window_tukey(&x->f_envelope);
 				break;
 			case 4:
 				window_decay(&x->f_envelope);
@@ -179,15 +175,15 @@ t_int *pollock_perform(t_int *w)
 	t_sample *env;
 	t_sample *del;
 	
-	float index;
-	float diff;
+	double index;
+	double diff;
 	
 	int nsamps;
 	int phase;
     t_sample limit;
     t_sample fn;
     t_sample *vp, *bp, *wp, *ep;
-	float rec;
+	double rec;
 	t_sample delsamps;
 	
 	for(j = 0; j < n; j++)
@@ -209,7 +205,7 @@ t_int *pollock_perform(t_int *w)
 		
 		for(j = 0; j < n; j++)
 		{
-			index = ctl->f_count * (float)(WINDOW_SIZE-1);
+			index = ctl->f_count * (double)(WINDOW_SIZE-1);
 			diff = index - (int)index;
 			*env++ = (x->f_envelope.f_envelope[(int)index] * (1.f - diff) + x->f_envelope.f_envelope[(int)index+1] * diff) * ctl->f_modAmp;
 			*del++ = ctl->f_delTime;
@@ -218,15 +214,15 @@ t_int *pollock_perform(t_int *w)
 			if(ctl->f_count >= 1.f)
 			{
 				ctl->f_count = 0.f;
-				ctl->f_grainLenghtDev	= (1000.f/ ((float)x->f_grainLenght * (((((float)rand()/(float)RAND_MAX) * (x->f_modLen / 100.f))) + (1.f - (x->f_modLen / 100.f)))  )) / x->f_sr;
-				ctl->f_delTime			= ((((float)rand() / (float)RAND_MAX) * (x->f_modDel / 100.f) + ((100.f - x->f_modDel) / 100.)) * ((float)i / (float)x->f_voices) * x->f_delayTime) * x->f_sr * 0.001f - n;
+				ctl->f_grainLenghtDev	= (1000.f/ ((double)x->f_grainLenght * (((((double)rand()/(double)RAND_MAX) * (x->f_modLen / 100.f))) + (1.f - (x->f_modLen / 100.f)))  )) / x->f_sr;
+				ctl->f_delTime			= ((((double)rand() / (double)RAND_MAX) * (x->f_modDel / 100.f) + ((100.f - x->f_modDel) / 100.)) * ((double)i / (double)x->f_voices) * x->f_delayTime) * x->f_sr * 0.001f - n;
 				
 				if (ctl->f_delTime < 1.00001f)	ctl->f_delTime = 1.00001f;
 				if (ctl->f_delTime > limit)		ctl->f_delTime = limit;
 	
 				if( (rand() % 101 ) >= x->f_rarefaction)
 				{
-					ctl->f_modAmp = ((((float)rand() / (float)RAND_MAX) * (x->f_modAmp / 100.f)) + (1.f - (x->f_modAmp / 100.)));
+					ctl->f_modAmp = ((((double)rand() / (double)RAND_MAX) * (x->f_modAmp / 100.f)) + (1.f - (x->f_modAmp / 100.)));
 				}
 				else ctl->f_modAmp = 0.f;
 			}
@@ -251,7 +247,7 @@ t_int *pollock_perform(t_int *w)
 
 			rec = *bp * *env;
 	
-			*out++ += rec / (float)x->f_voices;
+			*out++ += rec / (double)x->f_voices;
 			*env++ = rec * x->f_feedback;
 		}
 
@@ -306,16 +302,16 @@ void pollock_assist(t_pollock *x, void *b, long m, long a, char *s)
 				sprintf(s,"Input signal (signal)");
 				break;
 			case 1:
-				sprintf(s,"Grain lenght (int or float)");
+				sprintf(s,"Grain lenght (int or double)");
 				break;
 			case 2:
-				sprintf(s,"Delay time (int or float)");
+				sprintf(s,"Delay time (int or double)");
 				break;
 			case 3:
-				sprintf(s,"Feedback (int or float)");
+				sprintf(s,"Feedback (int or double)");
 				break;
 			case 4:
-				sprintf(s,"Rarefaction (int or float)");
+				sprintf(s,"Rarefaction (int or double)");
 				break;
 		}
 	} else
@@ -361,7 +357,7 @@ void pollock_int(t_pollock *x, long n)
 	
 }
 
-void pollock_float(t_pollock *x, double n)	
+void pollock_double(t_pollock *x, double n)	
 {
 	int i;
 	switch (proxy_getinlet((t_object *)x))
@@ -395,17 +391,12 @@ void pollock_float(t_pollock *x, double n)
 	
 }
 
-void pollock_dblclick(t_pollock *x)
-{
-	;
-}
-
 t_max_err mode_set(t_pollock *x, t_object *attr, long argc, t_atom *argv)
 {
 	int mode;
 	
 	if ( atom_gettype(argv) == A_LONG) mode = atom_getlong(argv);
-	else if ( atom_gettype(argv) == A_FLOAT) mode = (int)atom_getfloat(argv);
+	else if ( atom_gettype(argv) == A_double) mode = (int)atom_getdouble(argv);
 	else if ( atom_gettype(argv) == A_SYM)
 	{
 		if ( gensym(argv->a_w.w_sym->s_name)	  == gensym("Hanning")) mode = 0;
