@@ -43,7 +43,6 @@ int main()
 
 void *alechinsky_new(t_symbol *s, int argc, t_atom *argv)
 {
-	int i;
 	double	maxDelay, initDelay, factor;
 	
 	t_alechinsky *x = (t_alechinsky *)object_alloc((t_class *)alechinsky_class);
