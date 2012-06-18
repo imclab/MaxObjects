@@ -15,10 +15,10 @@
 * **pg.alechinsky~** : A signal reverser.
 * **pg.pollock~** : Quasi-synchronous granular synthesizer.
 * **pg.chaos~** : A chaotic signal generator.
-
 * **pg.pack~** : Pack object for signal (Max5 only & souce code only).
 * **pg.unpack~** : Unpack object for signal (Max5 only & souce code only).
 * **pg.adaptor~** : Adapter for packed signal (Max5 only & souce code only).
+                * 
 Please look at the Jamoma AudioGraph project to pack signal.
 [Jamoma](http://www.jamoma.org/)
 
