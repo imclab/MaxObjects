@@ -19,8 +19,9 @@
 * **pg.pack~** : Pack object for signal (Max5 only & souce code only).
 * **pg.unpack~** : Unpack object for signal (Max5 only & souce code only).
 * **pg.adaptor~** : Adapter for packed signal (Max5 only & souce code only).
+
 Please look at the Jamoma AudioGraph project to pack signal.
-[OSX link 1](http://www.jamoma.org/)
+[Jamoma](http://www.jamoma.org/)
 
 ### MaxFFT :
 
