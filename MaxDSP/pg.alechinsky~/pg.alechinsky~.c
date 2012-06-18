@@ -278,7 +278,7 @@ t_int *alechinsky_perform(t_int *w)
 		windoTwo =	(x->f_window[indexTwo + 1] * ratio +  x->f_window[indexTwo] * (1. - ratio));
 		sigDelayOne *= windoOne;
 		sigDelayTwo *= windoTwo;
-		out[i] = float(sigDelayOne + sigDelayTwo);
+		out[i] = (float)(sigDelayOne + sigDelayTwo);
 
 		x->f_inc += x->f_grain;
 		if(x->f_inc >= WINSIZE)
