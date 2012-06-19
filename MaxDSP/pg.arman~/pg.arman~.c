@@ -124,7 +124,7 @@ void arman_perform64(t_arman *x, t_object *dsp64, double **ins, long numins, dou
 	int i, j, index;
 	double sigDelayOne, sigDelayTwo, ratio, incOne, incTwo;
 	double delayOne, delayTwo;
-	double windoOne, windoTwo;
+	double window;
 	if(x->f_connected[0]);
 	{
 		for(i = 0; i < sampleframes; i++)
@@ -142,18 +142,15 @@ void arman_perform64(t_arman *x, t_object *dsp64, double **ins, long numins, dou
 
 				index = incOne * (double)WINSIZE;
 				ratio = (incOne * (double)WINSIZE) - index;
-				windoOne = x->f_window[index] * (1.- ratio) + x->f_window[index + 1] * ratio;
-
-				index =  incTwo * (double)WINSIZE;
-				windoTwo = x->f_window[index] * (1.- ratio) + x->f_window[index + 1] * ratio;
+				window = x->f_window[index] * (1.- ratio) + x->f_window[index + 1] * ratio;
 				
-				delayOne = incOne * x->f_winSize;
-				delayTwo = incTwo * x->f_winSize;
-		
-				sigDelayOne = delay_read_ms(&x->f_delay, delayOne + x->f_delayAdd);
-				sigDelayTwo = delay_read_ms(&x->f_delay, delayTwo + x->f_delayAdd);
+				delayOne = incOne * x->f_winSize + x->f_delayAdd;
+				delayTwo = incTwo * x->f_winSize + x->f_delayAdd;
 
-				outs[j][i] = sigDelayOne * windoOne + sigDelayTwo * windoTwo;
+				sigDelayOne = delay_read_ms(&x->f_delay, delayOne);
+				sigDelayTwo = delay_read_ms(&x->f_delay, delayTwo);
+
+				outs[j][i] = sigDelayOne * window + sigDelayTwo * (1. - window);
 				
 				x->f_inc[j] += x->f_grain[j];
 				
