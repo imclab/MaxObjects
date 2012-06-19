@@ -189,11 +189,11 @@ void arman_assist(t_arman *x, void *b, long m, long a, char *s)
 		if(a == 0)
 			sprintf(s,"(Signal) Input");
 		else
-			sprintf(s,"(Int, Float or Signal) Transposition %i", a);
+			sprintf(s,"(Int, Float or Signal) Transposition %i", (int)a);
 	}
 	else 
 	{
-		sprintf(s,"(Signal) Armaned signal %i", a);
+		sprintf(s,"(Signal) Armaned signal %i", (int)a);
 	}
 }
 
@@ -208,6 +208,7 @@ t_max_err voices_set(t_arman *x, t_object *attr, long argc, t_atom *argv)
 		voices = x->f_voiceNumber;
 
 	x->f_voices = voices;
+	return 1;
 }
 
 t_max_err window_size_set(t_arman *x, t_object *attr, long argc, t_atom *argv)
@@ -218,6 +219,7 @@ t_max_err window_size_set(t_arman *x, t_object *attr, long argc, t_atom *argv)
 	if(winSize >= x->f_delay.f_lenghtMs)
 		winSize = x->f_delay.f_lenghtMs - 1.;
 	arman_ratio(x, winSize);
+	return 1;
 }
 
 void arman_ratio(t_arman *x, double winSize)

@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		DD1803111584E4110098DAE8 /* fftw3.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1803101584E4110098DAE8 /* fftw3.h */; };
-		DDA7389F158F6571006EAAA7 /* pg.alechinsky.h in Headers */ = {isa = PBXBuildFile; fileRef = DDA7389D158F6571006EAAA7 /* pg.alechinsky.h */; };
-		DDA738A0158F6571006EAAA7 /* pg.alechinsky~.c in Sources */ = {isa = PBXBuildFile; fileRef = DDA7389E158F6571006EAAA7 /* pg.alechinsky~.c */; };
+		DD7242391590CE390036701B /* pg.arman.h in Headers */ = {isa = PBXBuildFile; fileRef = DD7242371590CE390036701B /* pg.arman.h */; };
+		DD72423A1590CE390036701B /* pg.arman~.c in Sources */ = {isa = PBXBuildFile; fileRef = DD7242381590CE390036701B /* pg.arman~.c */; };
 		DDA738A3158F657C006EAAA7 /* pg.delay.c in Sources */ = {isa = PBXBuildFile; fileRef = DDA738A1158F657C006EAAA7 /* pg.delay.c */; };
 		DDA738A4158F657C006EAAA7 /* pg.delay.h in Headers */ = {isa = PBXBuildFile; fileRef = DDA738A2158F657C006EAAA7 /* pg.delay.h */; };
 		DDCAF2B9158A09140049CBA1 /* libfftw3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCAF2B8158A09140049CBA1 /* libfftw3.3.dylib */; };
@@ -19,10 +19,10 @@
 
 /* Begin PBXFileReference section */
 		22CF10220EE984600054F513 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../../maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
-		2FBBEAE508F335360078DB84 /* pg.alechinsky~.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "pg.alechinsky~.mxo"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2FBBEAE508F335360078DB84 /* pg.arman~.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "pg.arman~.mxo"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD1803101584E4110098DAE8 /* fftw3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fftw3.h; path = /usr/include/fftw3.h; sourceTree = "<absolute>"; };
-		DDA7389D158F6571006EAAA7 /* pg.alechinsky.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.alechinsky.h; sourceTree = "<group>"; };
-		DDA7389E158F6571006EAAA7 /* pg.alechinsky~.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "pg.alechinsky~.c"; sourceTree = "<group>"; };
+		DD7242371590CE390036701B /* pg.arman.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pg.arman.h; sourceTree = "<group>"; };
+		DD7242381590CE390036701B /* pg.arman~.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "pg.arman~.c"; sourceTree = "<group>"; };
 		DDA738A1158F657C006EAAA7 /* pg.delay.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pg.delay.c; path = ../pg.delay/pg.delay.c; sourceTree = SOURCE_ROOT; };
 		DDA738A2158F657C006EAAA7 /* pg.delay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pg.delay.h; path = ../pg.delay/pg.delay.h; sourceTree = SOURCE_ROOT; };
 		DDCAF2B8158A09140049CBA1 /* libfftw3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfftw3.3.dylib; path = usr/local/lib/libfftw3.3.dylib; sourceTree = SDKROOT; };
@@ -47,10 +47,10 @@
 		089C166AFE841209C02AAC07 /* iterator */ = {
 			isa = PBXGroup;
 			children = (
+				DD7242371590CE390036701B /* pg.arman.h */,
+				DD7242381590CE390036701B /* pg.arman~.c */,
 				DDA738A1158F657C006EAAA7 /* pg.delay.c */,
 				DDA738A2158F657C006EAAA7 /* pg.delay.h */,
-				DDA7389D158F6571006EAAA7 /* pg.alechinsky.h */,
-				DDA7389E158F6571006EAAA7 /* pg.alechinsky~.c */,
 				DD1803101584E4110098DAE8 /* fftw3.h */,
 				08FB77ADFE841716C02AAC07 /* Source */,
 				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
@@ -80,7 +80,7 @@
 		19C28FB4FE9D528D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2FBBEAE508F335360078DB84 /* pg.alechinsky~.mxo */,
+				2FBBEAE508F335360078DB84 /* pg.arman~.mxo */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -93,8 +93,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD1803111584E4110098DAE8 /* fftw3.h in Headers */,
-				DDA7389F158F6571006EAAA7 /* pg.alechinsky.h in Headers */,
 				DDA738A4158F657C006EAAA7 /* pg.delay.h in Headers */,
+				DD7242391590CE390036701B /* pg.arman.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,7 +117,7 @@
 			);
 			name = "max-external";
 			productName = iterator;
-			productReference = 2FBBEAE508F335360078DB84 /* pg.alechinsky~.mxo */;
+			productReference = 2FBBEAE508F335360078DB84 /* pg.arman~.mxo */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -125,7 +125,7 @@
 /* Begin PBXProject section */
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "pg.alechinsky~" */;
+			buildConfigurationList = 2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "pg.arman~" */;
 			compatibilityVersion = "Xcode 3.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -169,8 +169,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDA738A0158F6571006EAAA7 /* pg.alechinsky~.c in Sources */,
 				DDA738A3158F657C006EAAA7 /* pg.delay.c in Sources */,
+				DD72423A1590CE390036701B /* pg.arman~.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,7 +231,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "pg.alechinsky~" */ = {
+		2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "pg.arman~" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2FBBEAD008F335010078DB84 /* Development */,
