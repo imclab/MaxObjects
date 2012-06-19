@@ -66,14 +66,17 @@ void delay_write(t_delay *c, double sample)
 double delay_read_ms(t_delay *c, double delay)
 {
 	int delaySample;
-	double one, two, thr, fou, oneMthr, ratio, delayMs, out;
-	if(delay > c->f_lenghtMs)
-		delay = c->f_lenghtMs;
-	delayMs = (double)c->f_phase - (delay * c->f_sr * 0.001);
-	if(delayMs < 4)delayMs = c->f_lenght + (delayMs - 4);
+	double one, two, thr, fou, oneMthr, ratio, out;
 
-	delaySample = delayMs;
-	ratio = delayMs - (double)delaySample;
+	delay *= c->f_sr * 0.001;
+	if(delay > c->f_lenght)
+		delay = c->f_lenght;
+
+	delaySample = delay;
+	ratio = delay - (double)delaySample;
+	delaySample = (double)c->f_phase - (delaySample);
+	if(delaySample < XTRASAMPS) delaySample += c->f_lenght;
+
 	one = c->f_vector[delaySample-3];
 	two = c->f_vector[delaySample-2];
 	thr = c->f_vector[delaySample-1];
