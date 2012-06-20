@@ -17,28 +17,33 @@
 *
 * guillotpierre6@gmail.com
 */
+#define WINSIZE	16384
 
 #include "ext.h"
 #include "ext_obex.h"
 #include "z_dsp.h"
-     
-#define XTRASAMPS	4
+#include "../pg.delay/pg.delay.h"
+//#include "../pg.window/pg.window.h"
+#include <fftw3.h>
 
-typedef struct delay
+typedef struct  _delayObj
 {
-    int			f_lenght;
-	double		f_lenghtMs;
-	int			f_phase;
+	t_pxobject	f_ob;
+
 	double		f_sr;
-    double		*f_vector;
-	double		f_alpha;
-} t_delay;
+	t_delay		f_delay;
 
-void delay_setup(t_delay *c, double msec, double sr);
-void delay_resize(t_delay *c, double sr);
-void delay_write(t_delay *c, double sample);
-double delay_read_ms_quadra(t_delay *c, double delay);
-double delay_read_ms_linear(t_delay *c, double delay);
-double delay_read_sample(t_delay *c, int delay);
-void delay_free(t_delay *c);
+} t_delayObj;
 
+void *delayObj_class;
+
+void *delayObj_new(t_symbol *s, int argc, t_atom *argv);
+void delayObj_free(t_delayObj *x);
+void delayObj_assist(t_delayObj *x, void *b, long m, long a, char *s);
+
+
+void delayObj_dsp64(t_delayObj *x, t_object *dsp64, short *count, double samplerate, long maxvectorsize, long flags);
+void delayObj_perform64(t_delayObj *x, t_object *dsp64, double **ins, long numins, double **outs, long numouts, long sampleframes, long flags, void *userparam);
+
+void delayObj_dsp(t_delayObj *x, t_signal **sp, short *count);
+t_int *delayObj_perform(t_int *w);

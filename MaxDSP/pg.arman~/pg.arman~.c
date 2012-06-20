@@ -94,7 +94,6 @@ void *arman_new(t_symbol *s, int argc, t_atom *argv)
 		}
 
 		x->f_delayAdd = 0.;
-		x->f_winSize = 100.;
 		x->f_rapport = pow(2., (1./12.));
 		arman_cosinus(x);
 		arman_ratio(x, 100.);
@@ -116,6 +115,7 @@ void arman_dsp64(t_arman *x, t_object *dsp64, short *count, double samplerate, l
 	delay_resize(&x->f_delay, x->f_sr);
 	for(i = 0; i < x->f_voiceNumber + 1; i++)
 		x->f_connected[i] = count[i];
+	arman_ratio(x, x->f_winSize);
 	object_method(dsp64, gensym("dsp_add64"), x, arman_perform64, 0, NULL);
 }
 
@@ -147,8 +147,8 @@ void arman_perform64(t_arman *x, t_object *dsp64, double **ins, long numins, dou
 				delayOne = incOne * x->f_winSize + x->f_delayAdd;
 				delayTwo = incTwo * x->f_winSize + x->f_delayAdd;
 
-				sigDelayOne = delay_read_ms(&x->f_delay, delayOne);
-				sigDelayTwo = delay_read_ms(&x->f_delay, delayTwo);
+				sigDelayOne = delay_read_ms_linear(&x->f_delay, delayOne);
+				sigDelayTwo = delay_read_ms_linear(&x->f_delay, delayTwo);
 
 				outs[j][i] = sigDelayOne * window + sigDelayTwo * (1. - window);
 				
@@ -225,7 +225,7 @@ void arman_ratio(t_arman *x, double winSize)
 	if(winSize != x->f_winSize)
 	{
 		x->f_winSize = winSize;
-		x->f_ratio = (1000. / winSize * -1.) / x->f_sr;
+		x->f_ratio = (1000. / x->f_winSize * -1.) / x->f_sr;
 		for(i = 0; i < x->f_voiceNumber; i++)
 		{
 			arman_transpo(x, x->f_cent[i], i);
