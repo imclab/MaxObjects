@@ -1904,10 +1904,10 @@
 										"globalpatchername" : "",
 										"digest" : "",
 										"default_fontname" : "Arial",
-										"tags" : "",
 										"default_fontsize" : 12.0,
 										"description" : "",
-										"fontname" : "Arial"
+										"fontname" : "Arial",
+										"tags" : ""
 									}
 ,
 									"text" : "p average 5"
@@ -2153,10 +2153,10 @@
 										"globalpatchername" : "",
 										"digest" : "",
 										"default_fontname" : "Arial",
-										"tags" : "",
 										"default_fontsize" : 12.0,
 										"description" : "",
-										"fontname" : "Arial"
+										"fontname" : "Arial",
+										"tags" : ""
 									}
 ,
 									"text" : "p average 5"
@@ -2426,10 +2426,10 @@
 										"globalpatchername" : "",
 										"digest" : "",
 										"default_fontname" : "Arial",
-										"tags" : "",
 										"default_fontsize" : 12.0,
 										"description" : "",
-										"fontname" : "Arial"
+										"fontname" : "Arial",
+										"tags" : ""
 									}
 ,
 									"text" : "p average 5"
@@ -2675,10 +2675,10 @@
 										"globalpatchername" : "",
 										"digest" : "",
 										"default_fontname" : "Arial",
-										"tags" : "",
 										"default_fontsize" : 12.0,
 										"description" : "",
-										"fontname" : "Arial"
+										"fontname" : "Arial",
+										"tags" : ""
 									}
 ,
 									"text" : "p average 5"
@@ -2959,7 +2959,7 @@
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"id" : "obj-12",
-					"items" : [ "RMS", ",", "Power", ",", "Energy" ],
+					"items" : [ "Linear", ",", "Power", ",", "Energy" ],
 					"maxclass" : "umenu",
 					"numinlets" : 1,
 					"numoutlets" : 3,
@@ -3414,10 +3414,10 @@
 						"globalpatchername" : "",
 						"digest" : "",
 						"default_fontname" : "Arial",
-						"tags" : "",
 						"default_fontsize" : 12.0,
 						"description" : "",
-						"fontname" : "Arial"
+						"fontname" : "Arial",
+						"tags" : ""
 					}
 ,
 					"text" : "p audioPanic 32"
@@ -3648,10 +3648,10 @@
 														"globalpatchername" : "",
 														"digest" : "",
 														"default_fontname" : "Arial",
-														"tags" : "",
 														"default_fontsize" : 12.0,
 														"description" : "",
-														"fontname" : "Arial"
+														"fontname" : "Arial",
+														"tags" : ""
 													}
 ,
 													"text" : "p noisy"

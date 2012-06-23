@@ -180,15 +180,15 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\SDKs\MaxSDK-6.0.4\c74support\max-includes\common\dllmain_win.c" />
     <ClCompile Include="..\pg.delay\pg.delay.c" />
-    <ClCompile Include="pg.alechinsky~.c" />
+    <ClCompile Include="pg.pollock~.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pg.delay\pg.delay.h" />
-    <ClInclude Include="pg.alechinsky.h" />
+    <ClInclude Include="pg.pollock.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\SDKs\fftw-3.3.2-dll32\libfftw3-3.def" />
-    <None Include="pg.alechinsky~.def" />
+    <None Include="pg.pollock~.def" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

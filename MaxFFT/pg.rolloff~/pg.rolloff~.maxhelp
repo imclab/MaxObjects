@@ -340,10 +340,10 @@
 										"globalpatchername" : "",
 										"digest" : "",
 										"default_fontname" : "Arial",
-										"tags" : "",
 										"default_fontsize" : 12.0,
 										"description" : "",
-										"fontname" : "Arial"
+										"fontname" : "Arial",
+										"tags" : ""
 									}
 ,
 									"text" : "p filter"
@@ -404,10 +404,10 @@
 						"globalpatchername" : "",
 						"digest" : "",
 						"default_fontname" : "Arial",
-						"tags" : "",
 						"default_fontsize" : 12.0,
 						"description" : "",
-						"fontname" : "Arial"
+						"fontname" : "Arial",
+						"tags" : ""
 					}
 ,
 					"text" : "p display"
@@ -497,7 +497,7 @@
 					"fontname" : "Arial",
 					"fontsize" : 11.595187,
 					"id" : "obj-12",
-					"items" : [ "RMS", ",", "Power" ],
+					"items" : [ "Linear", ",", "Power" ],
 					"maxclass" : "umenu",
 					"numinlets" : 1,
 					"numoutlets" : 3,
@@ -952,10 +952,10 @@
 						"globalpatchername" : "",
 						"digest" : "",
 						"default_fontname" : "Arial",
-						"tags" : "",
 						"default_fontsize" : 12.0,
 						"description" : "",
-						"fontname" : "Arial"
+						"fontname" : "Arial",
+						"tags" : ""
 					}
 ,
 					"text" : "p audioPanic 32"
@@ -1186,10 +1186,10 @@
 														"globalpatchername" : "",
 														"digest" : "",
 														"default_fontname" : "Arial",
-														"tags" : "",
 														"default_fontsize" : 12.0,
 														"description" : "",
-														"fontname" : "Arial"
+														"fontname" : "Arial",
+														"tags" : ""
 													}
 ,
 													"text" : "p noisy"

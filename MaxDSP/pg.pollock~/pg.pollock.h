@@ -31,13 +31,7 @@
 
 
 #define SIZETAB		10000
-
-#define Ndefaut		4
-#define NMAX		16
-#define I360		0.0027777777777777778F
-#define OFFSET		.3
-#define T_COS     4096
-#define NPOLY		4
+#define WINSIZE		16384
 
 typedef struct _pollock
 {
@@ -64,9 +58,10 @@ typedef struct _pollock
 	double		f_modLen;		/* Grain lenght modulation			*/
 	
 	/**** Granulation ***********************************************/
-	t_window	f_envelope;		/* Envellope du grain				*/
-	t_delay		*f_delay;		/* Delais							*/
-	t_sample	*f_inputSig;	/* Vector for input signal			*/
+	double		*f_window;		/* Envellope du grain				*/
+	t_delay		f_delay;		/* Delais							*/
+	double		f_factor;
+	double		f_offset;
 } t_pollock;
 
 void *pollock_class;
@@ -80,6 +75,5 @@ void pollock_double(t_pollock *x, double n);
 void pollock_dblclick(t_pollock *x);
 t_int *pollock_perform(t_int *w);
 t_int *result_perform(t_int *w);
-
-t_max_err mode_set(t_pollock *x, t_object *attr, long argc, t_atom *argv);
+void pollock_tukey(t_pollock *x, double factor, double offset);
 

@@ -40,7 +40,7 @@ int main()
 
 	CLASS_ATTR_LONG				(c, "amplitude", 0, t_gradient, f_ampMode);
 	CLASS_ATTR_LABEL			(c, "amplitude", 0, "Amplitude mode");
-	CLASS_ATTR_ENUMINDEX		(c, "amplitude", 0, "RMS \" \"Power");
+	CLASS_ATTR_ENUMINDEX		(c, "amplitude", 0, "Linear \" \"Power");
 	CLASS_ATTR_DEFAULT			(c, "amplitude", 0, "0");
 	CLASS_ATTR_SAVE				(c, "amplitude", 1);
 	CLASS_ATTR_FILTER_CLIP		(c, "amplitude", 0, 1);

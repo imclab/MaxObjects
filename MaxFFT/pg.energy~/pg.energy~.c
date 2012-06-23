@@ -37,7 +37,7 @@ int main()
 	
 	CLASS_ATTR_LONG				(c, "amplitude", 0, t_energy, f_ampMode);
 	CLASS_ATTR_LABEL			(c, "amplitude", 0, "Amplitude mode");
-	CLASS_ATTR_ENUMINDEX		(c, "amplitude", 0, "RMS \" \"Power \" \"Energy");
+	CLASS_ATTR_ENUMINDEX		(c, "amplitude", 0, "Linear \" \"Power \" \"Energy");
 	CLASS_ATTR_DEFAULT			(c, "amplitude", 0, "0");
 	CLASS_ATTR_SAVE				(c, "amplitude", 1);
 	CLASS_ATTR_FILTER_CLIP		(c, "amplitude", 0, 2);
@@ -102,6 +102,7 @@ void *energy_new(t_symbol *s, long argc, t_atom *argv)
 		outlet_new((t_pxobject *)x, "signal");
 		outlet_new((t_pxobject *)x, "signal");
 		x->f_ampMode = 0;
+
 		attr_args_process(x, argc, argv);
 	}
 	return (x);
