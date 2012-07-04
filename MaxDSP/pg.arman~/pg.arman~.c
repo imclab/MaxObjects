@@ -112,6 +112,7 @@ void arman_dsp64(t_arman *x, t_object *dsp64, short *count, double samplerate, l
 {
 	int i;
 	x->f_sr = samplerate;
+
 	delay_resize(&x->f_delay, x->f_sr);
 	for(i = 0; i < x->f_voiceNumber + 1; i++)
 		x->f_connected[i] = count[i];
@@ -144,8 +145,8 @@ void arman_perform64(t_arman *x, t_object *dsp64, double **ins, long numins, dou
 				ratio = (incOne * (double)WINSIZE) - index;
 				window = x->f_window[index] * (1.- ratio) + x->f_window[index + 1] * ratio;
 				
-				delayOne = incOne * x->f_winSize + x->f_delayAdd;
-				delayTwo = incTwo * x->f_winSize + x->f_delayAdd;
+				delayOne = (incOne * x->f_winSize) + x->f_delayAdd;
+				delayTwo = (incTwo * x->f_winSize) + x->f_delayAdd;
 
 				sigDelayOne = delay_read_ms_linear(&x->f_delay, delayOne);
 				sigDelayTwo = delay_read_ms_linear(&x->f_delay, delayTwo);
@@ -154,7 +155,7 @@ void arman_perform64(t_arman *x, t_object *dsp64, double **ins, long numins, dou
 				
 				x->f_inc[j] += x->f_grain[j];
 				
-				if(x->f_inc[j] >= 1. && x->f_grain[j] > 0.)
+				if(x->f_inc[j] >= 1. && x->f_grain[j] >= 0.)
 					x->f_inc[j] = 0.;
 				else if(x->f_inc[j] <= 0. && x->f_grain[j] < 0.)
 					x->f_inc[j] = 1.;
