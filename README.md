@@ -44,6 +44,6 @@ Precompiled WINDOWS DLL is in the package or:
 
 ### Download Binaries (Windows & OsX):
 
-[PG.LIBRARY.RAR](http://dl.dropbox.com/u/21891549/pg.library.rar)
+[PG.LIBRARY.RAR](https://dl.dropbox.com/u/21891549/pg.library.rar)
 
 Please report bugs. Other objects will come out!
