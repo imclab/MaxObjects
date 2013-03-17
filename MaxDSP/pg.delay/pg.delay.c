@@ -29,8 +29,6 @@ void delay_setup(t_delay *c, double msec, double sr)
 	if (c->f_lenght < 1)  c->f_lenght = 1;
     c->f_vector = (double *)getbytes(( c->f_lenght + XTRASAMPS) * sizeof(double));
     c->f_phase = XTRASAMPS;
-
-	c->f_alpha = 5. / 3.;
 }
 
 void delay_resize(t_delay *c, double sr)
@@ -66,7 +64,7 @@ void delay_write(t_delay *c, double sample)
 double delay_read_ms_quadra(t_delay *c, double delay)
 {
 	int delaySample;
-	double one, two, thr, fou, oneMthr, ratio, out;
+	double aa, bb, cc, dd, cminusb, frac, out;
 
 	delay *= c->f_sr;
 	if(delay > (double)(c->f_lenght - 1))
@@ -75,16 +73,16 @@ double delay_read_ms_quadra(t_delay *c, double delay)
 		delay = 0.;
 	
 	delaySample = delay;
-	ratio = delay - (double)delaySample;
+	frac = delay - (double)delaySample;
 	delaySample = (double)c->f_phase - (delaySample);
 	if(delaySample < XTRASAMPS) delaySample += c->f_lenght;
 
-	fou = c->f_vector[delaySample-3];
-	thr = c->f_vector[delaySample-2];
-	two = c->f_vector[delaySample-1];
-	one = c->f_vector[delaySample];
-	oneMthr = thr - two;
-	out = two + ratio * (oneMthr - c->f_alpha * (1. - ratio) * ((fou - one - 3. * oneMthr) * ratio + (fou + 2. * one - 3. * two)));
+	dd = c->f_vector[delaySample-3];
+	cc = c->f_vector[delaySample-2];
+	bb = c->f_vector[delaySample-1];
+	aa = c->f_vector[delaySample];
+	cminusb = cc - bb;
+	out = bb + frac * (cminusb - RATIO * (1. - frac) * ((dd - aa - 3. * cminusb) * frac + (dd + 2. * aa - 3. * bb)));
 
 	return out;
 }

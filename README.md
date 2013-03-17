@@ -1,5 +1,7 @@
 ## The pg.library is a collection of externals for Max 5 and Max 6.
 
+The library is deprecated, please look at the [website www.pierreguillot.com](http://www.pierreguillot.com/).
+
 ### MaxData :
 
 * **pg.average** : Moving average.
@@ -20,7 +22,7 @@
 * **pg.adaptor~** : Adapter for packed signal (Max5 only & souce code only).
 
 Please look at the Jamoma AudioGraph project to pack signal.
-[Jamoma](http://www.jamoma.org/)
+
 
 ### MaxFFT :
 

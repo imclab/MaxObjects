@@ -11,10 +11,15 @@ typedef struct  _delete
 	t_object f_ob;
 	void	*f_outlet1;
 	void	*f_outlet2;
+	void	*f_inlet2;
 
 	t_symbol **f_name;
+	t_symbol *f_include[128];
+	t_symbol *f_exclude[128];
 	int		f_size;
 	int		f_all;
+
+	long	f_in;
 
 } t_delete;
 
@@ -38,7 +43,18 @@ int main()
 	class_addmethod(c, (method)delete_set,		"set",			A_GIMME,	0);
 	class_addmethod(c, (method)delete_delete,	"delete",		A_GIMME,	0);
 	class_addmethod(c, (method)delete_assist,	"assist",		A_CANT,		0);
+	class_addmethod(c, (method)NULL,			"anything",		A_CANT,		0);
 	
+	CLASS_ATTR_SYM_ARRAY			(c, "include", 0, t_delete, f_include, 128);
+	CLASS_ATTR_LABEL				(c, "include", 0, "Include scripting name");
+	CLASS_ATTR_SAVE					(c, "include", 1);
+	CLASS_ATTR_ORDER				(c, "include", 0, "1");
+
+	CLASS_ATTR_SYM_ARRAY			(c, "exclude", 0, t_delete, f_exclude, 128);
+	CLASS_ATTR_LABEL				(c, "exclude", 0, "Exclude scripting name");
+	CLASS_ATTR_SAVE					(c, "exclude", 1);
+	CLASS_ATTR_ORDER				(c, "exclude", 0, "2");
+
 	class_register(CLASS_BOX, c);
 	delete_class = c;
 
@@ -69,8 +85,9 @@ void *delete_new(t_symbol *s, int argc, t_atom *argv)
 			if(x->f_name[i] == gensym("all"))
 				x->f_all = 1;
 		}
-		x->f_outlet1 = outlet_new((t_object *)x, NULL);
-		x->f_outlet2 = outlet_new((t_object *)x, NULL);
+		x->f_outlet1	= outlet_new((t_object *)x, NULL);
+		x->f_outlet2	= outlet_new((t_object *)x, NULL);
+		x->f_inlet2		= proxy_new((t_object *)x, 1, &x->f_in);	
 	}
 	return x;
 }			
@@ -78,7 +95,17 @@ void *delete_new(t_symbol *s, int argc, t_atom *argv)
 void delete_assist(t_delete *x, void *b, long m, long a, char *s)
 {
 	if (m == ASSIST_INLET)
-		sprintf(s,"(Message or Bang) Set and/or delete an object type");
+	{
+		switch (a) 
+		{	
+			case 0:
+				sprintf(s,"(Message or Bang) Set and/or delete an object type and exclude an object");
+			break;
+			case 1:
+				sprintf(s,"(Message or Bang) Set and/or delete an object type and include an object");
+			break;
+		}
+	}
 	else 
 	{
 		switch (a) 
@@ -108,16 +135,19 @@ void delete_bang(t_delete *x)
 		obj = jbox_get_object(box);
 		delBox = box;
 		check = 0;
-		if(x->f_all == 1 && delete_patchline(x, patcher, obj) != 0)
-			check = 1;
-		else if(delete_patchline(x, patcher, obj) == 2)
-			check = 1;
-		else if(delete_patchline(x, patcher, obj) == 1)
+		if(obj != &x->f_ob)
 		{
-			for(i = 0; i < x->f_size; i++)
+			if(x->f_all == 1 && delete_patchline(x, patcher, obj) != 0)
+				check = 1;
+			else if(delete_patchline(x, patcher, obj) == 2)
+				check = 1;
+			else if(delete_patchline(x, patcher, obj) == 1)
 			{
-				if (object_classname(obj) == x->f_name[i])
-					check = 1;
+				for(i = 0; i < x->f_size; i++)
+				{
+					if (object_classname(obj) == x->f_name[i])
+						check = 1;
+				}
 			}
 		}
 		
@@ -143,6 +173,14 @@ int delete_patchline(t_delete *x, t_object *patcher, t_object *cible)
 		else if (obj == &x->f_ob && jpatchline_get_outletnum(line) == 1 && cible == jbox_get_object(jpatchline_get_box2(line)))
 		{
 			value = 2;
+		}
+		else if (obj == cible && jpatchline_get_inletnum(line) == 1 && &x->f_ob == jbox_get_object(jpatchline_get_box2(line)))
+		{
+			value = 2;
+		}
+		else if (obj == cible && jpatchline_get_inletnum(line) == 0 && &x->f_ob == jbox_get_object(jpatchline_get_box2(line)))
+		{
+			value = 0;
 		}
 	}
 	return value;
@@ -172,6 +210,26 @@ void delete_delete(t_delete *x, t_symbol *s, long argc, t_atom *argv)
 {
 	delete_set(x, s, argc, argv);
 	delete_bang(x);
+}
+
+void delete_include(t_delete *x, t_symbol *s, long argc, t_atom *argv)
+{
+	int i;
+	x->f_all = 0;
+	freebytes(x->f_name, x->f_size * sizeof(t_symbol *));
+	x->f_size = argc;
+	x->f_name = (t_symbol **)getbytes(x->f_size * sizeof(t_symbol *));
+	for (i = 0; i < argc; i++) 
+	{
+		if (atom_gettype(argv+i) == A_SYM) 
+			x->f_name[i] = atom_getsym(argv+i);
+	}
+
+	for(i = 0; i < x->f_size; i++)
+	{
+		if(x->f_name[i] == gensym("all"))
+			x->f_all = 1;
+	}
 }
 
 void delete_free(t_delete *x)

@@ -23,6 +23,7 @@
 #include "z_dsp.h"
      
 #define XTRASAMPS	4
+#define RATIO 0.16666666666666666667
 
 typedef struct delay
 {
@@ -31,7 +32,6 @@ typedef struct delay
 	int			f_phase;
 	double		f_sr;
     double		*f_vector;
-	double		f_alpha;
 } t_delay;
 
 void delay_setup(t_delay *c, double msec, double sr);
