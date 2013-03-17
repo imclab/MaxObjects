@@ -1,6 +1,6 @@
 ## The pg.library is a collection of externals for Max 5 and Max 6.
 
-The library is deprecated, please look at the [website www.pierreguillot.com](http://www.pierreguillot.com/).
+### The library is deprecated, please look at the [website www.pierreguillot.com](http://www.pierreguillot.com/).
 
 ### MaxData :
 
